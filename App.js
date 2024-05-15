@@ -11,6 +11,7 @@ import HomeScreen from "./src/screens/HomeScreen";
 import SearchScreen from "./src/screens/SearchScreen";
 import ReelScreen from "./src/screens/ReelScreen";
 import ProfileScreen from "./src/screens/ProfileScreen";
+import PostScreen from "./src/screens/PostScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -19,6 +20,9 @@ const HomeTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+        tabBarStyle: {
+          backgroundColor: "black",
+        },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
@@ -30,6 +34,8 @@ const HomeTabs = () => {
             iconName = focused ? "videocam" : "videocam-outline";
           } else if (route.name === "Profile") {
             iconName = focused ? "person" : "person-outline";
+          } else if (route.name === "Post") {
+            iconName = focused ? "post" : "duplicate-outline";
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -42,6 +48,7 @@ const HomeTabs = () => {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Search" component={SearchScreen} />
+      <Tab.Screen name="Post" component={PostScreen} />
       <Tab.Screen name="Reel" component={ReelScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
@@ -53,7 +60,11 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Home" component={HomeTabs} />
+        <Stack.Screen
+          name="Home"
+          component={HomeTabs}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
