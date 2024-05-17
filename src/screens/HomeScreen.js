@@ -4,20 +4,22 @@ import {
   View,
   ScrollView,
   RefreshControl,
-  ActivityIndicator,
+  // ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import Header from "../../components/Header";
+import InstaStories from "../../components/Stories";
+import InstaPost from "../../components/Post";
 
 const HomeScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = () => {
     setRefreshing(true);
-    // Add your refresh logic here, e.g., fetch new data
+
     setTimeout(() => {
       setRefreshing(false);
-    }, 2000); // Simulating a delay, replace with your actual refresh logic
+    }, 2000);
   };
 
   const [posts, setPosts] = useState([
@@ -42,12 +44,15 @@ const HomeScreen = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {posts.map((post) => (
+        {/* {posts.map((post) => (
           <View key={post.id} style={styles.postItem}>
             <Text>{post.name}</Text>
             <Text>ID: {post.id}</Text>
           </View>
-        ))}
+        ))} */}
+
+        <InstaStories />
+        <InstaPost />
       </ScrollView>
       {/* {refreshing && (
         <View style={styles.loader}>
