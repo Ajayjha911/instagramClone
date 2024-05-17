@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   headerIcons: {
+    paddingTop: 2,
     flexDirection: "row",
   },
   iconStyle: {
