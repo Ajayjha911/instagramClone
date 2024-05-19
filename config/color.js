@@ -6,4 +6,5 @@ export const colors = {
   black: "black",
   primaryBlue: "#009cff",
   blue: "blue",
+  white: "white",
 };

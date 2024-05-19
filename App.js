@@ -42,7 +42,7 @@ const HomeTabs = () => {
         },
       })}
       tabBarOptions={{
-        activeTintColor: "tomato",
+        activeTintColor: "white",
         inactiveTintColor: "gray",
       }}
     >

@@ -28,10 +28,15 @@ const styles = StyleSheet.create({
   },
   headerBackground: {
     backgroundColor: "black",
-    paddingVertical: 15,
+    paddingVertical: 20,
+    marginTop: 24,
+    // paddingBottom: ,
     paddingHorizontal: 18,
+    // height: 100,
     flexDirection: "row",
     justifyContent: "space-between",
+    textAlign: "center",
+    alignItems: "center",
   },
   headerIcons: {
     paddingTop: 2,

@@ -4,7 +4,7 @@ import {
   View,
   ScrollView,
   RefreshControl,
-  // ActivityIndicator,
+  SafeAreaView,
 } from "react-native";
 import React, { useState } from "react";
 import Header from "../../components/Header";
@@ -22,21 +22,8 @@ const HomeScreen = () => {
     }, 2000);
   };
 
-  const [posts, setPosts] = useState([
-    { name: "Post1", id: 1 },
-    { name: "Post2", id: 2 },
-    { name: "Post3", id: 3 },
-    { name: "Post4", id: 4 },
-    { name: "Post5", id: 5 },
-    { name: "Post6", id: 6 },
-    { name: "Post7", id: 7 },
-    { name: "Post8", id: 8 },
-    { name: "Post9", id: 9 },
-    { name: "Post10", id: 10 },
-  ]);
-
   return (
-    <View>
+    <SafeAreaView style={styles.container}>
       <Header />
       <ScrollView
         contentContainerStyle={styles.scrollView}
@@ -44,13 +31,6 @@ const HomeScreen = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {/* {posts.map((post) => (
-          <View key={post.id} style={styles.postItem}>
-            <Text>{post.name}</Text>
-            <Text>ID: {post.id}</Text>
-          </View>
-        ))} */}
-
         <InstaStories />
         <InstaPost />
       </ScrollView>
@@ -59,7 +39,7 @@ const HomeScreen = () => {
           <ActivityIndicator size="large" color="tomato" />
         </View>
       )} */}
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -68,6 +48,7 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 20,
   },
   scrollView: {
     flex: 1,
