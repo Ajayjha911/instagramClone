@@ -7,7 +7,6 @@ import {
   Text,
   View,
 } from "react-native";
-
 import { LinearGradient } from "expo-linear-gradient";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Img1 from "../assets/img1.jpeg";
@@ -17,31 +16,11 @@ import Img4 from "../assets/img4.jpg";
 import Img5 from "../assets/img5.jpg";
 
 const stories = [
-  {
-    id: 1,
-    img: Img1,
-    username: "jolly67",
-  },
-  {
-    id: 2,
-    img: Img2,
-    username: "jolly67",
-  },
-  {
-    id: 3,
-    img: Img3,
-    username: "jolly67",
-  },
-  {
-    id: 4,
-    img: Img4,
-    username: "jolly67",
-  },
-  {
-    id: 5,
-    img: Img5,
-    username: "jolly67",
-  },
+  { id: 1, img: Img1, username: "jolly67" },
+  { id: 2, img: Img2, username: "jolly67" },
+  { id: 3, img: Img3, username: "jolly67" },
+  { id: 4, img: Img4, username: "jolly67" },
+  { id: 5, img: Img5, username: "jolly67" },
 ];
 
 const Stories = () => {

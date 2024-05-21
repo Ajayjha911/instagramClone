@@ -5,6 +5,7 @@ import {
   ScrollView,
   RefreshControl,
   SafeAreaView,
+  StatusBar,
 } from "react-native";
 import React, { useState } from "react";
 import Header from "../../components/Header";
@@ -24,6 +25,7 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" />
       <Header />
       <ScrollView
         contentContainerStyle={styles.scrollView}
@@ -34,11 +36,6 @@ const HomeScreen = () => {
         <InstaStories />
         <InstaPost />
       </ScrollView>
-      {/* {refreshing && (
-        <View style={styles.loader}>
-          <ActivityIndicator size="large" color="tomato" />
-        </View>
-      )} */}
     </SafeAreaView>
   );
 };
@@ -48,10 +45,10 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20,
+    backgroundColor: "black",
   },
   scrollView: {
-    flex: 1,
+    flexGrow: 1,
   },
   postItem: {
     padding: 20,

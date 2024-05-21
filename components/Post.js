@@ -1,14 +1,14 @@
 import React from "react";
 import { Image, StyleSheet, Text, View, FlatList } from "react-native";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Feather from "react-native-vector-icons/Feather";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Img1 from "../assets/img1.jpeg";
 import Img2 from "../assets/img2.jpeg";
 import Img3 from "../assets/img3.jpg";
 import Img4 from "../assets/img4.jpg";
 import Img5 from "../assets/img5.jpg";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import Feather from "react-native-vector-icons/Feather";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 const Posts = [
   {
@@ -58,8 +58,11 @@ const InstaPost = () => {
     <View style={styles.postBackground} key={item.id}>
       <View style={styles.postHeader}>
         <View style={styles.postTitle}>
-          <Image source={item.img} style={styles.imageStyle} />
-          <Text style={styles.usernameStyle}>{item.username}</Text>
+          <Image source={item.img} style={styles.profileImageStyle} />
+          <View style={styles.userInfo}>
+            <Text style={styles.usernameStyle}>{item.username}</Text>
+            <Text style={styles.sponsoredText}>Sponsored</Text>
+          </View>
         </View>
         <MaterialCommunityIcons name="dots-vertical" size={25} color="white" />
       </View>
@@ -70,25 +73,26 @@ const InstaPost = () => {
             <AntDesign
               name="hearto"
               size={25}
-              color="white"
+              color="black"
               style={styles.iconStyle}
             />
             <Feather
               name="message-circle"
               size={25}
-              color="white"
+              color="black"
               style={styles.commentIcon}
             />
-            <Feather name="send" size={25} color="white" />
+            <Feather name="send" size={25} color="black" />
           </View>
-          <FontAwesome name="bookmark-o" size={25} color="white" />
+          <FontAwesome name="bookmark-o" size={25} color="black" />
         </View>
         <Text style={styles.likeStyles}>{item.likes} likes</Text>
         <Text style={styles.captionSection}>
           <Text style={styles.captionUserStyle}>{item.username}</Text>
           <Text style={styles.caption}>
             {" "}
-            Living like a Bird, Flying.. Want to fly, want to explore..
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt...
           </Text>
         </Text>
         <Text style={styles.viewComments}>
@@ -110,18 +114,24 @@ const InstaPost = () => {
 
 const styles = StyleSheet.create({
   postBackground: {
-    backgroundColor: "black",
+    backgroundColor: "white",
     paddingBottom: 30,
   },
-  imageStyle: {
+  profileImageStyle: {
     height: 30,
     width: 30,
     borderRadius: 50,
   },
-  usernameStyle: {
-    color: "white",
+  userInfo: {
     marginLeft: 8,
+  },
+  usernameStyle: {
+    color: "black",
     fontSize: 13,
+  },
+  sponsoredText: {
+    color: "gray",
+    fontSize: 11,
   },
   postTitle: {
     flexDirection: "row",
@@ -131,6 +141,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
   },
   postImage: {
     width: "100%",
@@ -153,17 +165,17 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   likeStyles: {
-    color: "white",
+    color: "black",
     marginTop: 8,
     fontSize: 13,
   },
   captionUserStyle: {
-    color: "white",
+    color: "black",
     fontSize: 13,
     fontWeight: "800",
   },
   caption: {
-    color: "white",
+    color: "black",
     fontSize: 13,
   },
   captionSection: {
@@ -173,12 +185,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
   },
   viewComments: {
-    color: "grey",
+    color: "gray",
     fontSize: 12,
     marginTop: 5,
   },
   postDate: {
-    color: "grey",
+    color: "gray",
     fontSize: 10,
     marginTop: 3,
   },
