@@ -28,17 +28,18 @@ const styles = StyleSheet.create({
   },
   headerBackground: {
     backgroundColor: "black",
-    paddingVertical: 15,
+    paddingTop: 10, // Adjusted to avoid status bar overlap
+    paddingBottom: 10,
     paddingHorizontal: 18,
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
   headerIcons: {
     flexDirection: "row",
   },
   iconStyle: {
     paddingHorizontal: 20,
-    marginTop: 1,
   },
 });
 

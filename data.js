@@ -105,3 +105,36 @@ export const USERS = [
     following: [{ id: "12345" }],
   },
 ];
+
+export const DATA = [
+  {
+    id: "jhgjfhd787",
+    Title: "Rose",
+    subTitle: "Lorem Ipum",
+    image: require("./assets/post/post1.jpg"),
+  },
+  {
+    id: "fdgdfgdfgf",
+    Title: "Janaki",
+    subTitle: "Lorem Ipum",
+    image: require("./assets/post/post2.jpg"),
+  },
+  {
+    id: "cvbfddffff",
+    Title: "Renuka",
+    subTitle: "Lorem Ipum",
+    image: require("./assets/post/post3.jpg"),
+  },
+  {
+    id: "dfghfghfgh",
+    Title: "Sita",
+    subTitle: "Lorem Ipum",
+    image: require("./assets/post/post4.jpg"),
+  },
+  {
+    id: "iuyiouyiuo",
+    Title: "Gita",
+    subTitle: "Lorem Ipum",
+    image: require("./assets/post/post5.jpg"),
+  },
+];
