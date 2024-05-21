@@ -35,11 +35,13 @@ export default StyleSheet.create({
   detailContainer: { alignItems: "center" },
   textLabel: {
     fontFamily: FONT.medium,
-    fontSize: 16,
+    fontSize: 20,
+    fontWeight: "600",
   },
   textValue: {
     fontFamily: FONT.medium,
-    fontSize: 17,
+    fontSize: 18,
+    fontWeight: "600",
   },
   bioContainer: {
     paddingHorizontal: 10,
@@ -50,7 +52,7 @@ export default StyleSheet.create({
     gap: 5,
   },
   container: {
-    backgroundColor: COLORS.tertiary,
+    backgroundColor: "#e5e7eb",
     padding: 10,
     width: "40%",
     justifyContent: "center",
@@ -58,7 +60,7 @@ export default StyleSheet.create({
     borderRadius: SIZES.medium / 2,
   },
   addFollowerContainer: {
-    backgroundColor: COLORS.tertiary,
+    backgroundColor: "#e5e7eb",
     padding: 10,
     paddingRight: 8,
     borderRadius: SIZES.medium / 2,
@@ -71,7 +73,7 @@ export default StyleSheet.create({
     gap: 2,
   },
   iconBtnContainer: (name, activeTab) => ({
-    width: "50%",
+    width: "33.5%",
     height: 40,
     alignItems: "center",
     justifyContent: "center",
@@ -80,6 +82,8 @@ export default StyleSheet.create({
   }),
   iconBtnText: {
     fontFamily: FONT.regular,
+    fontSize: 18,
+    fontWeight: "700",
   },
 
   noDataContainer: {
@@ -104,5 +108,32 @@ export default StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     gap: 1,
+  },
+  profileHeader: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 10,
+    marginBottom: 10,
+    marginTop: 5,
+  },
+  disUserName: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    gap: 10,
+  },
+  profileIcons: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    gap: 30,
+  },
+  userNameText: {
+    fontSize: 27,
+    fontWeight: "600",
   },
 });

@@ -1,18 +1,39 @@
 import React, { useMemo } from "react";
-import { useWindowDimensions, View, Image } from "react-native";
+import {
+  useWindowDimensions,
+  View,
+  Image,
+  TouchableOpacity,
+  ImageBackground,
+} from "react-native";
 import styles from "./profile_post.style";
+import Icon from "react-native-vector-icons/FontAwesome5";
 
-const ProfilePost = ({ post }) => {
+const ProfilePost = ({ image, onPress, isSelected = false }) => {
   const screenWidth = useWindowDimensions().width - 20;
-  const { images } = post;
 
   return (
     <View style={styles.imageContainer(screenWidth)}>
-      <Image
-        source={images[0]}
-        style={styles.contentImage}
-        resizeMode="cover"
-      />
+      <TouchableOpacity onPress={onPress}>
+        {!isSelected && (
+          <Image
+            source={image}
+            style={styles.contentImage}
+            resizeMode="cover"
+          />
+        )}
+        {isSelected && (
+          <ImageBackground
+            source={image}
+            resizeMode="cover"
+            style={{ ...styles.checkedImage, ...styles.imageDisplay }}
+          >
+            <View style={styles.checkCont}>
+              <Icon name="check" size={24} color={"#0a0a0a"} />
+            </View>
+          </ImageBackground>
+        )}
+      </TouchableOpacity>
     </View>
   );
 };
