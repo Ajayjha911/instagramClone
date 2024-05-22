@@ -1,12 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import AddPost from "../../components/add_post";
 
 const PostScreen = () => {
-  return (
-    <View>
-      <Text>PostScreen</Text>
-    </View>
-  );
+  return <AddPost />;
 };
 
 export default PostScreen;

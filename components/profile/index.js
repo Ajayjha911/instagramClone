@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import styles from "./profile.style";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import NewIcon from "react-native-vector-icons/FontAwesome6";
 import { ScrollView } from "react-native-gesture-handler";
 import { COLORS, SIZES, images } from "../../constants";
 import { USERS, POSTS } from "../../data";
@@ -15,7 +16,7 @@ import ProfilePost from "./profile_post";
 
 const loggedInUser = USERS[1];
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const [activeTab, setActiveTab] = useState("posts");
 
   const { postsCreatedByLoggedInUser, postsLikedByLoggedInUser } =
@@ -40,6 +41,18 @@ const ProfileScreen = () => {
 
   return (
     <SafeAreaView style={styles.rootContainer}>
+      <View style={styles.profileHeader}>
+        <TouchableOpacity style={styles.disUserName}>
+          <Icon name="lock" size={20} />
+          <Text style={styles.userNameText}>user97</Text>
+          <Icon name="chevron-down" size={20} />
+        </TouchableOpacity>
+        <View style={styles.profileIcons}>
+          <NewIcon name="at" size={30} />
+          <Icon name="plus-square" solid size={32} />
+          <Icon name="bars" size={30} />
+        </View>
+      </View>
       <View style={styles.profileContainer}>
         <View style={styles.imageContainer}>
           <Image
@@ -69,8 +82,10 @@ const ProfileScreen = () => {
       </View>
 
       <View style={styles.bioContainer}>
-        <Text>{loggedInUser?.name}</Text>
-        <Text>{loggedInUser?.bio || "This is my bio!"}</Text>
+        <Text style={styles.textLabel}>{loggedInUser?.name}</Text>
+        <Text style={styles.textValue}>
+          {loggedInUser?.bio || "This is my bio!"}
+        </Text>
       </View>
 
       <View style={styles.btnContainer}>
@@ -90,7 +105,10 @@ const ProfileScreen = () => {
           style={styles.iconBtnContainer("posts", activeTab)}
           onPress={() => setActiveTab("posts")}
         >
-          <Icon name="list" size={25} />
+          <Icon name="th" size={25} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.iconBtnContainer("reels", activeTab)}>
+          <Icon name="video" size={25} />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.iconBtnContainer("likes", activeTab)}
@@ -104,16 +122,19 @@ const ProfileScreen = () => {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View>
             {contentToDisplay.length ? (
-              <View style={styles.postContainer}>
+              <TouchableOpacity style={styles.postContainer}>
                 {contentToDisplay.map((post) => (
                   <ProfilePost
                     key={post.id}
-                    post={post}
+                    image={post.images[0]}
                     showActionBtn={activeTab === "posts"}
                     showHeader={false}
+                    // onPress={() => {
+                    //   navigation.navigate("/profile/posts");
+                    // }}
                   />
                 ))}
-              </View>
+              </TouchableOpacity>
             ) : (
               <View style={styles.noDataContainer}>
                 <Icon name="bug" size={100} style={{ color: COLORS.gray2 }} />
