@@ -1,59 +1,26 @@
-import React from "react";
-import { Image, StyleSheet, Text, View, FlatList } from "react-native";
+import React, { useState } from "react";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
+import Modal from "react-native-modal";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Img1 from "../assets/img1.jpeg";
-import Img2 from "../assets/img2.jpeg";
-import Img3 from "../assets/img3.jpg";
-import Img4 from "../assets/img4.jpg";
-import Img5 from "../assets/img5.jpg";
-
-const Posts = [
-  {
-    id: 1,
-    img: Img1,
-    username: "BlossomBelle",
-    likes: "13,393",
-    comments: "433",
-    date: "1 week ago",
-  },
-  {
-    id: 2,
-    img: Img2,
-    username: "LavenderLuxe_",
-    likes: "13,393",
-    comments: "433",
-    date: "1 week ago",
-  },
-  {
-    id: 3,
-    img: Img3,
-    username: "RosyRadiance_",
-    likes: "13,393",
-    comments: "433",
-    date: "1 week ago",
-  },
-  {
-    id: 4,
-    img: Img4,
-    username: "DiamondDuchess_",
-    likes: "13,393",
-    comments: "433",
-    date: "1 week ago",
-  },
-  {
-    id: 5,
-    img: Img5,
-    username: "CherryCharm_",
-    likes: "13,393",
-    comments: "433",
-    date: "1 week ago",
-  },
-];
+import { Posts } from "../data";
 
 const InstaPost = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
+
   const renderItem = ({ item }) => (
     <View style={styles.postBackground} key={item.id}>
       <View style={styles.postHeader}>
@@ -64,7 +31,13 @@ const InstaPost = () => {
             <Text style={styles.sponsoredText}>Sponsored</Text>
           </View>
         </View>
-        <MaterialCommunityIcons name="dots-vertical" size={25} color="white" />
+        <TouchableOpacity onPress={toggleModal}>
+          <MaterialCommunityIcons
+            name="dots-vertical"
+            size={25}
+            color="black"
+          />
+        </TouchableOpacity>
       </View>
       <Image source={item.img} style={styles.postImage} />
       <View style={styles.postFooter}>
@@ -104,18 +77,85 @@ const InstaPost = () => {
   );
 
   return (
-    <FlatList
-      data={Posts}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.id.toString()}
-    />
+    <>
+      <FlatList
+        data={Posts}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
+      />
+      <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={toggleModal}
+        style={styles.modal}
+        swipeDirection={["down"]}
+        onSwipeComplete={toggleModal}
+      >
+        <View style={styles.modalContent}>
+          <View style={styles.modalHandle} />
+          <View style={styles.modalIcons}>
+            <View style={styles.modalIconWrapper}>
+              <Feather name="bookmark" size={25} color="white" />
+              <Text style={styles.modalIconText}>Save</Text>
+            </View>
+            <View style={styles.modalIconWrapper}>
+              <MaterialCommunityIcons
+                name="content-copy"
+                size={25}
+                color="white"
+              />
+              <Text style={styles.modalIconText}>Remix</Text>
+            </View>
+            <View style={styles.modalIconWrapper}>
+              <MaterialCommunityIcons
+                name="qrcode-scan"
+                size={25}
+                color="white"
+              />
+              <Text style={styles.modalIconText}>QR Code</Text>
+            </View>
+          </View>
+          <TouchableOpacity style={styles.modalOption}>
+            <MaterialCommunityIcons
+              name="account-arrow-down-outline"
+              size={25}
+              color="white"
+            />
+            <Text style={styles.modalOptionText}>Unfollow</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.modalOption}>
+            <AntDesign name="exclamationcircleo" size={25} color="white" />
+            <Text style={styles.modalOptionText}>
+              Why you're seeing this post
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.modalOption}>
+            <MaterialCommunityIcons name="eye-off" size={25} color="white" />
+            <Text style={styles.modalOptionText}>Hide</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.modalOption}>
+            <MaterialCommunityIcons
+              name="account-circle-outline"
+              size={25}
+              color="white"
+            />
+            <Text style={styles.modalOptionText}>About this account</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.modalOption}>
+            <MaterialCommunityIcons name="email-alert" size={25} color="red" />
+            <Text style={styles.modalReportOptionText}>Report</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   postBackground: {
-    backgroundColor: "white",
-    paddingBottom: 30,
+    // paddingTop: 10,
+    backgroundColor: "black",
+    paddingBottom: 10,
   },
   profileImageStyle: {
     height: 30,
@@ -139,10 +179,11 @@ const styles = StyleSheet.create({
   },
   postHeader: {
     paddingHorizontal: 18,
+    paddingTop: 5,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 10,
+    // marginBottom: 10,
   },
   postImage: {
     width: "100%",
@@ -193,6 +234,52 @@ const styles = StyleSheet.create({
     color: "gray",
     fontSize: 10,
     marginTop: 3,
+  },
+  modal: {
+    justifyContent: "flex-end",
+    margin: 0,
+  },
+  modalContent: {
+    backgroundColor: "black",
+    padding: 22,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    alignItems: "center",
+  },
+  modalHandle: {
+    width: 40,
+    height: 5,
+    backgroundColor: "gray",
+    borderRadius: 4,
+    marginBottom: 10,
+  },
+  modalIcons: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+    marginBottom: 20,
+  },
+  modalIconWrapper: {
+    alignItems: "center",
+  },
+  modalIconText: {
+    color: "white",
+    marginTop: 5,
+  },
+  modalOption: {
+    width: "100%",
+    paddingVertical: 15,
+    borderBottomColor: "gray",
+    // borderBottomWidth: 1,
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 10,
+  },
+  modalOptionText: {
+    color: "white",
+  },
+  modalReportOptionText: {
+    color: "red",
   },
 });
 
