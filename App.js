@@ -1,4 +1,3 @@
-// App.js
 import "react-native-gesture-handler";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
@@ -13,6 +12,8 @@ import ReelScreen from "./src/screens/ReelScreen";
 import ProfileScreen from "./src/screens/ProfileScreen";
 import PostScreen from "./src/screens/PostScreen";
 import { StatusBar } from "react-native";
+import ChatScreen from "./src/screens/ChatScreen";
+import NotificationScreen from "./src/screens/NotificationScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -90,6 +91,16 @@ const App = () => {
           <Stack.Screen
             name="Home"
             component={HomeTabs}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Chat"
+            component={ChatScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Notifications"
+            component={NotificationScreen}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
