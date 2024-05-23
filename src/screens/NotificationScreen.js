@@ -10,44 +10,14 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+import { notifications } from "../../data";
 import user1 from "../../assets/chat/user1.jpg";
-import user2 from "../../assets/chat/user2.jpg";
-import user3 from "../../assets/chat/user3.jpg";
-import user4 from "../../assets/chat/user4.jpg";
-
-const notifications = [
-  {
-    id: 1,
-    type: "followRequest",
-    user: "aabvc_f445",
-    others: 2,
-    time: "1w",
-    avatar: user1,
-  },
-  {
-    id: 2,
-    type: "suggestion",
-    user: "gonsonqueenvictoria",
-    time: "4d",
-    avatar: user2,
-  },
-  { id: 3, type: "like", user: "jack", time: "5d", avatar: user3 },
-  { id: 4, type: "follow", user: "rc0511011", time: "1w", avatar: user4 },
-  {
-    id: 5,
-    type: "like",
-    user: "freak_treat_______",
-    others: ["jack", "tom"],
-    time: "1w",
-    avatar: user3,
-  },
-];
 
 const NotificationScreen = () => {
-  const navigation = useNavigation(); // Access navigation object
+  const navigation = useNavigation();
 
   const handleBack = () => {
-    navigation.goBack(); // Navigate back to the previous screen
+    navigation.goBack();
   };
 
   return (
@@ -64,10 +34,18 @@ const NotificationScreen = () => {
           <View style={styles.notificationContent}>
             <Text style={styles.notificationText}>
               <Text style={styles.userName}>Follow Request</Text>
+            </Text>
+            <Text style={styles.notificationText}>
               <Text style={styles.userName}>aabvc_f445</Text> + 2 others
             </Text>
             <Text style={styles.timeText}>{notifications[0].time}</Text>
           </View>
+          <Ionicons
+            name="chevron-forward"
+            size={24}
+            color="white"
+            style={styles.chevronIcon}
+          />
         </View>
         <Text style={styles.sectionTitle}>Last 7 Days</Text>
         {notifications.slice(1).map((notification) => (
@@ -113,7 +91,6 @@ const styles = StyleSheet.create({
   header: {
     padding: 15,
     backgroundColor: "black",
-    // borderBottomWidth: 1,
     borderBottomColor: "#333",
     flexDirection: "row",
     alignItems: "center",
@@ -130,7 +107,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 10,
-    // borderBottomWidth: 1,
     borderBottomColor: "#333",
   },
   avatar: { width: 40, height: 40, borderRadius: 20, marginRight: 10 },
@@ -138,7 +114,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 10,
-    // borderBottomWidth: 1,
     borderBottomColor: "#333",
   },
   notificationContent: { flex: 1 },
@@ -157,6 +132,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   followButtonText: { color: "white" },
+  chevronIcon: { marginLeft: 10 },
 });
 
 export default NotificationScreen;

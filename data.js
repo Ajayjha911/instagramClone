@@ -5,6 +5,11 @@ import Img3 from "./assets/img3.jpg";
 import Img4 from "./assets/img4.jpg";
 import Img5 from "./assets/img5.jpg";
 
+import user1 from "./assets/chat/user1.jpg";
+import user2 from "./assets/chat/user2.jpg";
+import user3 from "./assets/chat/user3.jpg";
+import user4 from "./assets/chat/user4.jpg";
+
 export const POSTS = [
   {
     id: 0,
@@ -184,5 +189,33 @@ export const Posts = [
     likes: "13,393",
     comments: "433",
     date: "1 week ago",
+  },
+];
+
+export const notifications = [
+  {
+    id: 1,
+    type: "followRequest",
+    user: "aabvc_f445",
+    others: 2,
+    time: "1w",
+    avatar: user1,
+  },
+  {
+    id: 2,
+    type: "suggestion",
+    user: "gonsonqueenvictoria",
+    time: "4d",
+    avatar: user2,
+  },
+  { id: 3, type: "like", user: "jack", time: "5d", avatar: user3 },
+  { id: 4, type: "follow", user: "rc0511011", time: "1w", avatar: user4 },
+  {
+    id: 5,
+    type: "like",
+    user: "freak_treat_______",
+    others: ["jack", "tom"],
+    time: "1w",
+    avatar: user3,
   },
 ];

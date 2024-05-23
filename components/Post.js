@@ -35,7 +35,7 @@ const InstaPost = () => {
           <MaterialCommunityIcons
             name="dots-vertical"
             size={25}
-            color="black"
+            color="white"
           />
         </TouchableOpacity>
       </View>
@@ -46,18 +46,18 @@ const InstaPost = () => {
             <AntDesign
               name="hearto"
               size={25}
-              color="black"
+              color="white"
               style={styles.iconStyle}
             />
             <Feather
               name="message-circle"
               size={25}
-              color="black"
+              color="white"
               style={styles.commentIcon}
             />
-            <Feather name="send" size={25} color="black" />
+            <Feather name="send" size={25} color="white" />
           </View>
-          <FontAwesome name="bookmark-o" size={25} color="black" />
+          <FontAwesome name="bookmark-o" size={25} color="white" />
         </View>
         <Text style={styles.likeStyles}>{item.likes} likes</Text>
         <Text style={styles.captionSection}>
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   usernameStyle: {
-    color: "black",
+    color: "white",
     fontSize: 13,
   },
   sponsoredText: {
@@ -206,17 +206,17 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   likeStyles: {
-    color: "black",
+    color: "white",
     marginTop: 8,
     fontSize: 13,
   },
   captionUserStyle: {
-    color: "black",
+    color: "white",
     fontSize: 13,
     fontWeight: "800",
   },
   caption: {
-    color: "black",
+    color: "white",
     fontSize: 13,
   },
   captionSection: {
