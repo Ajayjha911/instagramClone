@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ScrollView,
   FlatList,
@@ -6,7 +6,9 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Img1 from "../assets/img1.jpeg";
@@ -15,41 +17,66 @@ import Img3 from "../assets/img3.jpg";
 import Img4 from "../assets/img4.jpg";
 import Img5 from "../assets/img5.jpg";
 
+const yourStory = [{ id: 1, img: Img4, username: "jolly67" }];
+
 const stories = [
-  { id: 1, img: Img1, username: "jolly67" },
-  { id: 2, img: Img2, username: "jolly67" },
-  { id: 3, img: Img3, username: "jolly67" },
-  { id: 4, img: Img4, username: "jolly67" },
-  { id: 5, img: Img5, username: "jolly67" },
+  ...yourStory,
+  { id: 2, img: Img1, username: "jolly67" },
+  { id: 3, img: Img2, username: "test6" },
+  { id: 4, img: Img3, username: "jam09" },
+  { id: 5, img: Img5, username: "hvgv_hbjb" },
 ];
 
 const Stories = () => {
-  const renderStoryItem = ({ item, index }) => (
-    <View style={styles.stories}>
-      {index === 0 ? (
-        <View>
-          <Image source={item.img} style={styles.yourStory} />
-          <AntDesign
-            name="pluscircle"
-            size={16}
-            color="#2A93D5"
-            style={styles.iconStyle}
-          />
-          <Text style={styles.usernameStyle}>Your story</Text>
-        </View>
-      ) : (
-        <LinearGradient
-          colors={["#feda75", "#fa7e1e", "#d62976", "#962fbf"]}
-          start={{ x: 0.0, y: 1.0 }}
-          end={{ x: 1.0, y: 1.0 }}
-          style={styles.gradient}
-        >
-          <Image source={item.img} style={styles.imageStyle} />
-        </LinearGradient>
-      )}
-      {index !== 0 && <Text style={styles.usernameStyle}>{item.username}</Text>}
-    </View>
-  );
+  const [viewed, setViewed] = useState([]);
+  const navigation = useNavigation();
+
+  const renderStoryItem = ({ item, index }) => {
+    const isYourStory = yourStory.some((story) => story.id === item.id);
+    return (
+      <TouchableOpacity
+        style={styles.stories}
+        onPress={() => {
+          if (isYourStory) {
+            navigation.navigate("StoryUploadScreen");
+          } else {
+            setViewed([...viewed, item.id]);
+            navigation.navigate("ViewStoryScreen", { story: item });
+          }
+        }}
+        disabled={viewed.includes(item.id)}
+      >
+        {isYourStory ? (
+          <View>
+            <Image source={item.img} style={styles.yourStory} />
+            <AntDesign
+              name="pluscircle"
+              size={16}
+              color="#2A93D5"
+              style={styles.iconStyle}
+            />
+            <Text style={styles.usernameStyle}>Your story</Text>
+          </View>
+        ) : (
+          <LinearGradient
+            colors={
+              viewed.includes(item.id)
+                ? ["#c0c0c0", "#c0c0c0", "#c0c0c0", "#c0c0c0"]
+                : ["#feda75", "#fa7e1e", "#d62976", "#962fbf"]
+            }
+            start={{ x: 0.0, y: 1.0 }}
+            end={{ x: 1.0, y: 1.0 }}
+            style={styles.gradient}
+          >
+            <Image source={item.img} style={styles.imageStyle} />
+          </LinearGradient>
+        )}
+        {!isYourStory && (
+          <Text style={styles.usernameStyle}>{item.username}</Text>
+        )}
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <ScrollView horizontal>

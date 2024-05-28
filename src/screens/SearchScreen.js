@@ -7,10 +7,8 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
-  SafeAreaView,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { colors } from "../../config/color";
 import { DATA } from "../../data";
 
 const SearchScreen = () => {
@@ -37,7 +35,7 @@ const SearchScreen = () => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.headerWrapper}>
         {isSearching && (
           <TouchableOpacity onPress={handleSearchPress}>
@@ -45,7 +43,7 @@ const SearchScreen = () => {
               style={styles.backIcon}
               name="arrow-left"
               size={18}
-              color="#000"
+              color="white"
             />
           </TouchableOpacity>
         )}
@@ -107,14 +105,14 @@ const SearchScreen = () => {
           <Text style={styles.searchResultText}>{searchText}</Text>
         </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "black",
   },
   headerWrapper: {
     paddingTop: 20,
@@ -126,14 +124,15 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#EFEFEF",
-    borderRadius: 10,
-    flex: 1,
+    backgroundColor: "#333",
     paddingHorizontal: 10,
+    paddingVertical: 5,
+    // margin: 10,
+    borderRadius: 5,
   },
   searchInput: {
     flex: 1,
-    color: "#000",
+    color: "white",
     fontSize: 16,
     paddingVertical: 8,
   },

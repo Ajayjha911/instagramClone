@@ -4,10 +4,9 @@ import {
   View,
   ScrollView,
   RefreshControl,
-  SafeAreaView,
-  StatusBar,
+  Appearance,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import InstaStories from "../../components/Stories";
 import InstaPost from "../../components/Post";
@@ -22,10 +21,24 @@ const HomeScreen = () => {
       setRefreshing(false);
     }, 2000);
   };
+  const localColorScheme = Appearance.getColorScheme();
+  // const color = useColorScheme();
+  console.log("color", localColorScheme);
+
+  // const [colorScheme, setColorScheme] = useState(Appearance.getColorScheme());
+  // console.log("color", colorScheme);
+  // useEffect(() => {
+  //   const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+  //     setColorScheme(colorScheme);
+  //   });
+
+  //   // Cleanup the subscription on unmount
+  //   return () => subscription.remove();
+  // }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" />
+    <View style={styles.container}>
+      {/* <StatusBar barStyle="light-content" /> */}
       <Header />
       <ScrollView
         contentContainerStyle={styles.scrollView}
@@ -36,7 +49,7 @@ const HomeScreen = () => {
         <InstaStories />
         <InstaPost />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -44,7 +57,7 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: "black",
   },
   scrollView: {
