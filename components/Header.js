@@ -28,6 +28,8 @@ const Header = () => {
   );
 };
 
+export default Header;
+
 const styles = StyleSheet.create({
   logoStyle: {
     height: 32,
@@ -49,5 +51,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
 });
-
-export default Header;

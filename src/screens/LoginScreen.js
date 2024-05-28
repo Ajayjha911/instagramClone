@@ -1,4 +1,3 @@
-// LoginScreen.js
 import React, { useState } from "react";
 import {
   View,
@@ -7,7 +6,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  SafeAreaView,
 } from "react-native";
 
 const LoginScreen = ({ navigation }) => {
@@ -15,7 +13,6 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
 
   const handleLogin = () => {
-    // Dummy login logic
     if (username === "user" && password === "password") {
       navigation.navigate("Home");
     } else {
@@ -24,7 +21,7 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Image source={require("../../assets/logo.png")} style={styles.logo} />
       <TextInput
         style={styles.input}
@@ -68,7 +65,7 @@ const LoginScreen = ({ navigation }) => {
           Don't have an account? <Text style={styles.signUpLink}>Sign up.</Text>
         </Text>
       </TouchableOpacity>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -80,6 +77,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingHorizontal: 30,
   },
+
   logo: {
     width: 240,
     height: 50,

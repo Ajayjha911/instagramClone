@@ -1,25 +1,36 @@
+import "react-native-gesture-handler";
 import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
-import HomeScreen from "../screens/HomeScreen";
-import ReelScreen from "../screens/ReelScreen";
-import SearchScreen from "../screens/SearchScreen";
-import ProfileScreen from "../screens/ProfileScreen";
-import PostScreen from "../screens/PostScreen";
-// import LoginScreen from "../screens/LoginScreen";
+import { createStackNavigator } from "@react-navigation/stack";
+import LoginScreen from "../screens/LoginScreen";
+import HomeNavigator from "./HomeNavigators";
+import ChatScreen from "../screens/ChatScreen";
+import NotificationScreen from "../screens/NotificationScreen";
+import StoryUploadScreen from "../screens/StoryUploadScreen";
+import ConfirmStoryScreen from "../screens/ConfirmStoryScreen";
+import ViewStoryScreen from "../screens/ViewStoryScreen";
 
-const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 const MainNavigator = () => {
   return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Reel" component={ReelScreen} />
-        <Tab.Screen name="Search" component={SearchScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator
+      initialRouteName="Login"
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Home" component={HomeNavigator} />
+      <Stack.Screen name="Chat" component={ChatScreen} />
+      <Stack.Screen name="Notifications" component={NotificationScreen} />
+      <Stack.Screen name="StoryUploadScreen" component={StoryUploadScreen} />
+      <Stack.Screen name="ConfirmStoryScreen" component={ConfirmStoryScreen} />
+      <Stack.Screen
+        name="ViewStoryScreen"
+        component={ViewStoryScreen}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
   );
 };
 
