@@ -7,17 +7,36 @@ import {
   StyleSheet,
   FlatList,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import { Ionicons } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { selectStoryImage } from "../../src/redux/slices/storySlice";
 
 const StoryUploadScreen = ({ navigation }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [galleryImages, setGalleryImages] = useState([]);
+  const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   (async () => {
+
+  //     const { status } = await MediaLibrary.requestPermissionsAsync();
+  //     if (status !== "granted") {
+  //       alert("Permission to access media library is required!");
+  //       return;
+  //     }
+
+  //     const media = await MediaLibrary.getAssetsAsync({
+  //       mediaType: "photo",
+  //       first: 50,
+  //     });
+  //     setGalleryImages(media.assets);
+  //   })();
+  // }, []);
 
   useEffect(() => {
-    (async () => {
+    const test = async () => {
       const { status } = await MediaLibrary.requestPermissionsAsync();
       if (status !== "granted") {
         alert("Permission to access media library is required!");
@@ -28,8 +47,10 @@ const StoryUploadScreen = ({ navigation }) => {
         mediaType: "photo",
         first: 50,
       });
+      // console.log("media-asset", media?.assets);
       setGalleryImages(media.assets);
-    })();
+    };
+    test();
   }, []);
 
   const openImagePickerAsync = async () => {
@@ -40,21 +61,41 @@ const StoryUploadScreen = ({ navigation }) => {
     setSelectedImage({ localUri: pickerResult.uri });
   };
 
+  const resolveAssetUri = async (id) => {
+    const assetInfo = await MediaLibrary.getAssetInfoAsync(id);
+    return assetInfo.localUri || assetInfo.uri;
+  };
+
   const renderGalleryItem = ({ item }) => (
-    <TouchableOpacity onPress={() => setSelectedImage({ localUri: item.uri })}>
-      <Image source={{ uri: item.uri }} style={styles.galleryImage} />
+    <TouchableOpacity
+      onPress={async () => {
+        const resolvedUri = await resolveAssetUri(item.id);
+        setSelectedImage({
+          localUri: "https://loremflickr.com/640/480/dslr",
+        });
+      }}
+    >
+      <Image
+        source={{ uri: "https://loremflickr.com/640/480/dslr" }}
+        style={styles.galleryImage}
+      />
     </TouchableOpacity>
   );
-  const navigations = useNavigation();
 
-  const handleBack = () => {
-    navigations.goBack();
+  const handleSelectImage = () => {
+    if (selectedImage) {
+      dispatch(selectStoryImage(selectedImage.localUri));
+      navigation.goBack();
+    }
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerWrraper}>
-        <TouchableOpacity onPress={handleBack} style={styles.arrow}>
+      <View style={styles.headerWrapper}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.arrow}
+        >
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
         <Text style={styles.header}>Add to story</Text>
@@ -92,10 +133,7 @@ const StoryUploadScreen = ({ navigation }) => {
           style={styles.thumbnail}
         />
       )}
-      <TouchableOpacity
-        style={styles.selectButton}
-        onPress={() => navigation.goBack()}
-      >
+      <TouchableOpacity style={styles.selectButton} onPress={handleSelectImage}>
         <Text style={styles.selectButtonText}>Select</Text>
       </TouchableOpacity>
     </View>
@@ -114,7 +152,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
   },
-  headerWrraper: {
+  headerWrapper: {
     flexDirection: "row",
     alignItems: "center",
     gap: 20,
