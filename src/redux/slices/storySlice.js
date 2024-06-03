@@ -1,31 +1,34 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  storyImage: null,
-  viewed: false,
-  timestamp: null,
-};
-
 const storySlice = createSlice({
   name: "story",
-  initialState,
+  initialState: {
+    storyImage: null,
+    timestamp: null,
+    viewedStories: [], // Added to track viewed stories with timestamps
+  },
   reducers: {
     selectStoryImage: (state, action) => {
       state.storyImage = action.payload;
-      state.viewed = false;
       state.timestamp = Date.now();
-    },
-    viewStoryImage: (state) => {
-      state.viewed = true;
     },
     resetStoryImage: (state) => {
       state.storyImage = null;
-      state.viewed = false;
       state.timestamp = null;
+    },
+    addViewedStory: (state, action) => {
+      state.viewedStories.push(action.payload); // Added to track viewed stories
+    },
+    clearViewedStories: (state) => {
+      state.viewedStories = [];
     },
   },
 });
 
-export const { selectStoryImage, viewStoryImage, resetStoryImage } =
-  storySlice.actions;
+export const {
+  selectStoryImage,
+  resetStoryImage,
+  addViewedStory,
+  clearViewedStories,
+} = storySlice.actions;
 export default storySlice.reducer;

@@ -9,8 +9,8 @@ import {
 } from "react-native";
 
 const LoginScreen = ({ navigation }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("user");
+  const [password, setPassword] = useState("password");
 
   const handleLogin = () => {
     if (username === "user" && password === "password") {

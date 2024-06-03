@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState, useRef } from "react";
 import {
   View,
   Image,
@@ -9,34 +9,98 @@ import {
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import * as Progress from "react-native-progress";
+import Modal from "react-native-modal";
+import { useDispatch, useSelector } from "react-redux";
+import { addViewedStory } from "../redux/slices/storySlice";
 
 const ViewStoryScreen = ({ route, navigation }) => {
   const { story } = route.params;
   const [progress, setProgress] = useState(0);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const progressRef = useRef(progress);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    let timer = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 1) {
-          clearInterval(timer);
-          navigation.goBack();
-          return 1;
-        }
-        return prev + 0.01;
-      });
-    }, 80);
+    progressRef.current = progress;
+  }, [progress]);
 
-    return () => clearInterval(timer);
-  }, []);
+  useLayoutEffect(() => {
+    let startTime = null;
+
+    const updateProgress = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+
+      if (elapsed >= 80) {
+        setProgress((prev) => {
+          const newProgress = prev + 0.01;
+          if (newProgress >= 1) {
+            navigation.goBack();
+            return 1;
+          }
+          return newProgress;
+        });
+        startTime = timestamp;
+      }
+
+      if (progressRef.current < 1) {
+        requestAnimationFrame(updateProgress);
+      }
+    };
+
+    requestAnimationFrame(updateProgress);
+
+    return () => {
+      setProgress(0);
+    };
+  }, [navigation]);
+
+  useLayoutEffect(() => {
+    dispatch(addViewedStory({ id: story.id, timestamp: Date.now() }));
+  }, [dispatch, story.id]);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
+  const getTimeDifference = (timestamp) => {
+    const now = Date.now();
+    const difference = now - timestamp;
+
+    if (difference < 60000) {
+      return `${Math.floor(difference / 1000)} sec ago`;
+    } else if (difference < 3600000) {
+      return `${Math.floor(difference / 60000)} min ago`;
+    } else if (difference < 86400000) {
+      return `${Math.floor(difference / 3600000)} hr ago`;
+    } else {
+      return `${Math.floor(difference / 86400000)} days ago`;
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <View style={styles.progressBarContainer}>
-        <View style={[styles.progressBar, { width: `${progress * 100}%` }]} />
-      </View>
+      <Progress.Bar
+        progress={progress}
+        width={null}
+        color="#fff"
+        unfilledColor="#555"
+        borderWidth={0}
+        height={3}
+        style={styles.progressBar}
+      />
       <View style={styles.userInfo}>
         <Image source={story.img} style={styles.userAvatar} />
-        <Text style={styles.modalUsername}>{story.username}</Text>
+        <View style={styles.textContainer}>
+          <Text style={styles.modalUsername}>{story.username}</Text>
+          <Text style={styles.timestampStyle}>
+            {getTimeDifference(story.timestamp)}
+          </Text>
+        </View>
+        <TouchableOpacity onPress={toggleModal} style={styles.moreIcon}>
+          <MaterialIcons name="more-vert" size={24} color="#fff" />
+        </TouchableOpacity>
       </View>
       <Image source={story.img} style={styles.modalImage} />
       <View style={styles.bottomBar}>
@@ -52,6 +116,20 @@ const ViewStoryScreen = ({ route, navigation }) => {
           <FontAwesome name="paper-plane" size={24} color="#ffffff" />
         </TouchableOpacity>
       </View>
+      <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={toggleModal}
+        style={styles.modal}
+      >
+        <View style={styles.modalContent}>
+          <TouchableOpacity style={styles.modalItem}>
+            <Text style={styles.modalText1}>Report</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.modalItem}>
+            <Text style={styles.modalText}>Mute</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -81,21 +159,21 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
   },
+  textContainer: {
+    marginLeft: 10,
+  },
   modalUsername: {
     color: "white",
-    marginLeft: 10,
     fontSize: 16,
   },
-  progressBarContainer: {
-    height: 3,
-    width: "100%",
-    backgroundColor: "#555",
-    position: "absolute",
-    top: 0,
+  timestampStyle: {
+    color: "gray",
+    fontSize: 12,
   },
   progressBar: {
-    height: "100%",
-    backgroundColor: "#fff",
+    position: "absolute",
+    top: 0,
+    width: "100%",
   },
   bottomBar: {
     flexDirection: "row",
@@ -114,15 +192,32 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingHorizontal: 15,
   },
-  sendButton: {
-    marginLeft: 10,
-  },
-  sendButtonText: {
-    color: "white",
-    fontSize: 16,
-  },
   iconButton: {
     marginLeft: 10,
+  },
+  moreIcon: {
+    marginLeft: "auto",
+  },
+  modal: {
+    justifyContent: "flex-end",
+    margin: 0,
+  },
+  modalContent: {
+    backgroundColor: "black",
+    padding: 20,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  modalItem: {
+    paddingVertical: 15,
+  },
+  modalText: {
+    fontSize: 18,
+    color: "white",
+  },
+  modalText1: {
+    fontSize: 18,
+    color: "red",
   },
 });
 
