@@ -18,6 +18,7 @@ const ViewStoryScreen = ({ route, navigation }) => {
   const { story } = route.params;
   const [progress, setProgress] = useState(0);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const progressRef = useRef(progress);
   const dispatch = useDispatch();
 
@@ -36,8 +37,13 @@ const ViewStoryScreen = ({ route, navigation }) => {
         setProgress((prev) => {
           const newProgress = prev + 0.01;
           if (newProgress >= 1) {
-            navigation.goBack();
-            return 1;
+            if (currentImageIndex < story.img.length - 1) {
+              setCurrentImageIndex((prevIndex) => prevIndex + 1);
+              setProgress(0);
+            } else {
+              navigation.goBack();
+            }
+            return 0;
           }
           return newProgress;
         });
@@ -54,7 +60,7 @@ const ViewStoryScreen = ({ route, navigation }) => {
     return () => {
       setProgress(0);
     };
-  }, [navigation]);
+  }, [navigation, currentImageIndex, story.img.length]);
 
   useLayoutEffect(() => {
     dispatch(addViewedStory({ id: story.id, timestamp: Date.now() }));
@@ -81,17 +87,31 @@ const ViewStoryScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Progress.Bar
-        progress={progress}
-        width={null}
-        color="#fff"
-        unfilledColor="#555"
-        borderWidth={0}
-        height={3}
-        style={styles.progressBar}
-      />
+      <View style={styles.progressContainer}>
+        {story.img.map((_, index) => (
+          <Progress.Bar
+            key={index}
+            progress={
+              index === currentImageIndex
+                ? progress
+                : index < currentImageIndex
+                ? 1
+                : 0
+            }
+            width={null}
+            color="#fff"
+            unfilledColor="#555"
+            borderWidth={0}
+            height={3}
+            style={styles.progressBar}
+          />
+        ))}
+      </View>
       <View style={styles.userInfo}>
-        <Image source={story.img} style={styles.userAvatar} />
+        <Image
+          source={story.img[currentImageIndex]}
+          style={styles.userAvatar}
+        />
         <View style={styles.textContainer}>
           <Text style={styles.modalUsername}>{story.username}</Text>
           <Text style={styles.timestampStyle}>
@@ -102,7 +122,7 @@ const ViewStoryScreen = ({ route, navigation }) => {
           <MaterialIcons name="more-vert" size={24} color="#fff" />
         </TouchableOpacity>
       </View>
-      <Image source={story.img} style={styles.modalImage} />
+      <Image source={story.img[currentImageIndex]} style={styles.modalImage} />
       <View style={styles.bottomBar}>
         <TextInput
           placeholder="Send message"
@@ -170,10 +190,16 @@ const styles = StyleSheet.create({
     color: "gray",
     fontSize: 12,
   },
-  progressBar: {
+  progressContainer: {
     position: "absolute",
     top: 0,
     width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  progressBar: {
+    flex: 1,
+    marginHorizontal: 2,
   },
   bottomBar: {
     flexDirection: "row",
