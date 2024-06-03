@@ -32,23 +32,52 @@ const Stories = () => {
   const yourStory = [
     {
       id: 1,
-      img: story.story.storyImage ? { uri: story.story.storyImage } : Img4,
+      img: story.story.storyImage ? [{ uri: story.story.storyImage }] : [Img4],
       username: "test",
       timestamp: story.story.timestamp,
     },
   ];
   const stories = [
-    ...yourStory,
-    { id: 2, img: Img1, username: "jolly67", timestamp: Date.now() - 3600000 },
-    { id: 3, img: Img2, username: "test6", timestamp: Date.now() - 7200000 },
-    { id: 4, img: Img3, username: "jam09", timestamp: Date.now() - 10800000 },
+    {
+      id: 2,
+      img: [Img1],
+      username: "jolly67",
+      timestamp: Date.now() - 3600000,
+    },
+    {
+      id: 3,
+      img: [Img2, Img5],
+      username: "test6",
+      timestamp: Date.now() - 7200000,
+    },
+    { id: 4, img: [Img3], username: "jam09", timestamp: Date.now() - 10800000 },
     {
       id: 5,
-      img: Img5,
+      img: [Img5],
       username: "hvgv_hbjb",
       timestamp: Date.now() - 14400000,
     },
   ];
+
+  // Separate and sort the stories
+  const unviewedStories = stories.filter(
+    (item) =>
+      !story.story.viewedStories.some(
+        (viewedStory) =>
+          viewedStory.id === item.id &&
+          Date.now() - viewedStory.timestamp < 24 * 60 * 60 * 1000
+      )
+  );
+
+  const viewedStories = stories.filter((item) =>
+    story.story.viewedStories.some(
+      (viewedStory) =>
+        viewedStory.id === item.id &&
+        Date.now() - viewedStory.timestamp < 24 * 60 * 60 * 1000
+    )
+  );
+
+  const sortedStories = [...yourStory, ...unviewedStories, ...viewedStories];
 
   useEffect(() => {
     if (story.timestamp) {
@@ -78,7 +107,7 @@ const Stories = () => {
   const renderStoryItem = ({ item }) => {
     const isYourStory = yourStory.some((story) => story.id === item.id);
     const displayImage =
-      tempStory && isYourStory ? { uri: tempStory } : item.img;
+      tempStory && isYourStory ? { uri: tempStory } : item.img[0]; // Display first image as preview
     const storyViewed = story?.story?.viewedStories?.some(
       (viewedStory) =>
         viewedStory.id === item.id &&
@@ -143,7 +172,7 @@ const Stories = () => {
       contentContainerStyle={styles.storiesContainer}
     >
       <FlatList
-        data={stories}
+        data={sortedStories}
         renderItem={renderStoryItem}
         keyExtractor={(item) => item.id.toString()}
         horizontal
