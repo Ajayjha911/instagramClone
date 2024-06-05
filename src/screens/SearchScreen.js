@@ -37,7 +37,7 @@ const SearchScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
-        {isSearching && (
+        {isSearching && searchText.length > 0 && (
           <TouchableOpacity onPress={handleSearchPress}>
             <Icon
               style={styles.backIcon}
@@ -151,14 +151,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderBottomWidth: 2,
-    borderBottomColor: "#000",
+    borderBottomColor: "white",
   },
   categoryItem: {
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
   titleSelected: {
-    color: "#000",
+    color: "white",
     fontWeight: "bold",
   },
   title: {

@@ -7,6 +7,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
@@ -149,12 +150,20 @@ const Stories = () => {
             <Image source={displayImage} style={styles.imageStyle} />
           </LinearGradient>
           {isYourStory && (
-            <AntDesign
-              name="pluscircle"
-              size={16}
-              color="#2A93D5"
-              style={styles.iconStyle}
-            />
+            <TouchableWithoutFeedback
+              onPress={() => {
+                navigation.navigate("StoryUploadScreen", {
+                  onUpload: (imageUri) => setTempStory(imageUri),
+                });
+              }}
+            >
+              <AntDesign
+                name="pluscircle"
+                size={16}
+                color="#2A93D5"
+                style={styles.iconStyle}
+              />
+            </TouchableWithoutFeedback>
           )}
         </View>
 
