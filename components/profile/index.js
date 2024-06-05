@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import styles from "./profile.style";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import GridIcon from "react-native-vector-icons/MaterialIcons";
+
 import LockIcon from "react-native-vector-icons/Ionicons";
 import ThreadsIcon from "react-native-vector-icons/FontAwesome6";
 import PlusIcon from "react-native-vector-icons/Feather";
@@ -17,13 +19,9 @@ import { COLORS, SIZES, images } from "../../constants";
 import { USERS, POSTS } from "../../data";
 import ProfilePost from "./profile_post";
 import CustomButton from "../custom-button/custom-button";
-// import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { Ionicons as ProfileIcon } from "@expo/vector-icons";
 
 const loggedInUser = USERS[1];
-
-const MyComp = () => {
-  return <Text>My Comp</Text>;
-};
 
 const ProfileScreen = ({ navigation }) => {
   const [activeTab, setActiveTab] = useState("posts");
@@ -48,10 +46,8 @@ const ProfileScreen = ({ navigation }) => {
     [activeTab, postsCreatedByLoggedInUser, postsLikedByLoggedInUser],
   );
 
-  // const Tab = createMaterialTopTabNavigator();
-
   return (
-    <SafeAreaView style={styles.rootContainer}>
+    <View style={styles.rootContainer}>
       <View style={styles.profileHeader}>
         <TouchableOpacity style={styles.disUserName}>
           <LockIcon name="lock-closed-outline" size={16} />
@@ -125,23 +121,12 @@ const ProfileScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {/* <Tab.Navigator>
-        <Tab.Screen name="Your lists" component={MyComp} />
-      </Tab.Navigator> */}
-
-      {/* <TopNav>
-        <Tab.Screen name="Your lists" component={MyComp} />
-        <Tab.Screen name="Saved lists" component={MyComp} />
-        <Tab.Screen name="Highlighted" component={MyComp} />
-        <Tab.Screen name="Reading history" component={MyComp} />
-      </TopNav> */}
-
-      {/* <View style={styles.iconContainer}>
+      <View style={styles.iconContainer}>
         <TouchableOpacity
           style={styles.iconBtnContainer("posts", activeTab)}
           onPress={() => setActiveTab("posts")}
         >
-          <Icon name="th" size={25} />
+          <GridIcon name="grid-on" size={25} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.iconBtnContainer("reels", activeTab)}>
           <Icon name="video" size={25} />
@@ -150,9 +135,9 @@ const ProfileScreen = ({ navigation }) => {
           style={styles.iconBtnContainer("likes", activeTab)}
           onPress={() => setActiveTab("likes")}
         >
-          <Icon name="heart" size={25} solid />
+          <ProfileIcon name="person-circle-sharp" size={30} />
         </TouchableOpacity>
-      </View> */}
+      </View>
 
       <>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -185,7 +170,7 @@ const ProfileScreen = ({ navigation }) => {
           </View>
         </ScrollView>
       </>
-    </SafeAreaView>
+    </View>
   );
 };
 
