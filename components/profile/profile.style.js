@@ -31,6 +31,7 @@ export default StyleSheet.create({
     alignItems: "flex-end",
     gap: 20,
     marginRight: 8,
+    paddingBottom: 24,
   },
   detailContainer: { alignItems: "center" },
   textLabel: {
