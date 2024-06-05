@@ -11,7 +11,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as Progress from "react-native-progress";
 import Modal from "react-native-modal";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addViewedStory } from "../redux/slices/storySlice";
 
 const ViewStoryScreen = ({ route, navigation }) => {
