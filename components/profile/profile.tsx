@@ -5,6 +5,8 @@ import {
   View,
   Image,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  ActionSheetIOS,
 } from "react-native";
 import styles from "./profile.style";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -13,6 +15,7 @@ import GridIcon from "react-native-vector-icons/MaterialIcons";
 import LockIcon from "react-native-vector-icons/Ionicons";
 import ThreadsIcon from "react-native-vector-icons/FontAwesome6";
 import PlusIcon from "react-native-vector-icons/Feather";
+import ElipseIcon from "react-native-vector-icons/AntDesign";
 
 import { ScrollView } from "react-native-gesture-handler";
 import { COLORS, SIZES, images } from "../../constants";
@@ -20,15 +23,14 @@ import { USERS, POSTS } from "../../data";
 import ProfilePost from "./profile_post";
 import CustomButton from "../custom-button/custom-button";
 import { Ionicons as ProfileIcon } from "@expo/vector-icons";
+
 import { ProfilePageProps } from "./profile.types";
 // import { useNavigation } from "@react-navigation/native";
 
 const loggedInUser = USERS[1];
 
 const ProfileScreen: React.FC<ProfilePageProps> = ({ isMyAccount }) => {
-  console.log("isMyAccount:", isMyAccount);
   const [activeTab, setActiveTab] = useState("posts");
-  // const navigation = useNavigation();
 
   const { postsCreatedByLoggedInUser, postsLikedByLoggedInUser } =
     useMemo(() => {
@@ -50,20 +52,65 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({ isMyAccount }) => {
     [activeTab, postsCreatedByLoggedInUser, postsLikedByLoggedInUser],
   );
 
+  const handleActionSheet = () => {
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: [
+          "Cancel",
+          "Restrict",
+          "Block",
+          "Report",
+          "About this account",
+          "Share this profile",
+        ],
+        destructiveButtonIndex: [1, 2, 3],
+        cancelButtonIndex: 0,
+        userInterfaceStyle: "light",
+      },
+      (buttonIndex) => {
+        if (buttonIndex === 0) {
+          // cancel action
+        }
+      },
+    );
+  };
+
   return (
     <View style={styles.rootContainer}>
-      <View style={styles.profileHeader}>
-        <TouchableOpacity style={styles.disUserName}>
-          <LockIcon name="lock-closed-outline" size={16} />
-          <Text style={styles.userNameText}>deepanshu__goyal</Text>
-          <Icon name="chevron-down" size={16} />
-        </TouchableOpacity>
-        <View style={styles.profileIcons}>
-          <ThreadsIcon name="threads" size={24} />
-          <PlusIcon name="plus-square" solid size={24} />
-          <Icon name="bars" size={22} />
+      {isMyAccount ? (
+        <View style={styles.profileHeader}>
+          <TouchableOpacity style={styles.disUserName}>
+            <LockIcon name="lock-closed-outline" size={16} />
+            <Text style={styles.userNameText}>deepanshu__goyal</Text>
+            <Icon name="chevron-down" size={16} />
+          </TouchableOpacity>
+          <View style={styles.profileIcons}>
+            <ThreadsIcon name="threads" size={24} />
+            <PlusIcon name="plus-square" solid size={24} />
+            <Icon name="bars" size={22} />
+          </View>
         </View>
-      </View>
+      ) : (
+        <View style={styles.searchProfileContainer}>
+          <TouchableOpacity>
+            <ProfileIcon name="chevron-back-outline" size={24} />
+          </TouchableOpacity>
+          <Text style={styles.searchProfileText}>_ajay_kumar_</Text>
+          <View style={styles.searchProfileIconContainer}>
+            <ProfileIcon
+              name="notifications-outline"
+              size={24}
+              style={{
+                paddingRight: 16,
+              }}
+            />
+            <TouchableOpacity onPress={handleActionSheet}>
+              <ElipseIcon name="ellipsis1" size={24} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+
       <View style={styles.profileContainer}>
         <View>
           <View style={styles.imageContainer}>

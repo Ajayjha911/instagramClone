@@ -3,6 +3,17 @@ import { COLORS, FONT, SIZES } from "../../constants";
 
 const screenWidth = Dimensions.get("window").width - 20;
 export default StyleSheet.create({
+  searchProfileContainer: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+  },
+  searchProfileIconContainer: {
+    flexDirection: "row",
+  },
+  searchProfileText: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
   rootContainer: {
     flex: 1,
     gap: 10,
