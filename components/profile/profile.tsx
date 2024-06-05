@@ -20,11 +20,15 @@ import { USERS, POSTS } from "../../data";
 import ProfilePost from "./profile_post";
 import CustomButton from "../custom-button/custom-button";
 import { Ionicons as ProfileIcon } from "@expo/vector-icons";
+import { ProfilePageProps } from "./profile.types";
+// import { useNavigation } from "@react-navigation/native";
 
 const loggedInUser = USERS[1];
 
-const ProfileScreen = ({ navigation }) => {
+const ProfileScreen: React.FC<ProfilePageProps> = ({ isMyAccount }) => {
+  console.log("isMyAccount:", isMyAccount);
   const [activeTab, setActiveTab] = useState("posts");
+  // const navigation = useNavigation();
 
   const { postsCreatedByLoggedInUser, postsLikedByLoggedInUser } =
     useMemo(() => {
