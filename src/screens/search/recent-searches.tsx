@@ -3,6 +3,7 @@ import {
   dummyUsers,
   selectRecentSearches,
   setClearRecentSearch,
+  setRecentSearches,
 } from "@redux/slices/searchSlice";
 import React, { useMemo } from "react";
 import {
@@ -16,6 +17,7 @@ import NewIcon from "react-native-vector-icons/Ionicons";
 import { USERS } from "data";
 import Avatar from "@components/avatar/avatar";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 declare type RecentSearches = {
   searchText: string;
@@ -43,6 +45,13 @@ const RecentSearches: React.FC<RecentSearches> = ({ searchText }) => {
     return searchText?.length > 0 ? found : recentSearches;
   }, [searchText, recentSearches]);
 
+  const handlePress = (user: SearchUsersState) => {
+    if (searchText?.length > 0) {
+      dispatch(setRecentSearches(user));
+    }
+    console.log("in else");
+  };
+
   return (
     <View>
       {searchText.length === 0 && (
@@ -65,27 +74,40 @@ const RecentSearches: React.FC<RecentSearches> = ({ searchText }) => {
             key={index}
           >
             <View style={styles.subContainer}>
-              {/* <Image
+              <TouchableOpacity
+                onPress={() => handlePress(user)}
+                activeOpacity={1}
+                style={{ flexDirection: "row" }}
+              >
+                <React.Fragment>
+                  {/* <Image
                 source={{ uri: user.profile_image }}
                 style={styles.recentSearchImages}
               /> */}
-              <Avatar
-                title={user.display_name}
-                height={35}
-                width={35}
-                titleSize={16}
-              />
-              <View style={styles.recentTextContainer}>
-                <Text style={[styles.recentSearchText]}>{user.user_name}</Text>
-                <Text
-                  style={[styles.recentSearchText, styles.recentSearchTextId]}
-                >
-                  {user.display_name}
-                  {loggedInUser?.following?.includes(user?.id)
-                    ? " • Following"
-                    : ""}
-                </Text>
-              </View>
+                  <Avatar
+                    title={user.display_name}
+                    height={35}
+                    width={35}
+                    titleSize={16}
+                  />
+                  <View style={styles.recentTextContainer}>
+                    <Text style={[styles.recentSearchText]}>
+                      {user.user_name}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.recentSearchText,
+                        styles.recentSearchTextId,
+                      ]}
+                    >
+                      {user.display_name}
+                      {loggedInUser?.following?.includes(user?.id)
+                        ? " • Following"
+                        : ""}
+                    </Text>
+                  </View>
+                </React.Fragment>
+              </TouchableOpacity>
             </View>
             {searchText.length === 0 && (
               <TouchableWithoutFeedback
