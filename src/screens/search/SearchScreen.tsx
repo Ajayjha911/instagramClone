@@ -18,6 +18,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setClearRecentSearch } from "@redux/slices/searchSlice";
 import NewIcon from "react-native-vector-icons/Ionicons";
+import RecentSearches from "./recent-searches";
 
 const SearchScreen = () => {
   const dispatch = useDispatch();
@@ -101,44 +102,7 @@ const SearchScreen = () => {
       </View>
       {isSearching ? (
         <React.Fragment>
-          <Text style={styles.recentHeading}>Recent</Text>
-          {recentSearches?.length === 0 && (
-            <Text style={{ color: "white" }}>No Recent Searches</Text>
-          )}
-          {recentSearches?.map((user) => {
-            return (
-              <View style={styles.recentSearchContainer}>
-                <Image
-                  source={{ uri: user.profile_image }}
-                  style={styles.recentSearchImages}
-                />
-                <View style={styles.recentSearchTextContainer}>
-                  <View style={{ flexDirection: "column" }}>
-                    <Text style={[styles.recentSearchText]}>
-                      {user.user_name}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.recentSearchText,
-                        styles.recentSearchTextId,
-                      ]}
-                    >
-                      {user.display_name}
-                      {loggedInUser?.following?.includes(user?.id)
-                        ? " • Following"
-                        : ""}
-                    </Text>
-                  </View>
-                  <TouchableOpacity
-                    onPress={() => handleRecentSearchClear(user)}
-                    style={{}}
-                  >
-                    <NewIcon name="close" size={24} color="red" />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            );
-          })}
+          <RecentSearches />
         </React.Fragment>
       ) : (
         <FlatList
@@ -157,34 +121,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
-  },
-  recentHeading: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-    paddingBottom: 16,
-  },
-  recentSearchContainer: {
-    paddingBottom: 16,
-    flexDirection: "row",
-  },
-  recentSearchTextContainer: {
-    paddingLeft: 16,
-    justifyContent: "center",
-    flexDirection: "row",
-  },
-  recentSearchTextId: {
-    fontWeight: "normal",
-    opacity: 0.7,
-  },
-  recentSearchImages: {
-    height: 40,
-    width: 40,
-    borderRadius: 100,
-  },
-  recentSearchText: {
-    color: "white",
-    fontWeight: "600",
   },
   headerWrapper: {
     paddingTop: 20,
