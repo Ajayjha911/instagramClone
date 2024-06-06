@@ -75,7 +75,7 @@ const loginUser = {
   display_name: "Deepanshu Goyal",
   user_name: "deepanshu__goyal",
   profile_image: "https://loremflickr.com/640/480/dslr",
-  bio: "",
+  bio: "This is dummy bio",
   posts: ["0"],
   followers: ["1", "2", "3", "4", "5"],
   following: ["1", "2", "3", "4", "5"],
