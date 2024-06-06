@@ -9,21 +9,11 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { DATA, USERS } from "../../../data";
-import {
-  SearchUsersState,
-  dummyUsers,
-  selectRecentSearches,
-} from "../../redux/slices/searchSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { setClearRecentSearch } from "@redux/slices/searchSlice";
-import NewIcon from "react-native-vector-icons/Ionicons";
+import { DATA } from "../../../data";
+
 import RecentSearches from "./recent-searches";
 
 const SearchScreen = () => {
-  const dispatch = useDispatch();
-  const loggedInUser = USERS[1];
-
   const [searchText, setSearchText] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const inputRef = useRef(null);
@@ -42,25 +32,9 @@ const SearchScreen = () => {
     </View>
   );
 
-  const recentSearches = useSelector(selectRecentSearches);
-
-  const handleRecentSearchClear = (user: SearchUsersState) => {
-    dispatch(setClearRecentSearch(user));
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
-        {isSearching && (
-          <TouchableOpacity onPress={clearSearch}>
-            <Icon
-              style={styles.backIcon}
-              name="arrow-left"
-              size={18}
-              color="white"
-            />
-          </TouchableOpacity>
-        )}
         <View style={styles.searchContainer}>
           <TextInput
             ref={inputRef}
@@ -102,7 +76,7 @@ const SearchScreen = () => {
       </View>
       {isSearching ? (
         <React.Fragment>
-          <RecentSearches />
+          <RecentSearches searchText={searchText} />
         </React.Fragment>
       ) : (
         <FlatList
@@ -144,9 +118,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingVertical: 8,
   },
-  backIcon: {
-    marginRight: 10,
-  },
+  // backIcon: {
+  //   marginRight: 10,
+  // },
   clearIcon: {
     marginLeft: 10,
   },

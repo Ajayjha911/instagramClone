@@ -1,15 +1,27 @@
 import {
   SearchUsersState,
+  dummyUsers,
   selectRecentSearches,
   setClearRecentSearch,
 } from "@redux/slices/searchSlice";
-import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useMemo } from "react";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import NewIcon from "react-native-vector-icons/Ionicons";
 import { USERS } from "data";
 
-const RecentSearches: React.FC = () => {
+declare type RecentSearches = {
+  searchText: string;
+};
+
+const RecentSearches: React.FC<RecentSearches> = ({ searchText }) => {
   const recentSearches = useSelector(selectRecentSearches);
   const dispatch = useDispatch();
   const loggedInUser = USERS[1];
@@ -17,21 +29,53 @@ const RecentSearches: React.FC = () => {
   const handleRecentSearchClear = (user: SearchUsersState) => {
     dispatch(setClearRecentSearch(user));
   };
+
+  const dataToBeUsed = useMemo(() => {
+    const found = [];
+    dummyUsers.forEach((user) => {
+      if (
+        user.display_name.toLowerCase().includes(searchText.toLowerCase()) ||
+        user.user_name.toLowerCase().includes(searchText.toLowerCase())
+      ) {
+        found.push(user);
+      }
+    });
+    return searchText?.length > 0 ? found : recentSearches;
+  }, [searchText, recentSearches]);
+
+  console.log("dataToBeUsed:", dataToBeUsed);
   return (
     <View>
-      <Text style={styles.recentHeading}>Recent</Text>
-      {recentSearches?.length === 0 && (
+      {searchText.length === 0 && (
+        <Text style={styles.recentHeading}>Recent</Text>
+      )}
+      {recentSearches?.length === 0 && searchText.length === 0 && (
         <Text style={{ color: "white" }}>No Recent Searches</Text>
       )}
-      {recentSearches?.map((user) => {
+      {searchText?.length > 0 && dataToBeUsed?.length === 0 && (
+        <Text style={{ color: "white", paddingTop: 16 }}>No user found</Text>
+      )}
+      {dataToBeUsed?.map((user, index) => {
         return (
-          <View style={styles.recentSearchContainer}>
+          <View
+            style={[
+              styles.recentSearchContainer,
+              searchText?.length > 0 &&
+                index === 0 && {
+                  paddingTop: 16,
+                },
+            ]}
+          >
             <Image
               source={{ uri: user.profile_image }}
               style={styles.recentSearchImages}
             />
             <View style={styles.recentSearchTextContainer}>
-              <View style={{ flexDirection: "column" }}>
+              <View
+                style={{
+                  flexDirection: "column",
+                }}
+              >
                 <Text style={[styles.recentSearchText]}>{user.user_name}</Text>
                 <Text
                   style={[styles.recentSearchText, styles.recentSearchTextId]}
@@ -42,12 +86,13 @@ const RecentSearches: React.FC = () => {
                     : ""}
                 </Text>
               </View>
-              <TouchableOpacity
-                onPress={() => handleRecentSearchClear(user)}
-                style={{}}
-              >
-                <NewIcon name="close" size={24} color="red" />
-              </TouchableOpacity>
+              {searchText.length === 0 && (
+                <TouchableWithoutFeedback
+                  onPress={() => handleRecentSearchClear(user)}
+                >
+                  <NewIcon name="close" size={24} color="red" />
+                </TouchableWithoutFeedback>
+              )}
             </View>
           </View>
         );
@@ -67,6 +112,7 @@ const styles = StyleSheet.create({
   recentSearchContainer: {
     paddingBottom: 16,
     flexDirection: "row",
+    backgroundColor: "blue",
   },
   recentSearchTextContainer: {
     paddingLeft: 16,
