@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Text,
   View,
@@ -9,13 +9,15 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { DATA, USERS } from "../../data";
+import { DATA, USERS } from "../../../data";
 import {
   SearchUsersState,
   dummyUsers,
   selectRecentSearches,
-} from "../redux/slices/searchSlice";
+} from "../../redux/slices/searchSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { setClearRecentSearch } from "@redux/slices/searchSlice";
+import NewIcon from "react-native-vector-icons/Ionicons";
 
 const SearchScreen = () => {
   const dispatch = useDispatch();
@@ -23,11 +25,14 @@ const SearchScreen = () => {
 
   const [searchText, setSearchText] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const inputRef = useRef(null);
 
-  //TODO on clearSearch remove focus
   const clearSearch = () => {
     setSearchText("");
     setIsSearching(false);
+    if (inputRef) {
+      inputRef.current.blur();
+    }
   };
 
   const renderItem = ({ item }) => (
@@ -37,11 +42,10 @@ const SearchScreen = () => {
   );
 
   const recentSearches = useSelector(selectRecentSearches);
-  console.log("recentSearches:", recentSearches);
 
-  // const handleRecentSearchClear=()=>{
-  //   dispatch()
-  // }
+  const handleRecentSearchClear = (user: SearchUsersState) => {
+    dispatch(setClearRecentSearch(user));
+  };
 
   return (
     <View style={styles.container}>
@@ -58,6 +62,7 @@ const SearchScreen = () => {
         )}
         <View style={styles.searchContainer}>
           <TextInput
+            ref={inputRef}
             placeholder="Search"
             placeholderTextColor="#888"
             style={styles.searchInput}
@@ -94,10 +99,13 @@ const SearchScreen = () => {
           <Text style={styles.title}>Auto</Text>
         </TouchableOpacity>
       </View>
-      {!isSearching ? (
+      {isSearching ? (
         <React.Fragment>
           <Text style={styles.recentHeading}>Recent</Text>
-          {dummyUsers?.map((user) => {
+          {recentSearches?.length === 0 && (
+            <Text style={{ color: "white" }}>No Recent Searches</Text>
+          )}
+          {recentSearches?.map((user) => {
             return (
               <View style={styles.recentSearchContainer}>
                 <Image
@@ -105,17 +113,28 @@ const SearchScreen = () => {
                   style={styles.recentSearchImages}
                 />
                 <View style={styles.recentSearchTextContainer}>
-                  <Text style={[styles.recentSearchText]}>
-                    {user.user_name}
-                  </Text>
-                  <Text
-                    style={[styles.recentSearchText, styles.recentSearchTextId]}
+                  <View style={{ flexDirection: "column" }}>
+                    <Text style={[styles.recentSearchText]}>
+                      {user.user_name}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.recentSearchText,
+                        styles.recentSearchTextId,
+                      ]}
+                    >
+                      {user.display_name}
+                      {loggedInUser?.following?.includes(user?.id)
+                        ? " • Following"
+                        : ""}
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => handleRecentSearchClear(user)}
+                    style={{}}
                   >
-                    {user.display_name}
-                    {loggedInUser?.following?.includes(user?.id)
-                      ? " • Following"
-                      : ""}
-                  </Text>
+                    <NewIcon name="close" size={24} color="red" />
+                  </TouchableOpacity>
                 </View>
               </View>
             );
@@ -152,6 +171,7 @@ const styles = StyleSheet.create({
   recentSearchTextContainer: {
     paddingLeft: 16,
     justifyContent: "center",
+    flexDirection: "row",
   },
   recentSearchTextId: {
     fontWeight: "normal",
