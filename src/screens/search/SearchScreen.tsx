@@ -12,6 +12,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { DATA } from "../../../data";
 
 import RecentSearches from "./recent-searches";
+import CustomButton from "@components/custom-button/custom-button";
 
 const SearchScreen = () => {
   const [searchText, setSearchText] = useState("");
@@ -34,29 +35,43 @@ const SearchScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerWrapper}>
-        <View style={styles.searchContainer}>
-          <TextInput
-            ref={inputRef}
-            placeholder="Search"
-            placeholderTextColor="#888"
-            style={styles.searchInput}
-            value={searchText}
-            onChangeText={(text) => setSearchText(text)}
-            onFocus={() => setIsSearching(true)}
-          />
-          {isSearching && (
-            <TouchableOpacity onPress={clearSearch}>
-              <Icon
-                name="times-circle"
-                size={18}
-                color="#888"
-                style={styles.clearIcon}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
+      <View style={styles.searchContainer}>
+        <TextInput
+          ref={inputRef}
+          placeholder="Search"
+          placeholderTextColor="#888"
+          style={styles.searchInput}
+          value={searchText}
+          onChangeText={(text) => setSearchText(text)}
+          onFocus={() => setIsSearching(true)}
+        />
+        {searchText?.length > 0 && (
+          <TouchableOpacity
+            onPress={() => {
+              setSearchText("");
+            }}
+          >
+            <Icon
+              name="times-circle"
+              size={18}
+              color="#888"
+              style={styles.clearIcon}
+            />
+          </TouchableOpacity>
+        )}
+        {isSearching && (
+          <View>
+            <CustomButton
+              title="Cancel"
+              onClick={clearSearch}
+              width={80}
+              textColor="white"
+              backgroundColor="transparent"
+            />
+          </View>
+        )}
       </View>
+
       <View style={styles.subHeaderWrapper}>
         <TouchableOpacity style={styles.selectedCategoryItem}>
           <Text style={styles.titleSelected}>IGTV</Text>
@@ -96,33 +111,25 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "black",
   },
-  headerWrapper: {
-    paddingTop: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    flexDirection: "row",
-    alignItems: "center",
-  },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#333",
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    // margin: 10,
-    borderRadius: 5,
+    paddingRight: 8,
+    paddingLeft: 8,
   },
   searchInput: {
+    borderRadius: 5,
     flex: 1,
     color: "white",
     fontSize: 16,
+    paddingHorizontal: 10,
     paddingVertical: 8,
+    backgroundColor: "#333",
   },
-  // backIcon: {
-  //   marginRight: 10,
-  // },
   clearIcon: {
-    marginLeft: 10,
+    position: "absolute",
+    right: 10,
+    bottom: -10,
   },
   subHeaderWrapper: {
     flexDirection: "row",
