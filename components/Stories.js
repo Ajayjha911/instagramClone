@@ -14,9 +14,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  resetStoryImage,
+  resetStories,
   addViewedStory,
-} from "../src/redux/slices/storySlice";
+  uploadNewStory,
+} from "../src/redux/slices/storySlice"; // Import uploadNewStory action
 import Img1 from "../assets/img1.jpeg";
 import Img2 from "../assets/img2.jpeg";
 import Img3 from "../assets/img3.jpg";
@@ -33,11 +34,19 @@ const Stories = () => {
   const yourStory = [
     {
       id: 1,
-      img: story.story.storyImage ? [{ uri: story.story.storyImage }] : [Img4],
+      img:
+        story.story.stories.length > 0
+          ? story.story.stories.map((s) => ({ uri: s.uri }))
+          : [Img4],
       username: "test",
-      timestamp: story.story.timestamp,
+      timestamp:
+        story.story.stories.length > 0
+          ? story.story.stories[0].timestamp
+          : null,
+      hasNewStory: story.story.hasNewStory, // Add hasNewStory flag
     },
   ];
+
   const stories = [
     {
       id: 2,
@@ -60,7 +69,6 @@ const Stories = () => {
     },
   ];
 
-  // Separate and sort the stories
   const unviewedStories = stories.filter(
     (item) =>
       !story.story.viewedStories.some(
@@ -86,11 +94,11 @@ const Stories = () => {
       const remainingTime = 24 * 60 * 60 * 1000 - timeElapsed;
       if (remainingTime > 0) {
         const timer = setTimeout(() => {
-          dispatch(resetStoryImage());
+          dispatch(resetStories());
         }, remainingTime);
         return () => clearTimeout(timer);
       } else {
-        dispatch(resetStoryImage());
+        dispatch(resetStories());
       }
     }
   }, [story, dispatch]);
@@ -109,7 +117,7 @@ const Stories = () => {
     const isYourStory = yourStory.some((story) => story.id === item.id);
     const displayImage =
       tempStory && isYourStory ? { uri: tempStory } : item.img[0]; // Display first image as preview
-    const storyViewed = story?.story?.viewedStories?.some(
+    const storyViewed = story?.story.viewedStories?.some(
       (viewedStory) =>
         viewedStory.id === item.id &&
         Date.now() - viewedStory.timestamp < 24 * 60 * 60 * 1000
@@ -119,10 +127,13 @@ const Stories = () => {
       <TouchableOpacity
         style={styles.stories}
         onPress={() => {
-          if (!storyViewed) {
-            if (isYourStory && !story.story.storyImage) {
+          if (!storyViewed || (isYourStory && item.hasNewStory)) {
+            if (isYourStory && story.story.stories.length === 0) {
               navigation.navigate("StoryUploadScreen", {
-                onUpload: (imageUri) => setTempStory(imageUri),
+                onUpload: (imageUri) => {
+                  setTempStory(imageUri);
+                  dispatch(uploadNewStory());
+                },
               });
             } else {
               setViewed([...viewed, item.id]);
@@ -137,9 +148,7 @@ const Stories = () => {
         <View>
           <LinearGradient
             colors={
-              storyViewed
-                ? ["transparent", "transparent"]
-                : !storyViewed && isYourStory && !story.story.storyImage
+              storyViewed && !item.hasNewStory
                 ? ["transparent", "transparent"]
                 : ["#feda75", "#fa7e1e", "#d62976", "#962fbf"]
             }
@@ -153,7 +162,10 @@ const Stories = () => {
             <TouchableWithoutFeedback
               onPress={() => {
                 navigation.navigate("StoryUploadScreen", {
-                  onUpload: (imageUri) => setTempStory(imageUri),
+                  onUpload: (imageUri) => {
+                    setTempStory(imageUri);
+                    dispatch(uploadNewStory());
+                  },
                 });
               }}
             >
