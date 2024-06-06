@@ -9,21 +9,21 @@ import {
   Image,
   StyleSheet,
   Text,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
 import NewIcon from "react-native-vector-icons/Ionicons";
 import { USERS } from "data";
+import Avatar from "@components/avatar/avatar";
+import { useAppDispatch, useAppSelector } from "@hooks/redux";
 
 declare type RecentSearches = {
   searchText: string;
 };
 
 const RecentSearches: React.FC<RecentSearches> = ({ searchText }) => {
-  const recentSearches = useSelector(selectRecentSearches);
-  const dispatch = useDispatch();
+  const recentSearches = useAppSelector(selectRecentSearches);
+  const dispatch = useAppDispatch();
   const loggedInUser = USERS[1];
 
   const handleRecentSearchClear = (user: SearchUsersState) => {
@@ -31,7 +31,7 @@ const RecentSearches: React.FC<RecentSearches> = ({ searchText }) => {
   };
 
   const dataToBeUsed = useMemo(() => {
-    const found = [];
+    const found: SearchUsersState[] = [];
     dummyUsers.forEach((user) => {
       if (
         user.display_name.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -43,7 +43,6 @@ const RecentSearches: React.FC<RecentSearches> = ({ searchText }) => {
     return searchText?.length > 0 ? found : recentSearches;
   }, [searchText, recentSearches]);
 
-  console.log("dataToBeUsed:", dataToBeUsed);
   return (
     <View>
       {searchText.length === 0 && (
@@ -55,27 +54,28 @@ const RecentSearches: React.FC<RecentSearches> = ({ searchText }) => {
       {searchText?.length > 0 && dataToBeUsed?.length === 0 && (
         <Text style={{ color: "white", paddingTop: 16 }}>No user found</Text>
       )}
+
       {dataToBeUsed?.map((user, index) => {
         return (
           <View
             style={[
-              styles.recentSearchContainer,
-              searchText?.length > 0 &&
-                index === 0 && {
-                  paddingTop: 16,
-                },
+              styles.container,
+              searchText?.length > 0 && index === 0 && { paddingTop: 24 },
             ]}
+            key={index}
           >
-            <Image
-              source={{ uri: user.profile_image }}
-              style={styles.recentSearchImages}
-            />
-            <View style={styles.recentSearchTextContainer}>
-              <View
-                style={{
-                  flexDirection: "column",
-                }}
-              >
+            <View style={styles.subContainer}>
+              {/* <Image
+                source={{ uri: user.profile_image }}
+                style={styles.recentSearchImages}
+              /> */}
+              <Avatar
+                title={user.display_name}
+                height={35}
+                width={35}
+                titleSize={16}
+              />
+              <View style={styles.recentTextContainer}>
                 <Text style={[styles.recentSearchText]}>{user.user_name}</Text>
                 <Text
                   style={[styles.recentSearchText, styles.recentSearchTextId]}
@@ -86,14 +86,19 @@ const RecentSearches: React.FC<RecentSearches> = ({ searchText }) => {
                     : ""}
                 </Text>
               </View>
-              {searchText.length === 0 && (
-                <TouchableWithoutFeedback
-                  onPress={() => handleRecentSearchClear(user)}
-                >
-                  <NewIcon name="close" size={24} color="red" />
-                </TouchableWithoutFeedback>
-              )}
             </View>
+            {searchText.length === 0 && (
+              <TouchableWithoutFeedback
+                onPress={() => handleRecentSearchClear(user)}
+              >
+                <NewIcon
+                  name="close"
+                  size={24}
+                  color="grey"
+                  style={styles.crossIcon}
+                />
+              </TouchableWithoutFeedback>
+            )}
           </View>
         );
       })}
@@ -103,33 +108,38 @@ const RecentSearches: React.FC<RecentSearches> = ({ searchText }) => {
 export default RecentSearches;
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingBottom: 12,
+  },
+  subContainer: {
+    flexDirection: "row",
+  },
   recentHeading: {
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
     paddingBottom: 16,
   },
-  recentSearchContainer: {
-    paddingBottom: 16,
-    flexDirection: "row",
-    backgroundColor: "blue",
-  },
-  recentSearchTextContainer: {
+  recentTextContainer: {
     paddingLeft: 16,
-    justifyContent: "center",
-    flexDirection: "row",
   },
   recentSearchTextId: {
     fontWeight: "normal",
     opacity: 0.7,
   },
   recentSearchImages: {
-    height: 40,
-    width: 40,
+    height: 35,
+    width: 35,
     borderRadius: 100,
   },
   recentSearchText: {
     color: "white",
     fontWeight: "600",
+    fontSize: 16,
+  },
+  crossIcon: {
+    alignSelf: "center",
   },
 });
