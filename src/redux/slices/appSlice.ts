@@ -92,8 +92,8 @@ const appSlice = createSlice({
   reducers: {},
 });
 
-export const selectLoggedInUser = (state: AppRootState) => {
-  return state?.app?.loginUser || {};
+export const selectLoggedInUser = (state: AppRootState): UserState => {
+  return state?.app?.loginUser || loginUser;
 };
 
 export const selectUsersList = (state: AppRootState): UserState[] => {

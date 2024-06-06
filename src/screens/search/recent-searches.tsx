@@ -14,10 +14,10 @@ import {
   View,
 } from "react-native";
 import NewIcon from "react-native-vector-icons/Ionicons";
-import { USERS } from "data";
 import Avatar from "@components/avatar/avatar";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { selectLoggedInUser } from "@redux/slices/appSlice";
 
 declare type RecentSearches = {
   searchText: string;
@@ -26,7 +26,7 @@ declare type RecentSearches = {
 const RecentSearches: React.FC<RecentSearches> = ({ searchText }) => {
   const recentSearches = useAppSelector(selectRecentSearches);
   const dispatch = useAppDispatch();
-  const loggedInUser = USERS[1];
+  const loggedInUser = useAppSelector(selectLoggedInUser);
 
   const handleRecentSearchClear = (user: SearchUsersState) => {
     dispatch(setClearRecentSearch(user));
