@@ -9,23 +9,25 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { DATA } from "../../data";
+import { DATA, USERS } from "../../data";
+import {
+  SearchUsersState,
+  dummyUsers,
+  selectRecentSearches,
+} from "../redux/slices/searchSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const SearchScreen = () => {
+  const dispatch = useDispatch();
+  const loggedInUser = USERS[1];
+
   const [searchText, setSearchText] = useState("");
   const [isSearching, setIsSearching] = useState(false);
 
-  const handleSearchPress = () => {
-    if (isSearching) {
-      setIsSearching(false);
-      setSearchText("");
-    } else {
-      setIsSearching(true);
-    }
-  };
-
+  //TODO on clearSearch remove focus
   const clearSearch = () => {
     setSearchText("");
+    setIsSearching(false);
   };
 
   const renderItem = ({ item }) => (
@@ -34,11 +36,18 @@ const SearchScreen = () => {
     </View>
   );
 
+  const recentSearches = useSelector(selectRecentSearches);
+  console.log("recentSearches:", recentSearches);
+
+  // const handleRecentSearchClear=()=>{
+  //   dispatch()
+  // }
+
   return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
         {isSearching && (
-          <TouchableOpacity onPress={handleSearchPress}>
+          <TouchableOpacity onPress={clearSearch}>
             <Icon
               style={styles.backIcon}
               name="arrow-left"
@@ -56,7 +65,7 @@ const SearchScreen = () => {
             onChangeText={(text) => setSearchText(text)}
             onFocus={() => setIsSearching(true)}
           />
-          {searchText !== "" && (
+          {isSearching && (
             <TouchableOpacity onPress={clearSearch}>
               <Icon
                 name="times-circle"
@@ -85,8 +94,34 @@ const SearchScreen = () => {
           <Text style={styles.title}>Auto</Text>
         </TouchableOpacity>
       </View>
-
-      {searchText === "" ? (
+      {!isSearching ? (
+        <React.Fragment>
+          <Text style={styles.recentHeading}>Recent</Text>
+          {dummyUsers?.map((user) => {
+            return (
+              <View style={styles.recentSearchContainer}>
+                <Image
+                  source={{ uri: user.profile_image }}
+                  style={styles.recentSearchImages}
+                />
+                <View style={styles.recentSearchTextContainer}>
+                  <Text style={[styles.recentSearchText]}>
+                    {user.user_name}
+                  </Text>
+                  <Text
+                    style={[styles.recentSearchText, styles.recentSearchTextId]}
+                  >
+                    {user.display_name}
+                    {loggedInUser?.following?.includes(user?.id)
+                      ? " • Following"
+                      : ""}
+                  </Text>
+                </View>
+              </View>
+            );
+          })}
+        </React.Fragment>
+      ) : (
         <FlatList
           data={DATA}
           keyExtractor={(item) => item.id}
@@ -94,16 +129,6 @@ const SearchScreen = () => {
           renderItem={renderItem}
           contentContainerStyle={styles.flatListContainer}
         />
-      ) : (
-        <View style={styles.searchResultContainer}>
-          <Icon
-            name="search"
-            size={18}
-            color="#888"
-            style={styles.searchResultIcon}
-          />
-          <Text style={styles.searchResultText}>{searchText}</Text>
-        </View>
       )}
     </View>
   );
@@ -113,6 +138,33 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
+  },
+  recentHeading: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+    paddingBottom: 16,
+  },
+  recentSearchContainer: {
+    paddingBottom: 16,
+    flexDirection: "row",
+  },
+  recentSearchTextContainer: {
+    paddingLeft: 16,
+    justifyContent: "center",
+  },
+  recentSearchTextId: {
+    fontWeight: "normal",
+    opacity: 0.7,
+  },
+  recentSearchImages: {
+    height: 40,
+    width: 40,
+    borderRadius: 100,
+  },
+  recentSearchText: {
+    color: "white",
+    fontWeight: "600",
   },
   headerWrapper: {
     paddingTop: 20,
