@@ -3,7 +3,7 @@ import React from "react";
 import ProfileComponent from "../../components/profile/profile";
 
 const ProfileScreen = () => {
-  return <ProfileComponent isMyAccount />;
+  return <ProfileComponent isMyAccount={false} />;
 };
 
 export default ProfileScreen;
