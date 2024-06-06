@@ -98,7 +98,7 @@ export const USERS = [
     age: 25,
     posts: [{ id: "1" }, { id: "2" }, { id: "3" }],
     followers: [{ id: "997" }],
-    following: [{ id: "997" }],
+    following: ["1", "3", "2"],
   },
   {
     id: "997",
@@ -112,7 +112,7 @@ export const USERS = [
     age: 25,
     posts: [{ id: "0" }, { id: "4" }, { id: "5" }],
     followers: [{ id: "12345" }],
-    following: [{ id: "12345" }],
+    following: ["1", "3", "4"],
   },
 ];
 
