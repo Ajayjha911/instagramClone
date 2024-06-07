@@ -25,7 +25,6 @@ const SearchScreen = () => {
     profile_image: "",
     id: "",
     bio: "",
-    posts: [],
     followers: [],
     following: [],
   };
