@@ -18,7 +18,11 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { fresh, getFullDate } from "@helpers/func";
 import BottomSheet from "@components/bottomsheet/bottom-sheet";
 import PostComments from "./comments";
-import { LikesType, PostType, setPostLikes } from "@redux/slices/postSlices";
+import {
+  LikesType,
+  PostType,
+  setPostCommentsLikes,
+} from "@redux/slices/postSlices";
 import { useAppDispatch } from "@hooks/redux";
 
 const { width: viewportWidth } = Dimensions.get("window");
@@ -55,7 +59,7 @@ const PostDetails: React.FC<PostDetailsProps> = (props) => {
     if (found > -1) {
       const freshPosts = fresh(post);
       freshPosts.likes.splice(found, 1);
-      dispatch(setPostLikes(freshPosts));
+      dispatch(setPostCommentsLikes(freshPosts));
     } else {
       const freshPosts = fresh(post);
       freshPosts.likes.push({
@@ -63,7 +67,7 @@ const PostDetails: React.FC<PostDetailsProps> = (props) => {
         user_id: activeUser.id,
         user_name: activeUser.user_name,
       });
-      dispatch(setPostLikes(freshPosts));
+      dispatch(setPostCommentsLikes(freshPosts));
     }
   };
 

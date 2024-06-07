@@ -189,7 +189,7 @@ const postsSlice = createSlice({
     setPosts: (state, action) => {
       state.posts = action.payload;
     },
-    setPostLikes: (state, action) => {
+    setPostCommentsLikes: (state, action) => {
       const findIndex = state.posts.findIndex(
         (post) => post.id === action.payload.id,
       );
@@ -202,5 +202,5 @@ export const selectAllPosts = (state: AppRootState) => {
   return state?.posts?.posts || [];
 };
 
-export const { setPosts, setPostLikes } = postsSlice.actions;
+export const { setPosts, setPostCommentsLikes } = postsSlice.actions;
 export default postsSlice.reducer;
