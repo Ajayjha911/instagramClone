@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import ProfileComponent from "../../components/profile/profile";
-import { USERS } from "data";
+import { useAppSelector } from "@hooks/redux";
+import { selectLoggedInUser } from "@redux/slices/appSlice";
 
 const ProfileScreen = () => {
-  const loggedInUser = USERS[1];
+  const loggedInUser = useAppSelector(selectLoggedInUser);
 
   return <ProfileComponent isMyAccount={true} activeUser={loggedInUser} />;
 };
