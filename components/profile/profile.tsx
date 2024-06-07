@@ -18,7 +18,7 @@ import ElipseIcon from "react-native-vector-icons/AntDesign";
 import { ScrollView } from "react-native-gesture-handler";
 import { COLORS, SIZES, images } from "../../constants";
 import { POSTS } from "../../data";
-import ProfilePost from "./profile_post";
+import ProfilePost from "./profile_post/profile-post";
 import CustomButton from "../custom-button/custom-button";
 import { Ionicons as ProfileIcon } from "@expo/vector-icons";
 
@@ -200,8 +200,9 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
                   <ProfilePost
                     key={post.id}
                     image={post.images}
-                    showActionBtn={activeTab === "posts"}
-                    showHeader={false}
+                    onPress={() => {}}
+                    // showActionBtn={activeTab === "posts"}
+                    // showHeader={false}
                     // onPress={() => {
                     //   navigation.navigate("/profile/posts");
                     // }}

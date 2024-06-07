@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import styles from "./add_post.style";
 import { SIZES, images } from "../../constants";
-import ProfilePost from "../profile/profile_post";
+import ProfilePost from "../profile/profile_post/profile-post";
 import {
   launchImageLibraryAsync,
   getMediaLibraryPermissionsAsync,
