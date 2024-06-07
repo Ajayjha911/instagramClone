@@ -45,7 +45,6 @@ const PostDetailsHeader: React.FC<PostDetailsProps> = ({
 const PostDetails: React.FC<PostDetailsProps> = (props) => {
   const dispatch = useAppDispatch();
   const { activeUser, activePosts } = props;
-  const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const [openComments, setOpenComments] = useState(false);
 
@@ -66,7 +65,6 @@ const PostDetails: React.FC<PostDetailsProps> = (props) => {
       });
       dispatch(setPostLikes(freshPosts));
     }
-    setLiked((val) => !val);
   };
 
   const findIfPostLiked = (likes: LikesType[]) => {
