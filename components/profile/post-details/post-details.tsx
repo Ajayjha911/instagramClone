@@ -15,9 +15,11 @@ import CommentIcon from "react-native-vector-icons/EvilIcons";
 import ShareIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import BookmarkIcon from "react-native-vector-icons/FontAwesome";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { getFullDate } from "@helpers/func";
+import { fresh, getFullDate } from "@helpers/func";
 import BottomSheet from "@components/bottomsheet/bottom-sheet";
 import PostComments from "./comments";
+import { LikesType, PostType, setPostLikes } from "@redux/slices/postSlices";
+import { useAppDispatch } from "@hooks/redux";
 
 const { width: viewportWidth } = Dimensions.get("window");
 
@@ -41,14 +43,40 @@ const PostDetailsHeader: React.FC<PostDetailsProps> = ({
 };
 
 const PostDetails: React.FC<PostDetailsProps> = (props) => {
+  const dispatch = useAppDispatch();
   const { activeUser, activePosts } = props;
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const [openComments, setOpenComments] = useState(false);
 
-  const handleLike = () => {
+  const handleLike = (post: PostType) => {
+    const found = post.likes?.findIndex(
+      (post) => post.user_id === activeUser.id,
+    );
+    if (found > -1) {
+      const freshPosts = fresh(post);
+      freshPosts.likes.splice(found, 1);
+      dispatch(setPostLikes(freshPosts));
+    } else {
+      const freshPosts = fresh(post);
+      freshPosts.likes.push({
+        id: freshPosts.likes.length + 1,
+        user_id: activeUser.id,
+        user_name: activeUser.user_name,
+      });
+      dispatch(setPostLikes(freshPosts));
+    }
     setLiked((val) => !val);
   };
+
+  const findIfPostLiked = (likes: LikesType[]) => {
+    const found = likes.findIndex((like) => like.user_id === activeUser.id);
+    if (found > -1) {
+      return true;
+    }
+    return false;
+  };
+
   const handleBookmark = () => {
     setBookmarked((val) => !val);
   };
@@ -69,6 +97,7 @@ const PostDetails: React.FC<PostDetailsProps> = (props) => {
       <Divider border={0.3} />
       <ScrollView>
         {activePosts?.map((posts, index) => {
+          const isPostLiked = findIfPostLiked(posts.likes);
           return (
             <View key={index} style={index !== 0 && { paddingTop: 24 }}>
               <View style={[styles["fd-row"], styles.subHeader]}>
@@ -87,15 +116,18 @@ const PostDetails: React.FC<PostDetailsProps> = (props) => {
                 </View>
               </View>
               <View style={styles.activePostContainer}>
-                <Image source={posts.images} style={styles.activePost} />
+                <Image source={posts.image} style={styles.activePost} />
               </View>
               <View style={styles.actionIconContainer}>
                 <View style={styles.actionItemsLeft}>
-                  <TouchableOpacity activeOpacity={1} onPress={handleLike}>
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => handleLike(posts)}
+                  >
                     <ElipseIcon
-                      name={liked ? "heart" : "hearto"}
+                      name={isPostLiked ? "heart" : "hearto"}
                       size={24}
-                      color={liked ? "red" : "white"}
+                      color={isPostLiked ? "red" : "white"}
                     />
                   </TouchableOpacity>
                   <TouchableOpacity activeOpacity={1} onPress={handleComments}>
@@ -141,7 +173,7 @@ const PostDetails: React.FC<PostDetailsProps> = (props) => {
                 </Text>
                 {posts?.comments?.length > 1 && (
                   <Text style={[styles.userName, { paddingTop: 4 }]}>
-                    {posts?.comments?.[posts?.comments?.length - 1]?.userName}{" "}
+                    {posts?.comments?.[posts?.comments?.length - 1]?.user_name}{" "}
                     <Text style={styles.captionText}>
                       {posts?.comments?.[posts?.comments?.length - 1]?.comment}
                     </Text>
