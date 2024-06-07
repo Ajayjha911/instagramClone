@@ -157,8 +157,19 @@ const PostDetails: React.FC<PostDetailsProps> = (props) => {
               </View>
               <View style={styles.likedByContainer}>
                 <Text style={styles.location}>
-                  Liked by <Text style={styles.likedByText}>ajay_kumar </Text>
-                  and <Text style={styles.likedByText}>118 others</Text>
+                  Liked by{" "}
+                  <Text style={styles.likedByText}>
+                    {posts?.likes?.[0]?.user_name}{" "}
+                  </Text>
+                  {posts?.likes?.length > 1 && (
+                    <React.Fragment>
+                      <Text>and </Text>
+                      <Text style={styles.likedByText}>
+                        {posts?.likes?.length - 1}{" "}
+                        {posts?.likes?.length === 2 ? "other" : "others"}
+                      </Text>
+                    </React.Fragment>
+                  )}
                 </Text>
               </View>
               <View style={styles.captionContainer}>
