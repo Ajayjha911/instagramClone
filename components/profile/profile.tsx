@@ -28,28 +28,27 @@ import { ProfilePageProps } from "./profile.types";
 const ProfileScreen: React.FC<ProfilePageProps> = ({
   isMyAccount,
   handleBack,
-  activeUser: loggedInUser,
+  activeUser,
 }) => {
   const [activeTab, setActiveTab] = useState("posts");
 
-  const { postsCreatedByLoggedInUser, postsLikedByLoggedInUser } =
-    useMemo(() => {
-      return {
-        postsCreatedByLoggedInUser: (POSTS || [])?.filter(
-          (post) => post.userId === loggedInUser?.id,
-        ),
-        postsLikedByLoggedInUser: (POSTS || []).filter((post) =>
-          post.likes.some((like) => like.userId === loggedInUser?.id),
-        ),
-      };
-    }, [POSTS, loggedInUser]);
+  const { activeUserPosts, postsLikedByLoggedInUser } = useMemo(() => {
+    return {
+      activeUserPosts: (POSTS || [])?.filter(
+        (post) => post.userId === activeUser?.id,
+      ),
+      postsLikedByLoggedInUser: (POSTS || []).filter((post) =>
+        post.likes.some((like) => like.userId === activeUser?.id),
+      ),
+    };
+  }, [POSTS, activeUser]);
 
   const contentToDisplay = useMemo(
     () =>
       activeTab === "posts"
-        ? postsCreatedByLoggedInUser || []
+        ? activeUserPosts || []
         : postsLikedByLoggedInUser || [],
-    [activeTab, postsCreatedByLoggedInUser, postsLikedByLoggedInUser],
+    [activeTab, activeUserPosts, postsLikedByLoggedInUser],
   );
 
   const handleActionSheet = () => {
@@ -80,14 +79,14 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
       {isMyAccount ? (
         <View style={styles.profileHeader}>
           <TouchableOpacity style={styles.disUserName}>
-            <LockIcon name="lock-closed-outline" size={16} />
+            <LockIcon name="lock-closed-outline" size={16} color={"white"} />
             <Text style={styles.userNameText}>deepanshu__goyal</Text>
-            <Icon name="chevron-down" size={16} />
+            <Icon name="chevron-down" size={16} color={"white"} />
           </TouchableOpacity>
           <View style={styles.profileIcons}>
-            <ThreadsIcon name="threads" size={24} />
-            <PlusIcon name="plus-square" solid size={24} />
-            <Icon name="bars" size={22} />
+            <ThreadsIcon name="threads" size={24} color={"white"} />
+            <PlusIcon name="plus-square" solid size={24} color={"white"} />
+            <Icon name="bars" size={22} color={"white"} />
           </View>
         </View>
       ) : (
@@ -99,7 +98,7 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
               color={"white"}
             />
           </TouchableOpacity>
-          <Text style={styles.searchProfileText}>_ajay_kumar_</Text>
+          <Text style={styles.searchProfileText}>{activeUser?.user_name}</Text>
           <View style={styles.searchProfileIconContainer}>
             <ProfileIcon
               name="notifications-outline"
@@ -107,9 +106,10 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
               style={{
                 paddingRight: 16,
               }}
+              color={"white"}
             />
             <TouchableOpacity onPress={handleActionSheet}>
-              <ElipseIcon name="ellipsis1" size={24} />
+              <ElipseIcon name="ellipsis1" size={24} color={"white"} />
             </TouchableOpacity>
           </View>
         </View>
@@ -119,38 +119,33 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
         <View>
           <View style={styles.imageContainer}>
             <Image
-              source={loggedInUser?.profile}
+              source={activeUser?.profile_image}
               resizeMode="contain"
               style={styles.image}
             />
           </View>
-          <Text style={styles.profileName}>Deepanshu Goyal</Text>
+          <Text style={styles.profileName}>
+            {activeUser?.display_name || "Deepanshu"}
+          </Text>
         </View>
 
         <View style={styles.countContainer}>
           <View style={styles.detailContainer}>
-            <Text style={styles.textValue}>{loggedInUser.posts.length}</Text>
+            <Text style={styles.textValue}>{activeUserPosts?.length}</Text>
             <Text style={styles.textLabel}>posts</Text>
           </View>
           <TouchableOpacity style={styles.detailContainer}>
-            <Text style={styles.textValue}>
-              {loggedInUser.followers.length}
-            </Text>
+            <Text style={styles.textValue}>{activeUser.followers.length}</Text>
             <Text style={styles.textLabel}>followers</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.detailContainer}>
-            <Text style={styles.textValue}>
-              {loggedInUser.following.length}
-            </Text>
+            <Text style={styles.textValue}>{activeUser.following.length}</Text>
             <Text style={styles.textLabel}>following</Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      <Text style={styles.bio}>
-        my bio my bio my bio my bio my bio my bio my bio my bio
-        {/* {loggedInUser?.bio || "This is my bio!"} */}
-      </Text>
+      <Text style={styles.bio}>{activeUser?.bio}</Text>
 
       <View style={styles.btnContainer}>
         <CustomButton
@@ -161,6 +156,7 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
           backgroundColor="#e5e7eb"
           textColor="black"
           textWeight="600"
+          feedbackOpacity={0.6}
         />
         <CustomButton
           title="Share Profile"
@@ -170,6 +166,7 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
           backgroundColor="#e5e7eb"
           textColor="black"
           textWeight="600"
+          feedbackOpacity={0.6}
         />
         <TouchableOpacity style={styles.addFollowerContainer}>
           <Icon name="user-plus" size={16} />
@@ -181,16 +178,16 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
           style={styles.iconBtnContainer("posts", activeTab)}
           onPress={() => setActiveTab("posts")}
         >
-          <GridIcon name="grid-on" size={25} />
+          <GridIcon name="grid-on" size={25} color={"white"} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.iconBtnContainer("reels", activeTab)}>
-          <Icon name="video" size={25} />
+          <Icon name="video" size={25} color={"white"} />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.iconBtnContainer("likes", activeTab)}
           onPress={() => setActiveTab("likes")}
         >
-          <ProfileIcon name="person-circle-sharp" size={30} />
+          <ProfileIcon name="person-circle-sharp" size={30} color={"white"} />
         </TouchableOpacity>
       </View>
 
@@ -202,7 +199,7 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
                 {contentToDisplay.map((post) => (
                   <ProfilePost
                     key={post.id}
-                    image={post.images[0]}
+                    image={post.images}
                     showActionBtn={activeTab === "posts"}
                     showHeader={false}
                     // onPress={() => {
@@ -213,12 +210,14 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
               </TouchableOpacity>
             ) : (
               <View style={styles.noDataContainer}>
-                <Icon name="bug" size={100} style={{ color: COLORS.gray2 }} />
+                <PlusIcon
+                  name="camera"
+                  size={50}
+                  style={{ color: COLORS.gray2 }}
+                />
 
-                <Text style={{ fontSize: SIZES.small, color: COLORS.gray }}>
-                  {activeTab === "posts"
-                    ? " Oops! No posts!."
-                    : "Oops! No likes! "}
+                <Text style={{ fontSize: SIZES.medium, color: COLORS.white }}>
+                  No Posts Yet
                 </Text>
               </View>
             )}

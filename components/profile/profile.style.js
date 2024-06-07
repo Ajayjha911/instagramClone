@@ -13,11 +13,13 @@ export default StyleSheet.create({
   searchProfileText: {
     fontSize: 16,
     fontWeight: "600",
+    color: "white",
   },
   rootContainer: {
     flex: 1,
     gap: 10,
     paddingHorizontal: 10,
+    backgroundColor: "black",
   },
   profileContainer: {
     flexDirection: "row",
@@ -48,21 +50,26 @@ export default StyleSheet.create({
   textLabel: {
     fontFamily: FONT.medium,
     fontSize: 18,
+    color: "white",
+
     // fontWeight: "600",
   },
   textValue: {
     fontFamily: FONT.medium,
     fontSize: 18,
     fontWeight: "600",
+    color: "white",
   },
   profileName: {
     textAlign: "center",
     fontSize: 16,
     paddingTop: 4,
     fontWeight: "600",
+    color: "white",
   },
   bio: {
     fontSize: 16,
+    color: "white",
   },
   btnContainer: {
     flexDirection: "row",
@@ -145,5 +152,6 @@ export default StyleSheet.create({
   userNameText: {
     fontSize: 20,
     fontWeight: "600",
+    color: "white",
   },
 });
