@@ -1,5 +1,4 @@
 import {
-  SearchUsersState,
   selectRecentSearches,
   setClearRecentSearch,
   setRecentSearches,
@@ -13,7 +12,6 @@ import {
   View,
 } from "react-native";
 import NewIcon from "react-native-vector-icons/Ionicons";
-import Avatar from "@components/avatar/avatar";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import {
@@ -36,12 +34,12 @@ const RecentSearches: React.FC<RecentSearches> = ({
   const loggedInUser = useAppSelector(selectLoggedInUser);
   const userLists = useAppSelector(selectUsersList);
 
-  const handleRecentSearchClear = (user: SearchUsersState) => {
+  const handleRecentSearchClear = (user: UserState) => {
     dispatch(setClearRecentSearch(user));
   };
 
   const dataToBeUsed = useMemo(() => {
-    const found: SearchUsersState[] = [];
+    const found: UserState[] = [];
     userLists.forEach((user) => {
       if (
         user.display_name.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -53,7 +51,7 @@ const RecentSearches: React.FC<RecentSearches> = ({
     return searchText?.length > 0 ? found : recentSearches;
   }, [searchText, recentSearches]);
 
-  const handlePress = (user: SearchUsersState) => {
+  const handlePress = (user: UserState) => {
     if (searchText?.length > 0) {
       dispatch(setRecentSearches(user));
     }
@@ -89,15 +87,9 @@ const RecentSearches: React.FC<RecentSearches> = ({
                 style={{ flexDirection: "row" }}
               >
                 <React.Fragment>
-                  {/* <Image
-                source={{ uri: user.profile_image }}
-                style={styles.recentSearchImages}
-              /> */}
-                  <Avatar
-                    title={user.display_name}
-                    height={35}
-                    width={35}
-                    titleSize={16}
+                  <Image
+                    source={user.profile_image}
+                    style={styles.recentSearchImages}
                   />
                   <View style={styles.recentTextContainer}>
                     <Text style={[styles.recentSearchText]}>
