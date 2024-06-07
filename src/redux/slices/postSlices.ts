@@ -59,7 +59,7 @@ const dummyPosts: PostType[] = [
     description: "This is my post description!",
     createdOn: "2023-07-18",
     user_id: "1",
-    likes: [{ id: 1, user_id: "12345", user_name: "" }],
+    likes: [{ id: 1, user_id: "12345", user_name: "deepanshu" }],
     comments: [
       {
         id: 1,
@@ -76,7 +76,7 @@ const dummyPosts: PostType[] = [
     description: "This is my post description!",
     createdOn: "2023-07-18",
     user_id: "2",
-    likes: [{ id: 1, user_id: "12345", user_name: "" }],
+    likes: [{ id: 1, user_id: "12345", user_name: "deepanshu" }],
     comments: [
       {
         id: 1,
@@ -93,7 +93,7 @@ const dummyPosts: PostType[] = [
     description: "This is my post description!",
     createdOn: "2023-07-18",
     user_id: "3",
-    likes: [{ id: 1, user_id: "12345", user_name: "" }],
+    likes: [{ id: 1, user_id: "12345", user_name: "deepanshu" }],
     comments: [
       {
         id: 1,
@@ -110,7 +110,7 @@ const dummyPosts: PostType[] = [
     description: "This is my post description!",
     createdOn: "2023-07-18",
     user_id: "100",
-    likes: [{ id: 1, user_id: "12345", user_name: "" }],
+    likes: [{ id: 1, user_id: "12345", user_name: "deepanshu" }],
     comments: [
       {
         id: 1,
@@ -127,7 +127,7 @@ const dummyPosts: PostType[] = [
     description: "This is my post description!",
     createdOn: "2023-07-18",
     user_id: "100",
-    likes: [{ id: 1, user_id: "12345", user_name: "" }],
+    likes: [{ id: 1, user_id: "12345", user_name: "deepanshu" }],
 
     comments: [
       {
@@ -145,7 +145,7 @@ const dummyPosts: PostType[] = [
     description: "This is my post description!",
     createdOn: "2023-07-18",
     user_id: "4",
-    likes: [{ id: 1, user_id: "12345", user_name: "" }],
+    likes: [{ id: 1, user_id: "12345", user_name: "deepanshu" }],
     comments: [
       {
         id: 1,
@@ -162,7 +162,7 @@ const dummyPosts: PostType[] = [
     description: "This is my post description!",
     createdOn: "07/09/2023",
     user_id: "5",
-    likes: [{ id: 1, user_id: "12345", user_name: "" }],
+    likes: [{ id: 1, user_id: "12345", user_name: "deepanshu" }],
     comments: [
       {
         id: 1,
