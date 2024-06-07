@@ -68,6 +68,26 @@ export const dummyUsers: UserState[] = [
     followers: ["2", "3", "4"],
     following: ["2", "1"],
   },
+  {
+    id: "6",
+    display_name: "Alisa",
+    user_name: "alisa_30_10",
+    profile_image: "https://loremflickr.com/640/480/dslr",
+    bio: "",
+    posts: ["0"],
+    followers: ["4"],
+    following: ["2", "1"],
+  },
+  {
+    id: "7",
+    display_name: "John Wick",
+    user_name: "wick_john",
+    profile_image: "https://loremflickr.com/640/480/dslr",
+    bio: "",
+    posts: ["0"],
+    followers: ["4", "1", "3", "5"],
+    following: ["2", "1"],
+  },
 ];
 
 const loginUser = {

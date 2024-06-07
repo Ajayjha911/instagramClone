@@ -1,6 +1,5 @@
 import {
   SearchUsersState,
-  dummyUsers,
   selectRecentSearches,
   setClearRecentSearch,
   setRecentSearches,
@@ -17,7 +16,7 @@ import NewIcon from "react-native-vector-icons/Ionicons";
 import Avatar from "@components/avatar/avatar";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { selectLoggedInUser } from "@redux/slices/appSlice";
+import { selectLoggedInUser, selectUsersList } from "@redux/slices/appSlice";
 
 declare type RecentSearches = {
   searchText: string;
@@ -27,6 +26,7 @@ const RecentSearches: React.FC<RecentSearches> = ({ searchText }) => {
   const recentSearches = useAppSelector(selectRecentSearches);
   const dispatch = useAppDispatch();
   const loggedInUser = useAppSelector(selectLoggedInUser);
+  const userLists = useAppSelector(selectUsersList);
 
   const handleRecentSearchClear = (user: SearchUsersState) => {
     dispatch(setClearRecentSearch(user));
@@ -34,7 +34,7 @@ const RecentSearches: React.FC<RecentSearches> = ({ searchText }) => {
 
   const dataToBeUsed = useMemo(() => {
     const found: SearchUsersState[] = [];
-    dummyUsers.forEach((user) => {
+    userLists.forEach((user) => {
       if (
         user.display_name.toLowerCase().includes(searchText.toLowerCase()) ||
         user.user_name.toLowerCase().includes(searchText.toLowerCase())
