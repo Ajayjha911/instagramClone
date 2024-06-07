@@ -17,13 +17,14 @@ import ElipseIcon from "react-native-vector-icons/AntDesign";
 
 import { ScrollView } from "react-native-gesture-handler";
 import { COLORS, SIZES, images } from "../../constants";
-import { POSTS } from "../../data";
 import ProfilePost from "./profile_post/profile-post";
 import CustomButton from "../custom-button/custom-button";
 import { Ionicons as ProfileIcon } from "@expo/vector-icons";
 
 import { ProfilePageProps } from "./profile.types";
 import PostDetails from "./post-details/post-details";
+import { useAppSelector } from "@hooks/redux";
+import { selectAllPosts } from "@redux/slices/postSlices";
 // import { useNavigation } from "@react-navigation/native";
 
 const ProfileScreen: React.FC<ProfilePageProps> = ({
@@ -33,17 +34,18 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState("posts");
   const [showPostDetails, setShowPostDetails] = useState(false);
+  const allPosts = useAppSelector(selectAllPosts);
 
   const { activeUserPosts, postsLikedByLoggedInUser } = useMemo(() => {
     return {
-      activeUserPosts: (POSTS || [])?.filter(
-        (post) => post.userId === activeUser?.id,
+      activeUserPosts: (allPosts || [])?.filter(
+        (post) => post.user_id === activeUser?.id,
       ),
-      postsLikedByLoggedInUser: (POSTS || []).filter((post) =>
-        post.likes.some((like) => like.userId === activeUser?.id),
+      postsLikedByLoggedInUser: (allPosts || []).filter((post) =>
+        post.likes.some((like) => like.user_id === activeUser?.id),
       ),
     };
-  }, [POSTS, activeUser]);
+  }, [allPosts, activeUser]);
 
   const contentToDisplay = useMemo(
     () =>
@@ -229,7 +231,7 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
                     {contentToDisplay.map((post) => (
                       <ProfilePost
                         key={post.id}
-                        image={post.images}
+                        image={post.image}
                         onPress={() => setShowPostDetails(true)}
                         // showActionBtn={activeTab === "posts"}
                         // showHeader={false}
