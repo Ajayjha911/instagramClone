@@ -23,6 +23,7 @@ import CustomButton from "../custom-button/custom-button";
 import { Ionicons as ProfileIcon } from "@expo/vector-icons";
 
 import { ProfilePageProps } from "./profile.types";
+import PostDetails from "./post-details/post-details";
 // import { useNavigation } from "@react-navigation/native";
 
 const ProfileScreen: React.FC<ProfilePageProps> = ({
@@ -31,6 +32,7 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
   activeUser,
 }) => {
   const [activeTab, setActiveTab] = useState("posts");
+  const [showPostDetails, setShowPostDetails] = useState(false);
 
   const { activeUserPosts, postsLikedByLoggedInUser } = useMemo(() => {
     return {
@@ -74,157 +76,189 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
     );
   };
 
+  const handlePostBack = () => {
+    setShowPostDetails(false);
+  };
+
   return (
     <View style={styles.rootContainer}>
-      {isMyAccount ? (
-        <View style={styles.profileHeader}>
-          <TouchableOpacity style={styles.disUserName}>
-            <LockIcon name="lock-closed-outline" size={16} color={"white"} />
-            <Text style={styles.userNameText}>deepanshu__goyal</Text>
-            <Icon name="chevron-down" size={16} color={"white"} />
-          </TouchableOpacity>
-          <View style={styles.profileIcons}>
-            <ThreadsIcon name="threads" size={24} color={"white"} />
-            <PlusIcon name="plus-square" solid size={24} color={"white"} />
-            <Icon name="bars" size={22} color={"white"} />
-          </View>
-        </View>
+      {showPostDetails ? (
+        <PostDetails
+          activePosts={activeUserPosts}
+          activeUser={activeUser}
+          handleBack={handlePostBack}
+        />
       ) : (
-        <View style={styles.searchProfileContainer}>
-          <TouchableOpacity onPress={handleBack && handleBack}>
-            <ProfileIcon
-              name="chevron-back-outline"
-              size={24}
-              color={"white"}
-            />
-          </TouchableOpacity>
-          <Text style={styles.searchProfileText}>{activeUser?.user_name}</Text>
-          <View style={styles.searchProfileIconContainer}>
-            <ProfileIcon
-              name="notifications-outline"
-              size={24}
-              style={{
-                paddingRight: 16,
+        <React.Fragment>
+          {isMyAccount ? (
+            <View style={styles.profileHeader}>
+              <TouchableOpacity style={styles.disUserName}>
+                <LockIcon
+                  name="lock-closed-outline"
+                  size={16}
+                  color={"white"}
+                />
+                <Text style={styles.userNameText}>deepanshu__goyal</Text>
+                <Icon name="chevron-down" size={16} color={"white"} />
+              </TouchableOpacity>
+              <View style={styles.profileIcons}>
+                <ThreadsIcon name="threads" size={24} color={"white"} />
+                <PlusIcon name="plus-square" solid size={24} color={"white"} />
+                <Icon name="bars" size={22} color={"white"} />
+              </View>
+            </View>
+          ) : (
+            <View style={styles.searchProfileContainer}>
+              <TouchableOpacity onPress={handleBack && handleBack}>
+                <ProfileIcon
+                  name="chevron-back-outline"
+                  size={24}
+                  color={"white"}
+                />
+              </TouchableOpacity>
+              <Text style={styles.searchProfileText}>
+                {activeUser?.user_name}
+              </Text>
+              <View style={styles.searchProfileIconContainer}>
+                <ProfileIcon
+                  name="notifications-outline"
+                  size={24}
+                  style={{
+                    paddingRight: 16,
+                  }}
+                  color={"white"}
+                />
+                <TouchableOpacity onPress={handleActionSheet}>
+                  <ElipseIcon name="ellipsis1" size={24} color={"white"} />
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+
+          <View style={styles.profileContainer}>
+            <View>
+              <View style={styles.imageContainer}>
+                <Image
+                  source={activeUser?.profile_image}
+                  resizeMode="contain"
+                  style={styles.image}
+                />
+              </View>
+              <Text style={styles.profileName}>
+                {activeUser?.display_name || "Deepanshu"}
+              </Text>
+            </View>
+
+            <View style={styles.countContainer}>
+              <View style={styles.detailContainer}>
+                <Text style={styles.textValue}>{activeUserPosts?.length}</Text>
+                <Text style={styles.textLabel}>posts</Text>
+              </View>
+              <TouchableOpacity style={styles.detailContainer}>
+                <Text style={styles.textValue}>
+                  {activeUser.followers.length}
+                </Text>
+                <Text style={styles.textLabel}>followers</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.detailContainer}>
+                <Text style={styles.textValue}>
+                  {activeUser.following.length}
+                </Text>
+                <Text style={styles.textLabel}>following</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <Text style={styles.bio}>{activeUser?.bio}</Text>
+
+          <View style={styles.btnContainer}>
+            <CustomButton
+              title="Edit Profile"
+              onClick={() => {
+                //
               }}
-              color={"white"}
+              backgroundColor="#e5e7eb"
+              textColor="black"
+              textWeight="600"
+              feedbackOpacity={0.6}
             />
-            <TouchableOpacity onPress={handleActionSheet}>
-              <ElipseIcon name="ellipsis1" size={24} color={"white"} />
+            <CustomButton
+              title="Share Profile"
+              onClick={() => {
+                //
+              }}
+              backgroundColor="#e5e7eb"
+              textColor="black"
+              textWeight="600"
+              feedbackOpacity={0.6}
+            />
+            <TouchableOpacity style={styles.addFollowerContainer}>
+              <Icon name="user-plus" size={16} />
             </TouchableOpacity>
           </View>
-        </View>
-      )}
 
-      <View style={styles.profileContainer}>
-        <View>
-          <View style={styles.imageContainer}>
-            <Image
-              source={activeUser?.profile_image}
-              resizeMode="contain"
-              style={styles.image}
-            />
+          <View style={styles.iconContainer}>
+            <TouchableOpacity
+              style={styles.iconBtnContainer("posts", activeTab)}
+              onPress={() => setActiveTab("posts")}
+            >
+              <GridIcon name="grid-on" size={25} color={"white"} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.iconBtnContainer("reels", activeTab)}
+            >
+              <Icon name="video" size={25} color={"white"} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.iconBtnContainer("likes", activeTab)}
+              onPress={() => setActiveTab("likes")}
+            >
+              <ProfileIcon
+                name="person-circle-sharp"
+                size={30}
+                color={"white"}
+              />
+            </TouchableOpacity>
           </View>
-          <Text style={styles.profileName}>
-            {activeUser?.display_name || "Deepanshu"}
-          </Text>
-        </View>
 
-        <View style={styles.countContainer}>
-          <View style={styles.detailContainer}>
-            <Text style={styles.textValue}>{activeUserPosts?.length}</Text>
-            <Text style={styles.textLabel}>posts</Text>
-          </View>
-          <TouchableOpacity style={styles.detailContainer}>
-            <Text style={styles.textValue}>{activeUser.followers.length}</Text>
-            <Text style={styles.textLabel}>followers</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.detailContainer}>
-            <Text style={styles.textValue}>{activeUser.following.length}</Text>
-            <Text style={styles.textLabel}>following</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+          <>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View>
+                {contentToDisplay.length ? (
+                  <TouchableOpacity style={styles.postContainer}>
+                    {contentToDisplay.map((post) => (
+                      <ProfilePost
+                        key={post.id}
+                        image={post.images}
+                        onPress={() => setShowPostDetails(true)}
+                        // showActionBtn={activeTab === "posts"}
+                        // showHeader={false}
+                        // onPress={() => {
+                        //   navigation.navigate("/profile/posts");
+                        // }}
+                      />
+                    ))}
+                  </TouchableOpacity>
+                ) : (
+                  <View style={styles.noDataContainer}>
+                    <PlusIcon
+                      name="camera"
+                      size={50}
+                      style={{ color: COLORS.gray2 }}
+                    />
 
-      <Text style={styles.bio}>{activeUser?.bio}</Text>
-
-      <View style={styles.btnContainer}>
-        <CustomButton
-          title="Edit Profile"
-          onClick={() => {
-            //
-          }}
-          backgroundColor="#e5e7eb"
-          textColor="black"
-          textWeight="600"
-          feedbackOpacity={0.6}
-        />
-        <CustomButton
-          title="Share Profile"
-          onClick={() => {
-            //
-          }}
-          backgroundColor="#e5e7eb"
-          textColor="black"
-          textWeight="600"
-          feedbackOpacity={0.6}
-        />
-        <TouchableOpacity style={styles.addFollowerContainer}>
-          <Icon name="user-plus" size={16} />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.iconContainer}>
-        <TouchableOpacity
-          style={styles.iconBtnContainer("posts", activeTab)}
-          onPress={() => setActiveTab("posts")}
-        >
-          <GridIcon name="grid-on" size={25} color={"white"} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.iconBtnContainer("reels", activeTab)}>
-          <Icon name="video" size={25} color={"white"} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.iconBtnContainer("likes", activeTab)}
-          onPress={() => setActiveTab("likes")}
-        >
-          <ProfileIcon name="person-circle-sharp" size={30} color={"white"} />
-        </TouchableOpacity>
-      </View>
-
-      <>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View>
-            {contentToDisplay.length ? (
-              <TouchableOpacity style={styles.postContainer}>
-                {contentToDisplay.map((post) => (
-                  <ProfilePost
-                    key={post.id}
-                    image={post.images}
-                    onPress={() => {}}
-                    // showActionBtn={activeTab === "posts"}
-                    // showHeader={false}
-                    // onPress={() => {
-                    //   navigation.navigate("/profile/posts");
-                    // }}
-                  />
-                ))}
-              </TouchableOpacity>
-            ) : (
-              <View style={styles.noDataContainer}>
-                <PlusIcon
-                  name="camera"
-                  size={50}
-                  style={{ color: COLORS.gray2 }}
-                />
-
-                <Text style={{ fontSize: SIZES.medium, color: COLORS.white }}>
-                  No Posts Yet
-                </Text>
+                    <Text
+                      style={{ fontSize: SIZES.medium, color: COLORS.white }}
+                    >
+                      No Posts Yet
+                    </Text>
+                  </View>
+                )}
               </View>
-            )}
-          </View>
-        </ScrollView>
-      </>
+            </ScrollView>
+          </>
+        </React.Fragment>
+      )}
     </View>
   );
 };
