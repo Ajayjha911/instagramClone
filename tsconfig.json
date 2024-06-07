@@ -17,6 +17,9 @@
       "@constants/*": [
         "constants/*"
       ],
+      "@helpers/*": [
+        "src/helpers/*"
+      ],
     }
   },
   "extends": "expo/tsconfig.base"
