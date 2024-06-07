@@ -1,11 +1,9 @@
 import React, { useState, useMemo } from "react";
 import {
-  SafeAreaView,
   Text,
   View,
   Image,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   ActionSheetIOS,
 } from "react-native";
 import styles from "./profile.style";
@@ -19,7 +17,7 @@ import ElipseIcon from "react-native-vector-icons/AntDesign";
 
 import { ScrollView } from "react-native-gesture-handler";
 import { COLORS, SIZES, images } from "../../constants";
-import { USERS, POSTS } from "../../data";
+import { POSTS } from "../../data";
 import ProfilePost from "./profile_post";
 import CustomButton from "../custom-button/custom-button";
 import { Ionicons as ProfileIcon } from "@expo/vector-icons";
@@ -27,9 +25,11 @@ import { Ionicons as ProfileIcon } from "@expo/vector-icons";
 import { ProfilePageProps } from "./profile.types";
 // import { useNavigation } from "@react-navigation/native";
 
-const loggedInUser = USERS[1];
-
-const ProfileScreen: React.FC<ProfilePageProps> = ({ isMyAccount }) => {
+const ProfileScreen: React.FC<ProfilePageProps> = ({
+  isMyAccount,
+  handleBack,
+  activeUser: loggedInUser,
+}) => {
   const [activeTab, setActiveTab] = useState("posts");
 
   const { postsCreatedByLoggedInUser, postsLikedByLoggedInUser } =
@@ -92,8 +92,12 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({ isMyAccount }) => {
         </View>
       ) : (
         <View style={styles.searchProfileContainer}>
-          <TouchableOpacity>
-            <ProfileIcon name="chevron-back-outline" size={24} />
+          <TouchableOpacity onPress={handleBack && handleBack}>
+            <ProfileIcon
+              name="chevron-back-outline"
+              size={24}
+              color={"white"}
+            />
           </TouchableOpacity>
           <Text style={styles.searchProfileText}>_ajay_kumar_</Text>
           <View style={styles.searchProfileIconContainer}>

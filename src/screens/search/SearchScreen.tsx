@@ -13,13 +13,27 @@ import { DATA } from "../../../data";
 
 import RecentSearches from "./recent-searches";
 import CustomButton from "@components/custom-button/custom-button";
+import ProfileComponent from "@components/profile/profile";
+import { UserState } from "@redux/slices/appSlice";
 
 const SearchScreen = () => {
   const [searchText, setSearchText] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const dummyValue: UserState = {
+    display_name: "",
+    user_name: "",
+    profile_image: "",
+    id: "",
+    bio: "",
+    posts: [],
+    followers: [],
+    following: [],
+  };
+  const [viewProfile, setViewProfile] = useState<UserState>(dummyValue);
   const inputRef = useRef(null);
 
   const clearSearch = () => {
+    setViewProfile(dummyValue);
     setSearchText("");
     setIsSearching(false);
     if (inputRef) {
@@ -33,74 +47,92 @@ const SearchScreen = () => {
     </View>
   );
 
+  const handleBack = () => {
+    setViewProfile(dummyValue);
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <TextInput
-          ref={inputRef}
-          placeholder="Search"
-          placeholderTextColor="#888"
-          style={styles.searchInput}
-          value={searchText}
-          onChangeText={(text) => setSearchText(text)}
-          onFocus={() => setIsSearching(true)}
+      {viewProfile.id?.length > 0 ? (
+        <ProfileComponent
+          isMyAccount={false}
+          handleBack={handleBack}
+          activeUser={viewProfile}
         />
-        {searchText?.length > 0 && (
-          <TouchableOpacity
-            onPress={() => {
-              setSearchText("");
-            }}
-          >
-            <Icon
-              name="times-circle"
-              size={18}
-              color="#888"
-              style={styles.clearIcon}
-            />
-          </TouchableOpacity>
-        )}
-        {isSearching && (
-          <View>
-            <CustomButton
-              title="Cancel"
-              onClick={clearSearch}
-              width={80}
-              textColor="white"
-              backgroundColor="transparent"
-            />
-          </View>
-        )}
-      </View>
-
-      <View style={styles.subHeaderWrapper}>
-        <TouchableOpacity style={styles.selectedCategoryItem}>
-          <Text style={styles.titleSelected}>IGTV</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.categoryItem}>
-          <Text style={styles.title}>Shop</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.categoryItem}>
-          <Text style={styles.title}>Style</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.categoryItem}>
-          <Text style={styles.title}>Sports</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.categoryItem}>
-          <Text style={styles.title}>Auto</Text>
-        </TouchableOpacity>
-      </View>
-      {isSearching ? (
-        <React.Fragment>
-          <RecentSearches searchText={searchText} />
-        </React.Fragment>
       ) : (
-        <FlatList
-          data={DATA}
-          keyExtractor={(item) => item.id}
-          numColumns={3}
-          renderItem={renderItem}
-          contentContainerStyle={styles.flatListContainer}
-        />
+        <React.Fragment>
+          <View style={styles.searchContainer}>
+            <TextInput
+              ref={inputRef}
+              placeholder="Search"
+              placeholderTextColor="#888"
+              style={styles.searchInput}
+              value={searchText}
+              onChangeText={(text) => setSearchText(text)}
+              onFocus={() => setIsSearching(true)}
+            />
+            {searchText?.length > 0 && (
+              <TouchableOpacity
+                onPress={() => {
+                  setSearchText("");
+                  setViewProfile(dummyValue);
+                }}
+              >
+                <Icon
+                  name="times-circle"
+                  size={18}
+                  color="#888"
+                  style={styles.clearIcon}
+                />
+              </TouchableOpacity>
+            )}
+            {isSearching && (
+              <View>
+                <CustomButton
+                  title="Cancel"
+                  onClick={clearSearch}
+                  width={80}
+                  textColor="white"
+                  backgroundColor="transparent"
+                />
+              </View>
+            )}
+          </View>
+
+          <View style={styles.subHeaderWrapper}>
+            <TouchableOpacity style={styles.selectedCategoryItem}>
+              <Text style={styles.titleSelected}>IGTV</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.categoryItem}>
+              <Text style={styles.title}>Shop</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.categoryItem}>
+              <Text style={styles.title}>Style</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.categoryItem}>
+              <Text style={styles.title}>Sports</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.categoryItem}>
+              <Text style={styles.title}>Auto</Text>
+            </TouchableOpacity>
+          </View>
+          {isSearching ? (
+            <React.Fragment>
+              <RecentSearches
+                searchText={searchText}
+                setViewProfile={setViewProfile}
+              />
+            </React.Fragment>
+          ) : (
+            <FlatList
+              data={DATA}
+              keyExtractor={(item) => item.id}
+              numColumns={3}
+              renderItem={renderItem}
+              contentContainerStyle={styles.flatListContainer}
+            />
+          )}
+        </React.Fragment>
       )}
     </View>
   );

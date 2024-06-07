@@ -16,13 +16,21 @@ import NewIcon from "react-native-vector-icons/Ionicons";
 import Avatar from "@components/avatar/avatar";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { selectLoggedInUser, selectUsersList } from "@redux/slices/appSlice";
+import {
+  UserState,
+  selectLoggedInUser,
+  selectUsersList,
+} from "@redux/slices/appSlice";
 
 declare type RecentSearches = {
   searchText: string;
+  setViewProfile: React.Dispatch<React.SetStateAction<UserState>>;
 };
 
-const RecentSearches: React.FC<RecentSearches> = ({ searchText }) => {
+const RecentSearches: React.FC<RecentSearches> = ({
+  searchText,
+  setViewProfile,
+}) => {
   const recentSearches = useAppSelector(selectRecentSearches);
   const dispatch = useAppDispatch();
   const loggedInUser = useAppSelector(selectLoggedInUser);
@@ -49,6 +57,7 @@ const RecentSearches: React.FC<RecentSearches> = ({ searchText }) => {
     if (searchText?.length > 0) {
       dispatch(setRecentSearches(user));
     }
+    setViewProfile(user);
     console.log("in else");
   };
 
