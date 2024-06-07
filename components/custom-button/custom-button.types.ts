@@ -13,4 +13,5 @@ export declare type CustomButtonProps = {
   borderWidth?: number;
   borderColor?: string;
   textWeight?: string;
+  feedbackOpacity?: number;
 };

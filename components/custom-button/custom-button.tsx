@@ -24,6 +24,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   borderWidth = 0,
   borderColor = "black",
   textWeight = "500",
+  feedbackOpacity = 0,
 }) => {
   const handleClick = () => {
     if (disabled) {
@@ -42,6 +43,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       ]}
     >
       <TouchableOpacity
+        activeOpacity={feedbackOpacity}
         style={{
           backgroundColor,
           width,
