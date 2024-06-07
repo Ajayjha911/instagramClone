@@ -1,20 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AppRootState } from "..";
-import { dummyUsers } from "./appSlice";
+import { UserState, dummyUsers } from "./appSlice";
 
 export declare type SearchState = {
-  recentSearches: SearchUsersState[];
-};
-
-export declare type SearchUsersState = {
-  display_name?: string;
-  user_name: string;
-  profile_image: string;
-  id: string;
-  bio?: string;
-  posts: string[];
-  followers: string[];
-  following: string[];
+  recentSearches: UserState[];
 };
 
 const initialState: SearchState = {
