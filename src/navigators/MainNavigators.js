@@ -6,7 +6,6 @@ import HomeNavigator from "./HomeNavigators";
 import ChatScreen from "../screens/ChatScreen";
 import NotificationScreen from "../screens/NotificationScreen";
 import StoryUploadScreen from "../screens/StoryUploadScreen";
-import ConfirmStoryScreen from "../screens/ConfirmStoryScreen";
 import ViewStoryScreen from "../screens/ViewStoryScreen";
 
 const Stack = createStackNavigator();
@@ -24,7 +23,7 @@ const MainNavigator = () => {
       <Stack.Screen name="Chat" component={ChatScreen} />
       <Stack.Screen name="Notifications" component={NotificationScreen} />
       <Stack.Screen name="StoryUploadScreen" component={StoryUploadScreen} />
-      <Stack.Screen name="ConfirmStoryScreen" component={ConfirmStoryScreen} />
+
       <Stack.Screen
         name="ViewStoryScreen"
         component={ViewStoryScreen}
