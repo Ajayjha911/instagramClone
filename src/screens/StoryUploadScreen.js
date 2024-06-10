@@ -12,28 +12,13 @@ import * as MediaLibrary from "expo-media-library";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { selectStoryImage } from "../../src/redux/slices/storySlice";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const StoryUploadScreen = ({ navigation }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [galleryImages, setGalleryImages] = useState([]);
+  const [showUploadScreen, setShowUploadScreen] = useState(false);
   const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   (async () => {
-
-  //     const { status } = await MediaLibrary.requestPermissionsAsync();
-  //     if (status !== "granted") {
-  //       alert("Permission to access media library is required!");
-  //       return;
-  //     }
-
-  //     const media = await MediaLibrary.getAssetsAsync({
-  //       mediaType: "photo",
-  //       first: 50,
-  //     });
-  //     setGalleryImages(media.assets);
-  //   })();
-  // }, []);
 
   useEffect(() => {
     const test = async () => {
@@ -47,7 +32,6 @@ const StoryUploadScreen = ({ navigation }) => {
         mediaType: "photo",
         first: 50,
       });
-      // console.log("media-asset", media?.assets);
       setGalleryImages(media.assets);
     };
     test();
@@ -66,28 +50,123 @@ const StoryUploadScreen = ({ navigation }) => {
     return assetInfo.localUri || assetInfo.uri;
   };
 
-  const renderGalleryItem = ({ item }) => (
+  const renderGalleryItem = async ({ item }) => (
     <TouchableOpacity
       onPress={async () => {
         const resolvedUri = await resolveAssetUri(item.id);
-        setSelectedImage({
-          localUri: "https://loremflickr.com/640/480/dslr",
-        });
+        setSelectedImage({ localUri: resolvedUri });
+        setShowUploadScreen(true);
       }}
     >
       <Image
-        source={{ uri: "https://loremflickr.com/640/480/dslr" }}
+        source={{ uri: await resolveAssetUri(item.id) }}
         style={styles.galleryImage}
       />
     </TouchableOpacity>
   );
 
-  const handleSelectImage = () => {
+  const handleUploadStory = () => {
     if (selectedImage) {
       dispatch(selectStoryImage(selectedImage.localUri));
       navigation.goBack();
     }
   };
+
+  if (showUploadScreen) {
+    return (
+      <View style={styles.uploadContainer}>
+        <View style={styles.uploadHeader}>
+          <TouchableOpacity onPress={() => setShowUploadScreen(false)}>
+            <View style={styles.iconWrapper}>
+              <Ionicons name="close" size={24} color="white" />
+            </View>
+          </TouchableOpacity>
+          <View style={styles.uploadIcons}>
+            <View style={styles.iconWrapper}>
+              <Ionicons
+                name="text"
+                size={24}
+                color="white"
+                style={styles.icon}
+              />
+            </View>
+            <View style={styles.iconWrapper}>
+              <Ionicons
+                name="happy"
+                size={24}
+                color="white"
+                style={styles.icon}
+              />
+            </View>
+            <View style={styles.iconWrapper}>
+              <Ionicons
+                name="musical-notes"
+                size={24}
+                color="white"
+                style={styles.icon}
+              />
+            </View>
+            <View style={styles.iconWrapper}>
+              <Ionicons
+                name="sparkles"
+                size={24}
+                color="white"
+                style={styles.icon}
+              />
+            </View>
+            <View style={styles.iconWrapper}>
+              <Ionicons
+                name="ellipsis-horizontal"
+                size={24}
+                color="white"
+                style={styles.icon}
+              />
+            </View>
+          </View>
+        </View>
+        <Image
+          source={{ uri: selectedImage.localUri }}
+          style={styles.fullImage}
+        />
+        <View style={styles.footerContainer}>
+          <TouchableOpacity
+            style={styles.yourStoryButton}
+            onPress={handleUploadStory}
+          >
+            <View>
+              <Image
+                source={require("../../assets/img1.jpeg")}
+                style={styles.profileImage}
+              />
+            </View>
+            <Text style={styles.buttonText}>Your Story</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.button, styles.closeFriends]}>
+            <View style={styles.closeFriend}>
+              <Icon
+                name="star"
+                size={18}
+                style={styles.iconStyles2}
+                color="white"
+              />
+            </View>
+            <Text style={styles.buttonText}>Close friends</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.arrowButton}
+            onPress={handleUploadStory}
+          >
+            <Icon
+              name="arrow-forward"
+              style={styles.iconStyles}
+              size={30}
+              color="black"
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -127,15 +206,6 @@ const StoryUploadScreen = ({ navigation }) => {
         numColumns={3}
         contentContainerStyle={styles.galleryContainer}
       />
-      {selectedImage && (
-        <Image
-          source={{ uri: selectedImage.localUri }}
-          style={styles.thumbnail}
-        />
-      )}
-      <TouchableOpacity style={styles.selectButton} onPress={handleSelectImage}>
-        <Text style={styles.selectButtonText}>Select</Text>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -186,21 +256,90 @@ const styles = StyleSheet.create({
     height: 100,
     margin: 5,
   },
-  thumbnail: {
-    width: "100%",
-    height: 300,
-    resizeMode: "contain",
-    marginVertical: 20,
+  uploadContainer: {
+    flex: 1,
+    backgroundColor: "black",
   },
-  selectButton: {
-    backgroundColor: "#2196F3",
+  uploadHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 16,
+  },
+  uploadIcons: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 20, // Adjust the margin to create space between the cross icon and other icons
+  },
+  iconWrapper: {
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    padding: 8,
+    borderRadius: 20,
+    marginHorizontal: 5,
+  },
+  icon: {
+    marginHorizontal: 10,
+  },
+  fullImage: {
+    flex: 1,
+    resizeMode: "contain",
+  },
+  footerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     padding: 10,
-    borderRadius: 5,
+    marginBottom: 12,
+  },
+  arrowButton: {
+    borderRadius: 50,
+    height: 50,
+    width: 50,
+    backgroundColor: "white",
+    display: "flex",
     alignItems: "center",
   },
-  selectButtonText: {
+  iconStyles: {
+    marginTop: 9,
+  },
+  closeFriend: {
+    borderRadius: 50,
+    height: 30,
+    width: 30,
+    backgroundColor: "green",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 18,
+    marginBottom: 10,
+    marginTop: 4,
+    fontWeight: "bold",
+  },
+  closeFriends: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+    backgroundColor: "#333",
+    padding: 10,
+    borderRadius: 36,
+  },
+  yourStoryButton: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+    backgroundColor: "#333",
+    padding: 8,
+    borderRadius: 36,
+  },
+  profileImage: {
+    height: 30,
+    width: 30,
+    borderRadius: 50,
   },
 });
 
