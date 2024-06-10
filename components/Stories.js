@@ -28,7 +28,7 @@ const Stories = () => {
   const [tempStory, setTempStory] = useState(null);
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const story = useSelector((state) => state.story);
+  const story = useSelector((state) => state);
 
   const yourStory = [
     {
@@ -66,16 +66,16 @@ const Stories = () => {
       !story.story.viewedStories.some(
         (viewedStory) =>
           viewedStory.id === item.id &&
-          Date.now() - viewedStory.timestamp < 24 * 60 * 60 * 1000
-      )
+          Date.now() - viewedStory.timestamp < 24 * 60 * 60 * 1000,
+      ),
   );
 
   const viewedStories = stories.filter((item) =>
     story.story.viewedStories.some(
       (viewedStory) =>
         viewedStory.id === item.id &&
-        Date.now() - viewedStory.timestamp < 24 * 60 * 60 * 1000
-    )
+        Date.now() - viewedStory.timestamp < 24 * 60 * 60 * 1000,
+    ),
   );
 
   const sortedStories = [...yourStory, ...unviewedStories, ...viewedStories];
@@ -112,7 +112,7 @@ const Stories = () => {
     const storyViewed = story?.story?.viewedStories?.some(
       (viewedStory) =>
         viewedStory.id === item.id &&
-        Date.now() - viewedStory.timestamp < 24 * 60 * 60 * 1000
+        Date.now() - viewedStory.timestamp < 24 * 60 * 60 * 1000,
     );
 
     return (

@@ -9,7 +9,17 @@ import {
 import styles from "./profile_post.style";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
-const ProfilePost = ({ image, onPress, isSelected = false }) => {
+declare type ProfilePostProps = {
+  isSelected?: boolean;
+  image: any;
+  onPress: () => void;
+};
+
+const ProfilePost: React.FC<ProfilePostProps> = ({
+  image,
+  onPress,
+  isSelected = false,
+}) => {
   const screenWidth = useWindowDimensions().width - 20;
 
   return (

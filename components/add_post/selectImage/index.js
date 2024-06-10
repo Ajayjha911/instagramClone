@@ -8,7 +8,7 @@ import {
   useWindowDimensions,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import ProfilePost from "../../profile/profile_post";
+import ProfilePost from "../../profile/profile_post/profile-post";
 import styles from "../add_post.style";
 import { COLORS, SIZES } from "../../../constants";
 import Icon from "react-native-vector-icons/FontAwesome5";

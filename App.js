@@ -5,7 +5,7 @@ import { StatusBar } from "react-native";
 import MainNavigator from "./src/navigators/MainNavigators";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
-import store from "./src/redux/store/store";
+import store from "./src/redux";
 
 const App = () => {
   return (

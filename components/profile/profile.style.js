@@ -3,61 +3,78 @@ import { COLORS, FONT, SIZES } from "../../constants";
 
 const screenWidth = Dimensions.get("window").width - 20;
 export default StyleSheet.create({
+  searchProfileContainer: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+  },
+  searchProfileIconContainer: {
+    flexDirection: "row",
+  },
+  searchProfileText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "white",
+  },
   rootContainer: {
     flex: 1,
     gap: 10,
     paddingHorizontal: 10,
+    backgroundColor: "black",
   },
   profileContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: 10,
-    margin: 10,
     marginTop: 7,
   },
   imageContainer: {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     justifyContent: "center",
     alignItems: "center",
+    marginLeft: 8,
   },
   image: {
     width: "100%",
     height: "100%",
-    borderRadius: 100 / 2,
+    borderRadius: 50,
   },
   countContainer: {
     flexDirection: "row",
     alignItems: "flex-end",
-    gap: 15,
+    gap: 20,
+    marginRight: 8,
+    paddingBottom: 24,
   },
   detailContainer: { alignItems: "center" },
   textLabel: {
     fontFamily: FONT.medium,
-    fontSize: 20,
-    fontWeight: "600",
+    fontSize: 18,
+    color: "white",
+
+    // fontWeight: "600",
   },
   textValue: {
     fontFamily: FONT.medium,
     fontSize: 18,
     fontWeight: "600",
+    color: "white",
   },
-  bioContainer: {
-    paddingHorizontal: 10,
+  profileName: {
+    textAlign: "center",
+    fontSize: 16,
+    paddingTop: 4,
+    fontWeight: "600",
+    color: "white",
+  },
+  bio: {
+    fontSize: 16,
+    color: "white",
   },
   btnContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    gap: 5,
-  },
-  container: {
-    backgroundColor: "#e5e7eb",
-    padding: 10,
-    width: "40%",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: SIZES.medium / 2,
+    paddingTop: 8,
   },
   addFollowerContainer: {
     backgroundColor: "#e5e7eb",
@@ -130,10 +147,11 @@ export default StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
-    gap: 30,
+    gap: 20,
   },
   userNameText: {
-    fontSize: 27,
+    fontSize: 20,
     fontWeight: "600",
+    color: "white",
   },
 });
