@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginLeft: 20,
-    gap: 12, // Adjust the margin to create space between the cross icon and other icons
+    gap: 12,
   },
   iconWrapper: {
     padding: 8,
