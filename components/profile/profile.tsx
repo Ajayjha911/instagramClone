@@ -25,6 +25,7 @@ import { ProfilePageProps } from "./profile.types";
 import PostDetails from "./post-details/post-details";
 import { useAppSelector } from "@hooks/redux";
 import { selectAllPosts } from "@redux/slices/postSlices";
+import ZoomInView from "@components/zoom-in-effect/zoom-in-view";
 // import { useNavigation } from "@react-navigation/native";
 
 const ProfileScreen: React.FC<ProfilePageProps> = ({
@@ -81,15 +82,18 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
   const handlePostBack = () => {
     setShowPostDetails(false);
   };
+  const [isVisible, setIsVisible] = useState(false);
 
   return (
     <View style={styles.rootContainer}>
       {showPostDetails ? (
-        <PostDetails
-          activePosts={activeUserPosts}
-          activeUser={activeUser}
-          handleBack={handlePostBack}
-        />
+        <ZoomInView isVisible={isVisible}>
+          <PostDetails
+            activePosts={activeUserPosts}
+            activeUser={activeUser}
+            handleBack={handlePostBack}
+          />
+        </ZoomInView>
       ) : (
         <React.Fragment>
           {isMyAccount ? (
@@ -178,6 +182,7 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
               title="Edit Profile"
               onClick={() => {
                 //
+                setIsVisible(true);
               }}
               backgroundColor="#e5e7eb"
               textColor="black"
@@ -232,7 +237,11 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
                       <ProfilePost
                         key={post.id}
                         image={post.image}
-                        onPress={() => setShowPostDetails(true)}
+                        onPress={() => {
+                          setShowPostDetails(true);
+
+                          setIsVisible(true);
+                        }}
                         // showActionBtn={activeTab === "posts"}
                         // showHeader={false}
                         // onPress={() => {
