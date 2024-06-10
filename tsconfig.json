@@ -20,6 +20,9 @@
       "@helpers/*": [
         "src/helpers/*"
       ],
+      "@assets/*": [
+        "assets/*"
+      ],
     }
   },
   "extends": "expo/tsconfig.base"
