@@ -54,6 +54,18 @@ PODS:
   - FBLazyVector (0.74.2)
   - fmt (9.1.0)
   - glog (0.3.5)
+  - libwebp (1.3.2):
+    - libwebp/demux (= 1.3.2)
+    - libwebp/mux (= 1.3.2)
+    - libwebp/sharpyuv (= 1.3.2)
+    - libwebp/webp (= 1.3.2)
+  - libwebp/demux (1.3.2):
+    - libwebp/webp
+  - libwebp/mux (1.3.2):
+    - libwebp/demux
+  - libwebp/sharpyuv (1.3.2)
+  - libwebp/webp (1.3.2):
+    - libwebp/sharpyuv
   - RCT-Folly (2024.01.01.00):
     - boost
     - DoubleConversion
@@ -1192,6 +1204,10 @@ PODS:
     - React-logger (= 0.74.2)
     - React-perflogger (= 0.74.2)
     - React-utils (= 0.74.2)
+  - RNFastImage (8.6.3):
+    - React-Core
+    - SDWebImage (~> 5.11.1)
+    - SDWebImageWebPCoder (~> 0.8.4)
   - RNFS (2.20.0):
     - React-Core
   - RNGestureHandler (2.16.2):
@@ -1257,6 +1273,12 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - SDWebImage (5.11.1):
+    - SDWebImage/Core (= 5.11.1)
+  - SDWebImage/Core (5.11.1)
+  - SDWebImageWebPCoder (0.8.5):
+    - libwebp (~> 1.0)
+    - SDWebImage/Core (~> 5.10)
   - SocketRocket (0.7.0)
   - Yoga (0.0.0)
 
@@ -1329,6 +1351,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - RNFastImage (from `../node_modules/react-native-fast-image`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -1337,6 +1360,9 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - libwebp
+    - SDWebImage
+    - SDWebImageWebPCoder
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -1472,6 +1498,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNFastImage:
+    :path: "../node_modules/react-native-fast-image"
   RNFS:
     :path: "../node_modules/react-native-fs"
   RNGestureHandler:
@@ -1502,6 +1530,7 @@ SPEC CHECKSUMS:
   FBLazyVector: 4bc164e5b5e6cfc288d2b5ff28643ea15fa1a589
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
+  libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
   RCTDeprecation: b03c35057846b685b3ccadc9bfe43e349989cdb2
   RCTRequired: 194626909cfa8d39ca6663138c417bc6c431648c
@@ -1550,10 +1579,13 @@ SPEC CHECKSUMS:
   React-runtimescheduler: d2f61c6fd47401f52d220cff22791db1ac7053e0
   React-utils: a4de2ebe8d96dfafd27ffd7c131e7ddca3a386e4
   ReactCommon: f75776d715a088ecb67041eaf50ccdb7e94b245c
+  RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: 9508b860b3709d658dda7a701363a318e329d04b
   RNReanimated: d6284e5ba8c4481cca1b2e1e60a9b8a58417869b
   RNVectorIcons: c6689df230427641f2313e35365855eb4cd1a0dd
+  SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
+  SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: ae3c32c514802d30f687a04a6a35b348506d411f
 
