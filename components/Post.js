@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -14,7 +14,7 @@ import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Posts } from "../data";
 
-const InstaPost = () => {
+const InstaPost = ({ data = Posts, itemIndex = 0 }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const toggleModal = () => {
@@ -76,10 +76,15 @@ const InstaPost = () => {
     </View>
   );
 
+  const flatListref = useRef(null);
+
   return (
     <>
       <FlatList
-        data={Posts}
+        ref={flatListref}
+        initialScrollIndex={Number(itemIndex) - 1}
+        onScrollToIndexFailed={(item) => {}}
+        data={data}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
       />

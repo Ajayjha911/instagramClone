@@ -26,6 +26,8 @@ import PostDetails from "./post-details/post-details";
 import { useAppSelector } from "@hooks/redux";
 import { selectAllPosts } from "@redux/slices/postSlices";
 import ZoomInView from "@components/zoom-in-effect/zoom-in-view";
+import { useNavigation } from "@react-navigation/native";
+import { getUserPost } from "@redux/slices/profileSlice";
 // import { useNavigation } from "@react-navigation/native";
 
 const ProfileScreen: React.FC<ProfilePageProps> = ({
@@ -36,24 +38,25 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
   const [activeTab, setActiveTab] = useState("posts");
   const [showPostDetails, setShowPostDetails] = useState(false);
   const allPosts = useAppSelector(selectAllPosts);
+  const UserPost = useAppSelector(getUserPost);
 
   const { activeUserPosts, postsLikedByLoggedInUser } = useMemo(() => {
     return {
       activeUserPosts: (allPosts || [])?.filter(
-        (post) => post.user_id === activeUser?.id,
+        (post) => post.user_id === activeUser?.id
       ),
       postsLikedByLoggedInUser: (allPosts || []).filter((post) =>
-        post.likes.some((like) => like.user_id === activeUser?.id),
+        post.likes.some((like) => like.user_id === activeUser?.id)
       ),
     };
   }, [allPosts, activeUser]);
-
+  const navigation = useNavigation();
   const contentToDisplay = useMemo(
     () =>
       activeTab === "posts"
         ? activeUserPosts || []
         : postsLikedByLoggedInUser || [],
-    [activeTab, activeUserPosts, postsLikedByLoggedInUser],
+    [activeTab, activeUserPosts, postsLikedByLoggedInUser]
   );
 
   const handleActionSheet = () => {
@@ -75,7 +78,7 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
         if (buttonIndex === 0) {
           // cancel action
         }
-      },
+      }
     );
   };
 
@@ -228,46 +231,44 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
             </TouchableOpacity>
           </View>
 
-          <>
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <View>
-                {contentToDisplay.length ? (
-                  <TouchableOpacity style={styles.postContainer}>
-                    {contentToDisplay.map((post) => (
-                      <ProfilePost
-                        key={post.id}
-                        image={post.image}
-                        onPress={() => {
-                          setShowPostDetails(true);
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View>
+              {UserPost.length ? (
+                <TouchableOpacity style={styles.postContainer}>
+                  {UserPost.map((post) => (
+                    <ProfilePost
+                      key={post.id}
+                      image={post.img}
+                      onPress={() => {
+                        // setShowPostDetails(true);
 
-                          setIsVisible(true);
-                        }}
-                        // showActionBtn={activeTab === "posts"}
-                        // showHeader={false}
-                        // onPress={() => {
-                        //   navigation.navigate("/profile/posts");
-                        // }}
-                      />
-                    ))}
-                  </TouchableOpacity>
-                ) : (
-                  <View style={styles.noDataContainer}>
-                    <PlusIcon
-                      name="camera"
-                      size={50}
-                      style={{ color: COLORS.gray2 }}
+                        // setIsVisible(true);
+                        //@ts-ignore
+                        navigation.navigate("ViewPost", { itemIndex: post.id });
+                      }}
+                      // showActionBtn={activeTab === "posts"}
+                      // showHeader={false}
+                      // onPress={() => {
+                      //   navigation.navigate("/profile/posts");
+                      // }}
                     />
+                  ))}
+                </TouchableOpacity>
+              ) : (
+                <View style={styles.noDataContainer}>
+                  <PlusIcon
+                    name="camera"
+                    size={50}
+                    style={{ color: COLORS.gray2 }}
+                  />
 
-                    <Text
-                      style={{ fontSize: SIZES.medium, color: COLORS.white }}
-                    >
-                      No Posts Yet
-                    </Text>
-                  </View>
-                )}
-              </View>
-            </ScrollView>
-          </>
+                  <Text style={{ fontSize: SIZES.medium, color: COLORS.white }}>
+                    No Posts Yet
+                  </Text>
+                </View>
+              )}
+            </View>
+          </ScrollView>
         </React.Fragment>
       )}
     </View>
