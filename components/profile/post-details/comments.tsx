@@ -1,7 +1,9 @@
+import Divider from "@components/divider/divider";
+import { fresh } from "@helpers/func";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { selectLoggedInUser } from "@redux/slices/appSlice";
-import { setPostCommentsLikes } from "@redux/slices/postSlices";
-import React, { useState } from "react";
+import { PostType, setPostCommentsLikes } from "@redux/slices/postSlices";
+import React, { useMemo, useState } from "react";
 import {
   Image,
   ScrollView,
@@ -14,35 +16,75 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/AntDesign";
 
 declare type PostCommentsProps = {
-  comments: any;
+  posts: PostType[];
+  selectedPostId: number;
 };
 
-const PostComments: React.FC<PostCommentsProps> = ({ comments }) => {
+const PostComments: React.FC<PostCommentsProps> = ({
+  posts,
+  selectedPostId,
+}) => {
   const dispatch = useAppDispatch();
   const style = getStyles();
   const activeUser = useAppSelector(selectLoggedInUser);
   const [comment, setComment] = useState("");
 
-  const handleComment = () => {
-    console.log("comment", comment);
+  const activePost = useMemo(() => {
+    return posts?.find((post) => post.id === selectedPostId);
+  }, [posts, selectedPostId]);
 
-    // dispatch(setPostCommentsLikes());
+  const handleComment = () => {
+    const freshPosts = fresh(activePost);
+    freshPosts.comments.push({
+      id: activePost?.comments?.length + 1,
+      user_id: activeUser?.id,
+      user_name: activeUser?.user_name,
+      comment: comment,
+      profile_image: activeUser?.profile_image,
+    });
+    dispatch(setPostCommentsLikes(freshPosts));
+    setComment("");
   };
+
+  const activeComments = useMemo(() => {
+    const reversedArray = [...activePost.comments].reverse();
+    return reversedArray;
+  }, [activePost]);
+
   return (
-    <View>
-      <ScrollView style={{ padding: 16 }}>
-        {comments?.map((comm, index) => {
+    <View style={style.container}>
+      <ScrollView
+        style={{
+          flex: 1,
+          marginBottom: 62,
+        }}
+      >
+        {activeComments?.map((comm, index) => {
           return (
             <View key={index}>
-              <View>
-                <Text style={style.commentAuthor}>anushka</Text>
-                <Text style={style.comment}>nicee</Text>
+              <View
+                style={[
+                  style.commentContainer,
+                  index === 0 && {
+                    paddingTop: 16,
+                  },
+                ]}
+              >
+                <Image
+                  source={comm.profile_image}
+                  style={style.userNameImage}
+                />
+                <View style={style.commentTextContainer}>
+                  <Text style={style.commentAuthor}>{comm?.user_name}</Text>
+                  <Text style={style.comment}>{comm.comment}</Text>
+                </View>
               </View>
             </View>
           );
         })}
+        <View style={{ paddingTop: 82 }} />
       </ScrollView>
-      <View style={{ flexDirection: "row" }}>
+      <View style={style.commentInputContainer}>
         <Image source={activeUser.profile_image} style={style.userNameImage} />
         <View style={{ flex: 1 }}>
           <TextInput
@@ -50,6 +92,7 @@ const PostComments: React.FC<PostCommentsProps> = ({ comments }) => {
             multiline
             style={style.commentInput}
             onChangeText={(value) => setComment(value)}
+            value={comment}
           />
           {comment?.length > 0 && (
             <View style={style.commentIconContainer}>
@@ -72,6 +115,22 @@ export default PostComments;
 
 const getStyles = () => {
   return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: "black",
+    },
+    commentContainer: {
+      flexDirection: "row",
+      paddingBottom: 16,
+    },
+    commentTextContainer: {
+      paddingLeft: 16,
+    },
+    userNameImage: {
+      height: 35,
+      width: 35,
+      borderRadius: 100,
+    },
     commentAuthor: {
       fontSize: 14,
       fontWeight: "700",
@@ -81,11 +140,14 @@ const getStyles = () => {
       fontSize: 14,
       color: "white",
     },
-    userNameImage: {
-      height: 35,
-      width: 35,
-      borderRadius: 100,
-      alignSelf: "center",
+    commentInputContainer: {
+      flexDirection: "row",
+      position: "absolute",
+      bottom: 40,
+      left: 0,
+      right: 0,
+      flex: 1,
+      backgroundColor: "black",
     },
     commentInput: {
       borderRadius: 25,
