@@ -36,6 +36,8 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
   activeUser,
 }) => {
   const [activeTab, setActiveTab] = useState("posts");
+  const UserPostpost = useAppSelector(getUserPost);
+
   const [showPostDetails, setShowPostDetails] = useState(false);
   const allPosts = useAppSelector(selectAllPosts);
   const UserPost = useAppSelector(getUserPost);
@@ -244,7 +246,10 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
 
                         // setIsVisible(true);
                         //@ts-ignore
-                        navigation.navigate("ViewPost", { itemIndex: post.id });
+                        navigation.navigate("ViewPost", {
+                          itemIndex: post.id,
+                          data: UserPostpost,
+                        });
                       }}
                       // showActionBtn={activeTab === "posts"}
                       // showHeader={false}

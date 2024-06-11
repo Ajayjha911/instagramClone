@@ -13,33 +13,38 @@ import user4 from "./assets/chat/user4.jpg";
 export const DATA = [
   {
     id: "jhgjfhd787",
+    key: 1,
     Title: "Rose",
     subTitle: "Lorem Ipum",
-    image: require("./assets/post/post1.jpg"),
+    img: require("./assets/post/post1.jpg"),
   },
   {
     id: "fdgdfgdfgf",
+    key: 2,
     Title: "Janaki",
     subTitle: "Lorem Ipum",
-    image: require("./assets/post/post2.jpg"),
+    img: require("./assets/post/post2.jpg"),
   },
   {
     id: "cvbfddffff",
+    key: 3,
     Title: "Renuka",
     subTitle: "Lorem Ipum",
-    image: require("./assets/post/post3.jpg"),
+    img: require("./assets/post/post3.jpg"),
   },
   {
     id: "dfghfghfgh",
+    key: 4,
     Title: "Sita",
     subTitle: "Lorem Ipum",
-    image: require("./assets/post/post4.jpg"),
+    img: require("./assets/post/post4.jpg"),
   },
   {
     id: "iuyiouyiuo",
+    key: 5,
     Title: "Gita",
     subTitle: "Lorem Ipum",
-    image: require("./assets/post/post5.jpg"),
+    img: require("./assets/post/post5.jpg"),
   },
 ];
 
