@@ -11,7 +11,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
-import { selectStoryImage } from "../../src/redux/slices/storySlice";
+import { addStoryImage } from "../../src/redux/slices/storySlice";
 import Icon from "react-native-vector-icons/Ionicons";
 
 const StoryUploadScreen = ({ navigation }) => {
@@ -21,7 +21,7 @@ const StoryUploadScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const test = async () => {
+    const getMedia = async () => {
       const { status } = await MediaLibrary.requestPermissionsAsync();
       if (status !== "granted") {
         alert("Permission to access media library is required!");
@@ -34,7 +34,7 @@ const StoryUploadScreen = ({ navigation }) => {
       });
       setGalleryImages(media.assets);
     };
-    test();
+    getMedia();
   }, []);
 
   const openImagePickerAsync = async () => {
@@ -67,7 +67,7 @@ const StoryUploadScreen = ({ navigation }) => {
 
   const handleUploadStory = () => {
     if (selectedImage) {
-      dispatch(selectStoryImage(selectedImage.localUri));
+      dispatch(addStoryImage(selectedImage.localUri));
       navigation.goBack();
     }
   };
@@ -269,77 +269,70 @@ const styles = StyleSheet.create({
   uploadIcons: {
     flexDirection: "row",
     alignItems: "center",
-    marginLeft: 20, // Adjust the margin to create space between the cross icon and other icons
+    marginLeft: 20,
+    gap: 12,
   },
   iconWrapper: {
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
     padding: 8,
-    borderRadius: 20,
-    marginHorizontal: 5,
-  },
-  icon: {
-    marginHorizontal: 10,
+    backgroundColor: "#2C2C2C",
+    borderRadius: 50,
   },
   fullImage: {
-    flex: 1,
-    resizeMode: "contain",
+    width: "100%",
+    height: "80%",
   },
   footerContainer: {
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
+    alignItems: "center",
+    padding: 16,
+  },
+  yourStoryButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#2C2C2C",
     padding: 10,
-    marginBottom: 12,
+    borderRadius: 24,
   },
-  arrowButton: {
-    borderRadius: 50,
-    height: 50,
-    width: 50,
-    backgroundColor: "white",
-    display: "flex",
-    alignItems: "center",
-  },
-  iconStyles: {
-    marginTop: 9,
-  },
-  closeFriend: {
-    borderRadius: 50,
-    height: 30,
+  profileImage: {
     width: 30,
-    backgroundColor: "green",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    height: 30,
+    borderRadius: 15,
+    marginRight: 10,
   },
   buttonText: {
     color: "white",
-    fontSize: 18,
-    marginBottom: 10,
-    marginTop: 4,
-    fontWeight: "bold",
+  },
+  button: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: "#666",
   },
   closeFriends: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 16,
-    backgroundColor: "#333",
-    padding: 10,
-    borderRadius: 36,
+    backgroundColor: "#2C2C2C",
   },
-  yourStoryButton: {
-    display: "flex",
+  closeFriend: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 16,
-    backgroundColor: "#333",
+    justifyContent: "center",
     padding: 8,
-    borderRadius: 36,
+    borderRadius: 24,
+    backgroundColor: "#008000",
+    marginRight: 8,
+    fontWeight: "bold",
   },
-  profileImage: {
-    height: 30,
-    width: 30,
+  arrowButton: {
+    padding: 8,
+    backgroundColor: "white",
     borderRadius: 50,
+  },
+  iconStyles: {
+    color: "black",
+  },
+  iconStyles2: {
+    color: "white",
   },
 });
 
