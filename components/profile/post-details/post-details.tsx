@@ -19,6 +19,7 @@ import { fresh, getFullDate } from "@helpers/func";
 import BottomSheet from "@components/bottomsheet/bottom-sheet";
 import PostComments from "./comments";
 import {
+  CommentsType,
   LikesType,
   PostType,
   setPostCommentsLikes,
@@ -51,6 +52,7 @@ const PostDetails: React.FC<PostDetailsProps> = (props) => {
   const { activeUser, activePosts } = props;
   const [bookmarked, setBookmarked] = useState(false);
   const [openComments, setOpenComments] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(-1);
 
   const handleLike = (post: PostType) => {
     const found = post.likes?.findIndex(
@@ -66,6 +68,7 @@ const PostDetails: React.FC<PostDetailsProps> = (props) => {
         id: freshPosts.likes.length + 1,
         user_id: activeUser.id,
         user_name: activeUser.user_name,
+        profile_image: activeUser?.profile_image,
       });
       dispatch(setPostCommentsLikes(freshPosts));
     }
@@ -110,7 +113,9 @@ const PostDetails: React.FC<PostDetailsProps> = (props) => {
                   />
                   <View style={styles.userNameContainer}>
                     <Text style={styles.userName}>{activeUser?.user_name}</Text>
-                    <Text style={styles.location}>{posts?.location}</Text>
+                    {posts?.location && (
+                      <Text style={styles.location}>{posts?.location}</Text>
+                    )}
                   </View>
                 </View>
                 <View style={styles.elipseIcon}>
@@ -132,7 +137,13 @@ const PostDetails: React.FC<PostDetailsProps> = (props) => {
                       color={isPostLiked ? "red" : "white"}
                     />
                   </TouchableOpacity>
-                  <TouchableOpacity activeOpacity={1} onPress={handleComments}>
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => {
+                      handleComments();
+                      setSelectedPost(posts?.id);
+                    }}
+                  >
                     <CommentIcon
                       name="comment"
                       size={30}
@@ -181,7 +192,13 @@ const PostDetails: React.FC<PostDetailsProps> = (props) => {
                   {activeUser.user_name}{" "}
                   <Text style={styles.captionText}>{posts.description}</Text>
                 </Text>
-                <Text style={styles.viewAllComments}>
+                <Text
+                  style={styles.viewAllComments}
+                  onPress={() => {
+                    handleComments();
+                    setSelectedPost(posts?.id);
+                  }}
+                >
                   View {getCommentNumber(posts?.comments)}
                 </Text>
                 {posts?.comments?.length > 1 && (
@@ -208,7 +225,7 @@ const PostDetails: React.FC<PostDetailsProps> = (props) => {
         openBottomSheet={openComments}
         setOpenBottomSheet={setOpenComments}
       >
-        <PostComments comments={["1"]} />
+        <PostComments posts={activePosts} selectedPostId={selectedPost} />
       </BottomSheet>
     </View>
   );
@@ -254,6 +271,7 @@ const styles = StyleSheet.create({
   },
   userNameContainer: {
     paddingLeft: 12,
+    alignSelf: "center",
   },
   userName: {
     color: "white",
