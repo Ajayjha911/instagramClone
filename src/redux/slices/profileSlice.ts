@@ -32,7 +32,8 @@ const dummyPosts = [
   },
   {
     id: 4,
-    img: images.image4,
+
+    img: [{ img: images.image4 }, { img: images.image2 }],
     username: "DiamondDuchess_",
     likes: "13,393",
     comments: "433",

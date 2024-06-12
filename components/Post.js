@@ -14,7 +14,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { Posts } from "../data";
+import Carousel from "./common/Carousel";
 
 const InstaPost = ({ data, itemIndex }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -41,7 +41,11 @@ const InstaPost = ({ data, itemIndex }) => {
           />
         </TouchableOpacity>
       </View>
-      <Image source={item.img} style={styles.postImage} />
+      {Array.isArray(item.img) ? (
+        <Carousel DATA={item.img} />
+      ) : (
+        <Image source={item.img} style={styles.postImage} />
+      )}
       <View style={styles.postFooter}>
         <View style={styles.postFooterIcons}>
           <View style={styles.postFooterActions}>
@@ -81,7 +85,7 @@ const InstaPost = ({ data, itemIndex }) => {
   ////////////scroll logic
 
   const WIDTH = Dimensions.get("window").width;
-  const HEIGHT = Dimensions.get("window").height;
+
   console.log("width", WIDTH);
   const flatListref = useRef(null);
   useEffect(() => {
@@ -108,6 +112,7 @@ const InstaPost = ({ data, itemIndex }) => {
         keyExtractor={(item) => item.id}
         getItemLayout={getItemLayout}
       />
+
       <Modal
         isVisible={isModalVisible}
         onBackdropPress={toggleModal}

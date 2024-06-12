@@ -240,7 +240,7 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
                   {UserPost.map((post) => (
                     <ProfilePost
                       key={post.id}
-                      image={post.img}
+                      image={post?.img[0]?.img || post.img}
                       onPress={() => {
                         // setShowPostDetails(true);
 
