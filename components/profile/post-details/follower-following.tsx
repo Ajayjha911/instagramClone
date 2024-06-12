@@ -4,13 +4,31 @@ import {
   useNavigationState,
   useRoute,
 } from "@react-navigation/native";
-import React, { useMemo } from "react";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useMemo, useRef, useState } from "react";
+import {
+  ActionSheetIOS,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import CustomButton from "@components/custom-button/custom-button";
 import ProfileHeader from "@components/profile-header/profile-header";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
-import { removeFollower, selectLoggedInUser } from "@redux/slices/appSlice";
+import {
+  FollowerFollowingType,
+  removeFollower,
+  selectLoggedInUser,
+} from "@redux/slices/appSlice";
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
+import Divider from "@components/divider/divider";
+import { emptyFunc } from "@helpers/func";
 
 declare type RoutePropsType = {
   details: {
@@ -72,6 +90,14 @@ const FollowerFollowing = () => {
   const dispatch = useAppDispatch();
   const navigationState = useNavigationState((state) => state); // Get navigation state
   const currentRouteName = navigationState.routes[navigationState.index].name;
+  const [removeFollowerValue, setRemoveFollowerValue] =
+    useState<FollowerFollowingType>({
+      id: "",
+      user_name: "",
+      profile_image: "",
+      display_name: "",
+    });
+
   const isTabFollower = useMemo(() => {
     return currentRouteName.includes("Followers") ? true : false;
   }, [currentRouteName]);
@@ -83,10 +109,12 @@ const FollowerFollowing = () => {
       return loggedInUser?.following;
     }
   }, [loggedInUser.followers, loggedInUser.following, isTabFollower]);
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
-  const handlePress = (id: string) => {
+  const handlePress = (user: FollowerFollowingType) => {
     if (isTabFollower) {
-      dispatch(removeFollower({ id }));
+      setRemoveFollowerValue(user);
+      bottomSheetModalRef.current?.present();
     }
   };
 
@@ -114,7 +142,7 @@ const FollowerFollowing = () => {
 
               <CustomButton
                 title={isTabFollower ? "Remove" : "Following"}
-                onClick={() => handlePress(user?.id)}
+                onClick={() => handlePress(user)}
                 width={80}
                 padding={4}
                 backgroundColor="gray"
@@ -125,6 +153,57 @@ const FollowerFollowing = () => {
           );
         })}
       </ScrollView>
+
+      <BottomSheetModalProvider>
+        <BottomSheetModal
+          ref={bottomSheetModalRef}
+          index={0}
+          snapPoints={["40%"]}
+          handleIndicatorStyle={{
+            backgroundColor: "black",
+          }}
+          backgroundStyle={{
+            backgroundColor: "black",
+          }}
+        >
+          <BottomSheetView style={style.removeContainer}>
+            <View style={style.removeFollowerContainer}>
+              <Image
+                source={removeFollowerValue?.profile_image}
+                style={style.profileImage}
+              />
+            </View>
+            <Text style={style.removeHeading}>Remove follower?</Text>
+            <Text style={style.removeSubHeading}>
+              We won't tell that{" "}
+              <Text style={{ fontWeight: "bold" }}>
+                {removeFollowerValue?.user_name}
+              </Text>{" "}
+              were {"\n"} removed from your followers.
+            </Text>
+            <Divider border={0.2} />
+            <View style={style.removeButtonContainer}>
+              <CustomButton
+                title="Remove"
+                onClick={() => {
+                  dispatch(removeFollower({ id: removeFollowerValue?.id }));
+                  bottomSheetModalRef?.current?.close();
+                }}
+                backgroundColor="transparent"
+                textColor="red"
+              />
+              <CustomButton
+                title="Cancel"
+                onClick={() => {
+                  bottomSheetModalRef?.current?.close();
+                }}
+                backgroundColor="transparent"
+                textColor="white"
+              />
+            </View>
+          </BottomSheetView>
+        </BottomSheetModal>
+      </BottomSheetModalProvider>
     </View>
   );
 };
@@ -178,6 +257,41 @@ const getStyles = () => {
     },
     nameTextColor: {
       color: "white",
+    },
+    removeContainer: {
+      backgroundColor: "#272525",
+      flex: 1,
+      paddingBottom: 4,
+    },
+    removeHeading: {
+      textAlign: "center",
+      fontSize: 16,
+      fontWeight: "bold",
+      color: "white",
+      paddingTop: 16,
+    },
+    removeSubHeading: {
+      textAlign: "center",
+      paddingHorizontal: 16,
+      color: "white",
+      fontSize: 16,
+      opacity: 0.8,
+      paddingBottom: 8,
+    },
+    removeButtonContainer: {
+      flex: 1,
+      position: "absolute",
+      bottom: 10,
+      width: "100%",
+    },
+    removeFollower: {
+      height: 35,
+      width: 35,
+      borderRadius: 50,
+    },
+    removeFollowerContainer: {
+      alignSelf: "center",
+      paddingTop: 16,
     },
   });
 };
