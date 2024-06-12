@@ -13,8 +13,8 @@ export declare type UserState = {
   profile_image: any;
   id: string;
   bio?: string;
-  followers: string[];
-  following: string[];
+  followers: FollowerFollowingType[];
+  following: FollowerFollowingType[];
 };
 
 export const usersObject = {
@@ -68,6 +68,13 @@ export const usersObject = {
   },
 };
 
+export declare type FollowerFollowingType = {
+  id: string;
+  user_name: string;
+  display_name: string;
+  profile_image: any;
+};
+
 export const dummyUsers: UserState[] = [
   {
     id: usersObject?.[1].id,
@@ -75,8 +82,18 @@ export const dummyUsers: UserState[] = [
     user_name: usersObject?.[1].user_name,
     profile_image: usersObject?.[1].profile_image,
     bio: "Welcome to Instagram Clone App",
-    followers: ["2", "3", "4", "5"],
-    following: ["2", "3", "4", "5"],
+    followers: [
+      usersObject?.[2],
+      usersObject?.[3],
+      usersObject?.[4],
+      usersObject?.[5],
+    ],
+    following: [
+      usersObject?.[2],
+      usersObject?.[3],
+      usersObject?.[4],
+      usersObject?.[5],
+    ],
   },
   {
     id: usersObject?.[2].id,
@@ -84,8 +101,8 @@ export const dummyUsers: UserState[] = [
     user_name: usersObject?.[2].user_name,
     profile_image: usersObject?.[2].profile_image,
     bio: "Welcome to Instagram Clone App",
-    followers: ["1", "4", "3"],
-    following: ["3", "5"],
+    followers: [usersObject?.[1], usersObject?.[4], usersObject?.[3]],
+    following: [usersObject?.[3], usersObject?.[5]],
   },
   {
     id: usersObject?.[3].id,
@@ -93,8 +110,8 @@ export const dummyUsers: UserState[] = [
     user_name: usersObject?.[3].user_name,
     profile_image: usersObject?.[3].profile_image,
     bio: "Welcome to Instagram Clone App",
-    followers: ["1", "2", "5"],
-    following: ["2", "1"],
+    followers: [usersObject?.[1], usersObject?.[2], usersObject?.[5]],
+    following: [usersObject?.[2], usersObject?.[1]],
   },
   {
     id: usersObject?.[4].id,
@@ -102,8 +119,8 @@ export const dummyUsers: UserState[] = [
     user_name: usersObject?.[4].user_name,
     profile_image: usersObject?.[4].profile_image,
     bio: "Welcome to Instagram Clone App",
-    followers: ["1", "2", "5"],
-    following: ["2", "1", "3"],
+    followers: [usersObject?.[1], usersObject?.[2], usersObject?.[5]],
+    following: [usersObject?.[1], usersObject?.[2], usersObject?.[3]],
   },
   {
     id: usersObject?.[5].id,
@@ -111,8 +128,8 @@ export const dummyUsers: UserState[] = [
     user_name: usersObject?.[5].user_name,
     profile_image: usersObject?.[5].profile_image,
     bio: "Welcome to Instagram Clone App",
-    followers: ["2", "3", "4"],
-    following: ["2", "1"],
+    followers: [usersObject?.[2], usersObject?.[4], usersObject?.[3]],
+    following: [usersObject?.[1], usersObject?.[2]],
   },
   {
     id: usersObject?.[6].id,
@@ -120,8 +137,8 @@ export const dummyUsers: UserState[] = [
     user_name: usersObject?.[6].user_name,
     profile_image: usersObject?.[6].profile_image,
     bio: "Welcome to Instagram Clone App",
-    followers: ["4"],
-    following: ["2", "1"],
+    followers: [usersObject?.[4]],
+    following: [usersObject?.[1], usersObject?.[2]],
   },
   {
     id: usersObject?.[7].id,
@@ -129,8 +146,13 @@ export const dummyUsers: UserState[] = [
     user_name: usersObject?.[7].user_name,
     profile_image: usersObject?.[7].profile_image,
     bio: "Welcome to Instagram Clone App",
-    followers: ["4", "1", "3", "5"],
-    following: ["2", "1"],
+    followers: [
+      usersObject?.[1],
+      usersObject?.[4],
+      usersObject?.[3],
+      usersObject?.[5],
+    ],
+    following: [usersObject?.[1], usersObject?.[2]],
   },
 ];
 
@@ -140,8 +162,22 @@ const loginUser = {
   user_name: usersObject?.[100].user_name,
   profile_image: usersObject?.[100].profile_image,
   bio: "Welcome to Instagram Clone App",
-  followers: ["1", "2", "3", "4", "5"],
-  following: ["1", "2", "3", "4", "5"],
+  followers: [
+    usersObject?.[1],
+    usersObject?.[4],
+    usersObject?.[3],
+    usersObject?.[5],
+    usersObject?.[2],
+  ],
+  following: [
+    usersObject?.[1],
+    usersObject?.[4],
+    usersObject?.[3],
+    usersObject?.[5],
+    usersObject?.[2],
+    usersObject?.[6],
+    usersObject?.[7],
+  ],
 };
 
 const initialState: AppState = {
