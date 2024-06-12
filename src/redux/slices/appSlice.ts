@@ -6,6 +6,7 @@ import { fresh } from "@helpers/func";
 export declare type AppState = {
   loginUser: UserState;
   userLists: UserState[];
+  removeFollowerTabLoading: boolean;
 };
 
 export declare type UserState = {
@@ -184,6 +185,7 @@ const loginUser = {
 const initialState: AppState = {
   loginUser: loginUser,
   userLists: dummyUsers,
+  removeFollowerTabLoading: false,
 };
 
 const appSlice = createSlice({
@@ -201,6 +203,9 @@ const appSlice = createSlice({
         state.loginUser = freshUsers;
       }
     },
+    setRemoveFollowerTabLoading: (state, action) => {
+      state.removeFollowerTabLoading = action.payload;
+    },
   },
 });
 
@@ -212,5 +217,9 @@ export const selectUsersList = (state: AppRootState): UserState[] => {
   return state?.app?.userLists || [];
 };
 
-export const { removeFollower } = appSlice.actions;
+export const selectLoading = (state: AppRootState): boolean => {
+  return state?.app?.removeFollowerTabLoading || false;
+};
+
+export const { removeFollower, setRemoveFollowerTabLoading } = appSlice.actions;
 export default appSlice.reducer;

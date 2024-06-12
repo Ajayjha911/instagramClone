@@ -4,9 +4,9 @@ import {
   useNavigationState,
   useRoute,
 } from "@react-navigation/native";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
-  ActionSheetIOS,
+  ActivityIndicator,
   Image,
   ScrollView,
   StyleSheet,
@@ -20,7 +20,9 @@ import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import {
   FollowerFollowingType,
   removeFollower,
+  selectLoading,
   selectLoggedInUser,
+  setRemoveFollowerTabLoading,
 } from "@redux/slices/appSlice";
 import {
   BottomSheetModal,
@@ -28,7 +30,6 @@ import {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import Divider from "@components/divider/divider";
-import { emptyFunc } from "@helpers/func";
 
 declare type RoutePropsType = {
   details: {
@@ -41,18 +42,29 @@ type BlogDetailRouteProp = RouteProp<RoutePropsType, "details">;
 const FollowerFollowingScreen: React.FC = () => {
   const route = useRoute<BlogDetailRouteProp>();
   const { value } = route.params;
+  const loggedInUser = useAppSelector(selectLoggedInUser);
 
   const Tab = createMaterialTopTabNavigator();
   const navigation = useNavigation();
+
+  const initValue = useMemo(() => {
+    if (value.includes("Followers")) {
+      return `${loggedInUser?.followers?.length} Followers`;
+    }
+    return `${loggedInUser?.following?.length} Following`;
+  }, [value, loggedInUser?.following, loggedInUser?.followers]);
+
   const handleBack = () => {
     navigation.goBack();
   };
+
+  const dispatch = useAppDispatch();
 
   return (
     <>
       <ProfileHeader handleBack={handleBack} />
       <Tab.Navigator
-        initialRouteName={value}
+        initialRouteName={initValue}
         screenOptions={{
           swipeEnabled: true,
           tabBarScrollEnabled: true,
@@ -71,13 +83,30 @@ const FollowerFollowingScreen: React.FC = () => {
         }}
       >
         <Tab.Screen
-          name={`5 Followers`}
+          name={`Followers`}
           component={FollowerFollowing}
+          options={{
+            tabBarLabel: `${loggedInUser?.followers?.length} Followers`,
+          }}
           listeners={{
-            tabPress: () => console.log("tab pressed"),
+            tabPress: () => {
+              dispatch(setRemoveFollowerTabLoading(true));
+            },
+          }}
+          initialParams={{ value: "abc" }}
+        />
+        <Tab.Screen
+          name={`Following`}
+          component={FollowerFollowing}
+          options={{
+            tabBarLabel: `${loggedInUser?.following?.length} Following`,
+          }}
+          listeners={{
+            tabPress: () => {
+              dispatch(setRemoveFollowerTabLoading(true));
+            },
           }}
         />
-        <Tab.Screen name={`7 Following`} component={FollowerFollowing} />
       </Tab.Navigator>
     </>
   );
@@ -86,6 +115,14 @@ const FollowerFollowingScreen: React.FC = () => {
 const FollowerFollowing = () => {
   const style = getStyles();
   const loggedInUser = useAppSelector(selectLoggedInUser);
+  const loading = useAppSelector(selectLoading);
+
+  useEffect(() => {
+    if (loading)
+      setTimeout(() => {
+        dispatch(setRemoveFollowerTabLoading(false));
+      }, 500);
+  }, [loading]);
 
   const dispatch = useAppDispatch();
   const navigationState = useNavigationState((state) => state); // Get navigation state
@@ -120,39 +157,47 @@ const FollowerFollowing = () => {
 
   return (
     <View style={style.container}>
-      <Text style={style.followerHeaderText}>
-        {isTabFollower ? "All Followers" : "Sort by"}
-      </Text>
-      <ScrollView>
-        {users?.map((user, index) => {
-          return (
-            <View style={style.listContainer} key={index}>
-              <View style={style.listInnerContainer}>
-                <Image
-                  source={user?.profile_image}
-                  style={style.profileImage}
-                />
-                <View style={style.nameContainer}>
-                  <Text style={[style.userNameText, style.nameTextColor]}>
-                    {user?.user_name}
-                  </Text>
-                  <Text style={style.nameTextColor}>{user?.display_name}</Text>
-                </View>
-              </View>
+      {loading ? (
+        <ActivityIndicator size={"small"} style={{ paddingTop: 16 }} />
+      ) : (
+        <>
+          <Text style={style.followerHeaderText}>
+            {isTabFollower ? "All Followers" : "Sort by"}
+          </Text>
+          <ScrollView>
+            {users?.map((user, index) => {
+              return (
+                <View style={style.listContainer} key={index}>
+                  <View style={style.listInnerContainer}>
+                    <Image
+                      source={user?.profile_image}
+                      style={style.profileImage}
+                    />
+                    <View style={style.nameContainer}>
+                      <Text style={[style.userNameText, style.nameTextColor]}>
+                        {user?.user_name}
+                      </Text>
+                      <Text style={style.nameTextColor}>
+                        {user?.display_name}
+                      </Text>
+                    </View>
+                  </View>
 
-              <CustomButton
-                title={isTabFollower ? "Remove" : "Following"}
-                onClick={() => handlePress(user)}
-                width={80}
-                padding={4}
-                backgroundColor="gray"
-                textSize={14}
-                feedbackOpacity={1}
-              />
-            </View>
-          );
-        })}
-      </ScrollView>
+                  <CustomButton
+                    title={isTabFollower ? "Remove" : "Following"}
+                    onClick={() => handlePress(user)}
+                    width={80}
+                    padding={4}
+                    backgroundColor="gray"
+                    textSize={14}
+                    feedbackOpacity={1}
+                  />
+                </View>
+              );
+            })}
+          </ScrollView>
+        </>
+      )}
 
       <BottomSheetModalProvider>
         <BottomSheetModal
