@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AppRootState } from "..";
 import images from "@constants/images";
+import { fresh } from "@helpers/func";
 
 export declare type AppState = {
   loginUser: UserState;
@@ -188,7 +189,19 @@ const initialState: AppState = {
 const appSlice = createSlice({
   name: "search",
   initialState,
-  reducers: {},
+  reducers: {
+    removeFollower: (state, action) => {
+      const freshUsers = fresh(state.loginUser);
+      const id = action.payload.id;
+      const foundIndex = freshUsers?.followers?.findIndex(
+        (user) => user?.id === id,
+      );
+      if (foundIndex > -1) {
+        freshUsers.followers.splice(foundIndex, 1);
+        state.loginUser = freshUsers;
+      }
+    },
+  },
 });
 
 export const selectLoggedInUser = (state: AppRootState): UserState => {
@@ -199,5 +212,5 @@ export const selectUsersList = (state: AppRootState): UserState[] => {
   return state?.app?.userLists || [];
 };
 
-// export const { setRecentSearches, setClearRecentSearch } = appSlice.actions;
+export const { removeFollower } = appSlice.actions;
 export default appSlice.reducer;
