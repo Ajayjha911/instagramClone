@@ -28,6 +28,7 @@ import {
   BottomSheetModal,
   BottomSheetModalProvider,
   BottomSheetView,
+  TouchableWithoutFeedback,
 } from "@gorhom/bottom-sheet";
 import Divider from "@components/divider/divider";
 
@@ -117,6 +118,8 @@ const FollowerFollowing = () => {
   }, [loading]);
 
   const dispatch = useAppDispatch();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigationState = useNavigationState((state) => state); // Get navigation state
   const currentRouteName = navigationState.routes[navigationState.index].name;
   const [removeFollowerValue, setRemoveFollowerValue] =
@@ -144,7 +147,13 @@ const FollowerFollowing = () => {
     if (isTabFollower) {
       setRemoveFollowerValue(user);
       bottomSheetModalRef.current?.present();
+      setIsModalOpen(true);
     }
+  };
+
+  const closeBottomSheetModal = () => {
+    setIsModalOpen(false);
+    bottomSheetModalRef.current?.dismiss();
   };
 
   return (
@@ -192,6 +201,11 @@ const FollowerFollowing = () => {
       )}
 
       <BottomSheetModalProvider>
+        {isModalOpen && (
+          <TouchableWithoutFeedback onPress={closeBottomSheetModal}>
+            <View style={style.overlay} />
+          </TouchableWithoutFeedback>
+        )}
         <BottomSheetModal
           ref={bottomSheetModalRef}
           index={0}
@@ -224,7 +238,7 @@ const FollowerFollowing = () => {
                 title="Remove"
                 onClick={() => {
                   dispatch(removeFollower({ id: removeFollowerValue?.id }));
-                  bottomSheetModalRef?.current?.close();
+                  closeBottomSheetModal();
                 }}
                 backgroundColor="transparent"
                 textColor="red"
@@ -232,7 +246,7 @@ const FollowerFollowing = () => {
               <CustomButton
                 title="Cancel"
                 onClick={() => {
-                  bottomSheetModalRef?.current?.close();
+                  closeBottomSheetModal();
                 }}
                 backgroundColor="transparent"
                 textColor="white"
@@ -329,6 +343,14 @@ const getStyles = () => {
     removeFollowerContainer: {
       alignSelf: "center",
       paddingTop: 16,
+    },
+    overlay: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0,0,0,0.5)",
     },
   });
 };
