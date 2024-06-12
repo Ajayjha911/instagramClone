@@ -6,6 +6,8 @@ import {
   View,
   FlatList,
   TouchableOpacity,
+  useWindowDimensions,
+  Dimensions,
 } from "react-native";
 import Modal from "react-native-modal";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -14,7 +16,7 @@ import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Posts } from "../data";
 
-const InstaPost = ({ data = Posts, itemIndex = 0 }) => {
+const InstaPost = ({ data, itemIndex }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const toggleModal = () => {
@@ -76,17 +78,35 @@ const InstaPost = ({ data = Posts, itemIndex = 0 }) => {
     </View>
   );
 
+  ////////////scroll logic
+
+  const WIDTH = Dimensions.get("window").width;
+  const HEIGHT = Dimensions.get("window").height;
+  console.log("width", WIDTH);
   const flatListref = useRef(null);
+  useEffect(() => {
+    if (flatListref.current && itemIndex) {
+      flatListref.current.scrollToIndex({ index: itemIndex - 1 });
+    }
+  }, []);
+
+  const getItemLayout = (_, index) => {
+    return {
+      length: 500,
+      offset: 500 * index,
+      index,
+    };
+  };
 
   return (
     <>
       <FlatList
         ref={flatListref}
-        initialScrollIndex={Number(itemIndex) - 1}
-        onScrollToIndexFailed={(item) => {}}
+        initialScrollIndex={Number(itemIndex - 1)}
         data={data}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id}
+        getItemLayout={getItemLayout}
       />
       <Modal
         isVisible={isModalVisible}
