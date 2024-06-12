@@ -85,8 +85,9 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
   };
   const [isVisible, setIsVisible] = useState(false);
 
-  const onPressNavigate = () => {
-    navigation.navigate("followerfollowing"); // Pass the value using params
+  const onPressNavigate = (value: string) => {
+    //@ts-ignore
+    navigation.navigate("followerfollowing", { value: value }); // Pass the value using params
   };
 
   return (
@@ -167,14 +168,21 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
               </View>
               <TouchableOpacity
                 style={styles.detailContainer}
-                onPress={onPressNavigate}
+                onPress={() =>
+                  onPressNavigate(`${activeUser.followers.length} Followers`)
+                }
               >
                 <Text style={styles.textValue}>
                   {activeUser.followers.length}
                 </Text>
                 <Text style={styles.textLabel}>followers</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.detailContainer}>
+              <TouchableOpacity
+                style={styles.detailContainer}
+                onPress={() =>
+                  onPressNavigate(`${activeUser.following.length} Following`)
+                }
+              >
                 <Text style={styles.textValue}>
                   {activeUser.following.length}
                 </Text>

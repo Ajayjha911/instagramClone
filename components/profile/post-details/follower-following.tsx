@@ -1,31 +1,40 @@
-import { useNavigationState, useRoute } from "@react-navigation/native";
+import {
+  RouteProp,
+  useNavigation,
+  useNavigationState,
+  useRoute,
+} from "@react-navigation/native";
 import React, { useMemo } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import CustomButton from "@components/custom-button/custom-button";
 import { emptyFunc } from "@helpers/func";
 import images from "@constants/images";
-import Icon from "react-native-vector-icons/Ionicons";
+import ProfileHeader from "@components/header/header";
 
-const Header = () => {
-  const style = getStyles();
-  return (
-    <View style={style.headerContainer}>
-      <Icon name="chevron-back" size={24} color="white" />
-      <Text style={style.headerText}>_deepanshu__goyal</Text>
-    </View>
-  );
+declare type RoutePropsType = {
+  details: {
+    value: "followers" | "following";
+  };
 };
 
+type BlogDetailRouteProp = RouteProp<RoutePropsType, "details">;
+
 const FollowerFollowingScreen: React.FC = () => {
-  const route = useRoute();
-  //   const { value } = route.params;
+  const route = useRoute<BlogDetailRouteProp>();
+  const { value } = route.params;
+
   const Tab = createMaterialTopTabNavigator();
+  const navigation = useNavigation();
+  const handleBack = () => {
+    navigation.goBack();
+  };
 
   return (
     <>
-      <Header />
+      <ProfileHeader handleBack={handleBack} />
       <Tab.Navigator
+        initialRouteName={value}
         screenOptions={{
           swipeEnabled: true,
           tabBarScrollEnabled: true,

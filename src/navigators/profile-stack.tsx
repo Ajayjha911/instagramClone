@@ -9,13 +9,13 @@ const ProfileStack: React.FC = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName="profile"
+      initialRouteName="profile-screen"
       screenOptions={{
         headerShown: false,
       }}
     >
       <Stack.Screen
-        name="profile"
+        name="profile-screen"
         component={ProfileScreen}
         // options={{ title: "Profile", headerShown: false }}
       />
