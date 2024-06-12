@@ -154,7 +154,7 @@ const FollowerFollowing = () => {
       ) : (
         <>
           <Text style={style.followerHeaderText}>
-            {isTabFollower ? "All Followers" : "Sort by"}
+            {isTabFollower ? "All Followers" : "All Followings"}
           </Text>
           <ScrollView>
             {users?.map((user, index) => {
