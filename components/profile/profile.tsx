@@ -168,9 +168,7 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
               </View>
               <TouchableOpacity
                 style={styles.detailContainer}
-                onPress={() =>
-                  onPressNavigate(`${activeUser.followers.length} Followers`)
-                }
+                onPress={() => onPressNavigate("Followers")}
               >
                 <Text style={styles.textValue}>
                   {activeUser.followers.length}
@@ -179,9 +177,7 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.detailContainer}
-                onPress={() =>
-                  onPressNavigate(`${activeUser.following.length} Following`)
-                }
+                onPress={() => onPressNavigate("Following")}
               >
                 <Text style={styles.textValue}>
                   {activeUser.following.length}

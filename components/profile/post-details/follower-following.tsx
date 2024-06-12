@@ -47,13 +47,6 @@ const FollowerFollowingScreen: React.FC = () => {
   const Tab = createMaterialTopTabNavigator();
   const navigation = useNavigation();
 
-  const initValue = useMemo(() => {
-    if (value.includes("Followers")) {
-      return `${loggedInUser?.followers?.length} Followers`;
-    }
-    return `${loggedInUser?.following?.length} Following`;
-  }, [value, loggedInUser?.following, loggedInUser?.followers]);
-
   const handleBack = () => {
     navigation.goBack();
   };
@@ -64,7 +57,7 @@ const FollowerFollowingScreen: React.FC = () => {
     <>
       <ProfileHeader handleBack={handleBack} />
       <Tab.Navigator
-        initialRouteName={initValue}
+        initialRouteName={value}
         screenOptions={{
           swipeEnabled: true,
           tabBarScrollEnabled: true,
@@ -93,7 +86,6 @@ const FollowerFollowingScreen: React.FC = () => {
               dispatch(setRemoveFollowerTabLoading(true));
             },
           }}
-          initialParams={{ value: "abc" }}
         />
         <Tab.Screen
           name={`Following`}
