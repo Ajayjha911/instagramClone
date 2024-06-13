@@ -1,19 +1,6 @@
-import Divider from "@components/divider/divider";
-import { fresh } from "@helpers/func";
-import { useAppDispatch, useAppSelector } from "@hooks/redux";
-import { selectLoggedInUser } from "@redux/slices/appSlice";
-import { PostType, setPostCommentsLikes } from "@redux/slices/postSlices";
-import React, { useMemo, useState } from "react";
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import Icon from "react-native-vector-icons/AntDesign";
+import { PostType } from "@redux/slices/postSlices";
+import React, { useEffect, useMemo, useRef } from "react";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 
 declare type PostCommentsProps = {
   posts: PostType[];
@@ -24,40 +11,30 @@ const PostComments: React.FC<PostCommentsProps> = ({
   posts,
   selectedPostId,
 }) => {
-  const dispatch = useAppDispatch();
   const style = getStyles();
-  const activeUser = useAppSelector(selectLoggedInUser);
-  const [comment, setComment] = useState("");
 
   const activePost = useMemo(() => {
     return posts?.find((post) => post.id === selectedPostId);
   }, [posts, selectedPostId]);
 
-  const handleComment = () => {
-    const freshPosts = fresh(activePost);
-    freshPosts.comments.push({
-      id: activePost?.comments?.length + 1,
-      user_id: activeUser?.id,
-      user_name: activeUser?.user_name,
-      comment: comment,
-      profile_image: activeUser?.profile_image,
-    });
-    dispatch(setPostCommentsLikes(freshPosts));
-    setComment("");
-  };
-
   const activeComments = useMemo(() => {
-    const reversedArray = [...activePost.comments].reverse();
+    const reversedArray = [...activePost?.comments]?.reverse();
     return reversedArray;
   }, [activePost]);
+
+  const scrollViewRef = useRef(null);
+
+  useEffect(() => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({ y: 0, animated: true });
+    }
+  }, [activeComments?.length]);
 
   return (
     <View style={style.container}>
       <ScrollView
-        style={{
-          flex: 1,
-          marginBottom: 62,
-        }}
+        contentContainerStyle={style.scrollViewContent}
+        ref={scrollViewRef}
       >
         {activeComments?.map((comm, index) => {
           return (
@@ -82,32 +59,7 @@ const PostComments: React.FC<PostCommentsProps> = ({
             </View>
           );
         })}
-        <View style={{ paddingTop: 82 }} />
       </ScrollView>
-      <View style={style.commentInputContainer}>
-        <Image source={activeUser.profile_image} style={style.userNameImage} />
-        <View style={{ flex: 1 }}>
-          <TextInput
-            placeholder="Add a comment..."
-            multiline
-            style={style.commentInput}
-            onChangeText={(value) => setComment(value)}
-            value={comment}
-          />
-          {comment?.length > 0 && (
-            <View style={style.commentIconContainer}>
-              <TouchableOpacity onPress={handleComment} activeOpacity={1}>
-                <Icon
-                  name="arrowup"
-                  size={20}
-                  color="white"
-                  style={style.commentIcon}
-                />
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
-      </View>
     </View>
   );
 };
@@ -115,8 +67,13 @@ export default PostComments;
 
 const getStyles = () => {
   return StyleSheet.create({
+    scrollViewContent: {
+      flexGrow: 1,
+      backgroundColor: "black",
+      paddingBottom: 224,
+    },
     container: {
-      flex: 1,
+      flexGrow: 1,
       backgroundColor: "black",
     },
     commentContainer: {
@@ -139,38 +96,6 @@ const getStyles = () => {
     comment: {
       fontSize: 14,
       color: "white",
-    },
-    commentInputContainer: {
-      flexDirection: "row",
-      position: "absolute",
-      bottom: 40,
-      left: 0,
-      right: 0,
-      flex: 1,
-      backgroundColor: "black",
-    },
-    commentInput: {
-      borderRadius: 25,
-      borderColor: "gray",
-      borderWidth: 1,
-      padding: 10,
-      paddingHorizontal: 16,
-      color: "white",
-      width: "auto",
-      flex: 1,
-      marginLeft: 8,
-    },
-    commentIconContainer: {
-      padding: 2,
-      backgroundColor: "blue",
-      position: "absolute",
-      right: 12,
-      borderRadius: 12,
-      width: 30,
-      top: 5,
-    },
-    commentIcon: {
-      alignSelf: "center",
     },
   });
 };

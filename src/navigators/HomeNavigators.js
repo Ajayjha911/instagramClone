@@ -6,6 +6,7 @@ import HomeScreen from "@screens/HomeScreen";
 import PostScreen from "@screens/PostScreen";
 import ReelScreen from "@screens/ReelScreen";
 import ProfileScreen from "@screens/ProfileScreen";
+import ProfileStack from "./profile-stack";
 
 const Tab = createBottomTabNavigator();
 
@@ -61,7 +62,7 @@ const HomeNavigator = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={ProfileStack}
         options={{ headerShown: false }}
       />
     </Tab.Navigator>

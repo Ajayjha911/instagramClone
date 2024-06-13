@@ -28,7 +28,6 @@ import { selectAllPosts } from "@redux/slices/postSlices";
 import ZoomInView from "@components/zoom-in-effect/zoom-in-view";
 import { useNavigation } from "@react-navigation/native";
 import { getUserPost } from "@redux/slices/profileSlice";
-// import { useNavigation } from "@react-navigation/native";
 
 const ProfileScreen: React.FC<ProfilePageProps> = ({
   isMyAccount,
@@ -40,7 +39,6 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
 
   const [showPostDetails, setShowPostDetails] = useState(false);
   const allPosts = useAppSelector(selectAllPosts);
-  const UserPost = useAppSelector(getUserPost);
 
   const { activeUserPosts, postsLikedByLoggedInUser } = useMemo(() => {
     return {
@@ -88,6 +86,14 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
     setShowPostDetails(false);
   };
   const [isVisible, setIsVisible] = useState(false);
+
+  const onPressNavigate = (value: string) => {
+    //@ts-ignore
+    navigation.navigate("followerfollowing", {
+      value: value,
+      userId: activeUser.id,
+    }); // Pass the value using params
+  };
 
   return (
     <View style={styles.rootContainer}>
@@ -165,13 +171,19 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
                 <Text style={styles.textValue}>{activeUserPosts?.length}</Text>
                 <Text style={styles.textLabel}>posts</Text>
               </View>
-              <TouchableOpacity style={styles.detailContainer}>
+              <TouchableOpacity
+                style={styles.detailContainer}
+                onPress={() => onPressNavigate("Followers")}
+              >
                 <Text style={styles.textValue}>
                   {activeUser.followers.length}
                 </Text>
                 <Text style={styles.textLabel}>followers</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.detailContainer}>
+              <TouchableOpacity
+                style={styles.detailContainer}
+                onPress={() => onPressNavigate("Following")}
+              >
                 <Text style={styles.textValue}>
                   {activeUser.following.length}
                 </Text>
