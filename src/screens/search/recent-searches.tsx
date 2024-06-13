@@ -59,6 +59,11 @@ const RecentSearches: React.FC<RecentSearches> = ({
     console.log("in else");
   };
 
+  const findId = (id: string) => {
+    const found = loggedInUser?.following.findIndex((user) => user.id === id);
+    return found > -1 ? true : false;
+  };
+
   return (
     <View>
       {searchText.length === 0 && (
@@ -102,9 +107,7 @@ const RecentSearches: React.FC<RecentSearches> = ({
                       ]}
                     >
                       {user.display_name}
-                      {loggedInUser?.following?.includes(user?.id)
-                        ? " • Following"
-                        : ""}
+                      {findId(user?.id || "") ? " • Following" : ""}
                     </Text>
                   </View>
                 </React.Fragment>
@@ -144,6 +147,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     paddingBottom: 16,
+    paddingTop: 16,
   },
   recentTextContainer: {
     paddingLeft: 16,

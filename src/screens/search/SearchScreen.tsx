@@ -98,7 +98,7 @@ const SearchScreen = () => {
             )}
           </View>
 
-          <View style={styles.subHeaderWrapper}>
+          {/* <View style={styles.subHeaderWrapper}>
             <TouchableOpacity style={styles.selectedCategoryItem}>
               <Text style={styles.titleSelected}>IGTV</Text>
             </TouchableOpacity>
@@ -114,7 +114,7 @@ const SearchScreen = () => {
             <TouchableOpacity style={styles.categoryItem}>
               <Text style={styles.title}>Auto</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
           {isSearching ? (
             <React.Fragment>
               <RecentSearches
