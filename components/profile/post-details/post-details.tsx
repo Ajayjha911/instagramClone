@@ -17,7 +17,6 @@ import ShareIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import BookmarkIcon from "react-native-vector-icons/FontAwesome";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { emptyFunc, fresh, getFullDate } from "@helpers/func";
-import BottomSheet from "@components/bottomsheet/bottom-sheet";
 import PostComments from "./comments";
 import {
   CommentsType,
@@ -26,7 +25,7 @@ import {
   setPostCommentsLikes,
 } from "@redux/slices/postSlices";
 import { useAppDispatch } from "@hooks/redux";
-import BottomSheet1 from "@components/bottomsheet/bottom-sheet-1";
+import BottomSheet from "@components/bottomsheet/bottom-sheet";
 import {
   BottomSheetModalProvider,
   BottomSheetScrollView,
@@ -262,13 +261,13 @@ const PostDetails: React.FC<PostDetailsProps> = (props) => {
         </View>
         {openComments && (
           <React.Fragment>
-            <BottomSheet1
+            <BottomSheet
               openBottomSheet={openComments}
               setOpenBottomSheet={setOpenComments}
               snapPoints={["50%", "70%"]}
             >
               <PostComments selectedPostId={selectedPost} posts={activePosts} />
-            </BottomSheet1>
+            </BottomSheet>
 
             <View style={styles.inputContainer}>
               <Image

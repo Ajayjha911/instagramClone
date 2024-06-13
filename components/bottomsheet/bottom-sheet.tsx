@@ -1,70 +1,76 @@
-import React, { useEffect, useRef } from "react";
-import RBSheet from "react-native-raw-bottom-sheet";
-import { BottomSheetProps, BottomSheetRefProps } from "./bottom-sheet.types";
-import { StyleSheet, View } from "react-native";
-// import useAppTheme from '@hooks/useAppTheme';
-// import {AppThemeMode} from '@redux/slices/appSlice';
-// import {globalThemeObj} from '@theme/theme';
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import { View, Text, StyleSheet, Button } from "react-native";
+import {
+  BottomSheetModal,
+  BottomSheetView,
+  BottomSheetModalProvider,
+} from "@gorhom/bottom-sheet";
 
-const BottomSheet: React.FC<BottomSheetProps> = ({
+declare type BottomSheet1Props = {
+  children: any;
+  openBottomSheet: boolean;
+  setOpenBottomSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  snapPoints?: string[];
+};
+
+const BottomSheet: React.FC<BottomSheet1Props> = ({
+  children,
   openBottomSheet,
   setOpenBottomSheet,
-  children,
-  height = 300,
+  snapPoints = ["25%", "60%", "90%"],
 }) => {
-  // const {mode} = useAppTheme();
-  const styles = getStyles();
-  const refRBSheet = useRef<BottomSheetRefProps>(null);
-
   useEffect(() => {
     if (openBottomSheet) {
-      refRBSheet.current?.open();
-    } else {
-      refRBSheet.current?.close();
+      handlePresentModalPress();
     }
   }, [openBottomSheet]);
 
-  const handleCloseSheet = () => {
-    setOpenBottomSheet(false); // Update state when closing the sheet
-  };
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  // const snapPoints = useMemo(() => ["30%", "90%"], []);
+
+  const handlePresentModalPress = useCallback(() => {
+    console.log("here");
+
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  const handleSheetChanges = useCallback((index: number) => {
+    if (index === -1) {
+      setOpenBottomSheet(false);
+    }
+  }, []);
 
   return (
-    <RBSheet
-      ref={refRBSheet}
-      height={height}
-      openDuration={250}
-      closeOnPressMask={true}
-      onClose={handleCloseSheet}
-      //@ts-ignore
-      onRequestClose={() => setOpenBottomSheet(false)} // Handle click outside
-      customStyles={{
-        container: {
-          borderTopLeftRadius: 10,
-          borderTopRightRadius: 10,
-        },
-      }}
-    >
-      <View style={styles.bottomSheetContainer}>{children}</View>
-    </RBSheet>
+    <BottomSheetModalProvider>
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        index={0}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+        handleIndicatorStyle={{
+          backgroundColor: "white",
+        }}
+        backgroundStyle={{
+          backgroundColor: "black",
+        }}
+      >
+        <BottomSheetView style={styles.container}>
+          {/* <View style={styles.contentContainer}>{children}</View> */}
+          {children}
+        </BottomSheetView>
+      </BottomSheetModal>
+    </BottomSheetModalProvider>
   );
 };
 
-export default BottomSheet;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  contentContainer: {
+    flexGrow: 1,
+  },
+});
 
-const getStyles = () => {
-  return StyleSheet.create({
-    bottomSheetContainer: {
-      height: "100%",
-      // backgroundColor: globalThemeObj?.[mode]?.appBackGround,
-      backgroundColor: "black",
-      borderTopLeftRadius: 10,
-      borderTopRightRadius: 10,
-      flex: 1,
-    },
-    bottomSheetContent: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-    },
-  });
-};
+export default BottomSheet;
