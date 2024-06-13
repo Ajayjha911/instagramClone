@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  TouchableWithoutFeedback,
+} from "react-native";
 import {
   BottomSheetModal,
   BottomSheetView,
@@ -41,8 +47,16 @@ const BottomSheet: React.FC<BottomSheet1Props> = ({
     }
   }, []);
 
+  const closeBottomSheetModal = () => {
+    setOpenBottomSheet(false);
+    bottomSheetModalRef.current?.dismiss();
+  };
+
   return (
     <BottomSheetModalProvider>
+      <TouchableWithoutFeedback onPress={closeBottomSheetModal}>
+        <View style={styles.overlay} />
+      </TouchableWithoutFeedback>
       <BottomSheetModal
         ref={bottomSheetModalRef}
         index={0}
@@ -65,6 +79,14 @@ const BottomSheet: React.FC<BottomSheet1Props> = ({
 };
 
 const styles = StyleSheet.create({
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
   container: {
     flex: 1,
   },
