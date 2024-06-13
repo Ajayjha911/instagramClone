@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AppRootState } from "..";
 import images from "@constants/images";
+import { fresh } from "@helpers/func";
 
 export declare type AppState = {
   loginUser: UserState;
   userLists: UserState[];
+  removeFollowerTabLoading: boolean;
 };
 
 export declare type UserState = {
@@ -13,8 +15,8 @@ export declare type UserState = {
   profile_image: any;
   id: string;
   bio?: string;
-  followers: string[];
-  following: string[];
+  followers: FollowerFollowingType[];
+  following: FollowerFollowingType[];
 };
 
 export const usersObject = {
@@ -68,71 +70,12 @@ export const usersObject = {
   },
 };
 
-export const dummyUsers: UserState[] = [
-  {
-    id: usersObject?.[1].id,
-    display_name: usersObject?.[1].display_name,
-    user_name: usersObject?.[1].user_name,
-    profile_image: usersObject?.[1].profile_image,
-    bio: "Welcome to Instagram Clone App",
-    followers: ["2", "3", "4", "5"],
-    following: ["2", "3", "4", "5"],
-  },
-  {
-    id: usersObject?.[2].id,
-    display_name: usersObject?.[2].display_name,
-    user_name: usersObject?.[2].user_name,
-    profile_image: usersObject?.[2].profile_image,
-    bio: "Welcome to Instagram Clone App",
-    followers: ["1", "4", "3"],
-    following: ["3", "5"],
-  },
-  {
-    id: usersObject?.[3].id,
-    display_name: usersObject?.[3].display_name,
-    user_name: usersObject?.[3].user_name,
-    profile_image: usersObject?.[3].profile_image,
-    bio: "Welcome to Instagram Clone App",
-    followers: ["1", "2", "5"],
-    following: ["2", "1"],
-  },
-  {
-    id: usersObject?.[4].id,
-    display_name: usersObject?.[4].display_name,
-    user_name: usersObject?.[4].user_name,
-    profile_image: usersObject?.[4].profile_image,
-    bio: "Welcome to Instagram Clone App",
-    followers: ["1", "2", "5"],
-    following: ["2", "1", "3"],
-  },
-  {
-    id: usersObject?.[5].id,
-    display_name: usersObject?.[5].display_name,
-    user_name: usersObject?.[5].user_name,
-    profile_image: usersObject?.[5].profile_image,
-    bio: "Welcome to Instagram Clone App",
-    followers: ["2", "3", "4"],
-    following: ["2", "1"],
-  },
-  {
-    id: usersObject?.[6].id,
-    display_name: usersObject?.[6].display_name,
-    user_name: usersObject?.[6].user_name,
-    profile_image: usersObject?.[6].profile_image,
-    bio: "Welcome to Instagram Clone App",
-    followers: ["4"],
-    following: ["2", "1"],
-  },
-  {
-    id: usersObject?.[7].id,
-    display_name: usersObject?.[7].display_name,
-    user_name: usersObject?.[7].user_name,
-    profile_image: usersObject?.[7].profile_image,
-    bio: "Welcome to Instagram Clone App",
-    followers: ["4", "1", "3", "5"],
-    following: ["2", "1"],
-  },
-];
+export declare type FollowerFollowingType = {
+  id: string;
+  user_name: string;
+  display_name: string;
+  profile_image: any;
+};
 
 const loginUser = {
   id: usersObject?.[100].id,
@@ -140,19 +83,131 @@ const loginUser = {
   user_name: usersObject?.[100].user_name,
   profile_image: usersObject?.[100].profile_image,
   bio: "Welcome to Instagram Clone App",
-  followers: ["1", "2", "3", "4", "5"],
-  following: ["1", "2", "3", "4", "5"],
+  followers: [
+    usersObject?.[1],
+    usersObject?.[4],
+    usersObject?.[3],
+    usersObject?.[5],
+    usersObject?.[2],
+  ],
+  following: [
+    usersObject?.[1],
+    usersObject?.[4],
+    usersObject?.[3],
+    usersObject?.[5],
+    usersObject?.[2],
+    usersObject?.[6],
+    usersObject?.[7],
+  ],
 };
+
+export const dummyUsers: UserState[] = [
+  {
+    id: usersObject?.[1].id,
+    display_name: usersObject?.[1].display_name,
+    user_name: usersObject?.[1].user_name,
+    profile_image: usersObject?.[1].profile_image,
+    bio: "Welcome to Instagram Clone App",
+    followers: [
+      usersObject?.[2],
+      usersObject?.[3],
+      usersObject?.[4],
+      usersObject?.[5],
+    ],
+    following: [
+      usersObject?.[2],
+      usersObject?.[3],
+      usersObject?.[4],
+      usersObject?.[5],
+    ],
+  },
+  {
+    id: usersObject?.[2].id,
+    display_name: usersObject?.[2].display_name,
+    user_name: usersObject?.[2].user_name,
+    profile_image: usersObject?.[2].profile_image,
+    bio: "Welcome to Instagram Clone App",
+    followers: [usersObject?.[1], usersObject?.[4], usersObject?.[3]],
+    following: [usersObject?.[3], usersObject?.[5]],
+  },
+  {
+    id: usersObject?.[3].id,
+    display_name: usersObject?.[3].display_name,
+    user_name: usersObject?.[3].user_name,
+    profile_image: usersObject?.[3].profile_image,
+    bio: "Welcome to Instagram Clone App",
+    followers: [usersObject?.[1], usersObject?.[2], usersObject?.[5]],
+    following: [usersObject?.[2], usersObject?.[1]],
+  },
+  {
+    id: usersObject?.[4].id,
+    display_name: usersObject?.[4].display_name,
+    user_name: usersObject?.[4].user_name,
+    profile_image: usersObject?.[4].profile_image,
+    bio: "Welcome to Instagram Clone App",
+    followers: [usersObject?.[1], usersObject?.[2], usersObject?.[5]],
+    following: [usersObject?.[1], usersObject?.[2], usersObject?.[3]],
+  },
+  {
+    id: usersObject?.[5].id,
+    display_name: usersObject?.[5].display_name,
+    user_name: usersObject?.[5].user_name,
+    profile_image: usersObject?.[5].profile_image,
+    bio: "Welcome to Instagram Clone App",
+    followers: [usersObject?.[2], usersObject?.[4], usersObject?.[3]],
+    following: [usersObject?.[1], usersObject?.[2]],
+  },
+  {
+    id: usersObject?.[6].id,
+    display_name: usersObject?.[6].display_name,
+    user_name: usersObject?.[6].user_name,
+    profile_image: usersObject?.[6].profile_image,
+    bio: "Welcome to Instagram Clone App",
+    followers: [usersObject?.[4]],
+    following: [usersObject?.[1], usersObject?.[2]],
+  },
+  {
+    id: usersObject?.[7].id,
+    display_name: usersObject?.[7].display_name,
+    user_name: usersObject?.[7].user_name,
+    profile_image: usersObject?.[7].profile_image,
+    bio: "Welcome to Instagram Clone App",
+    followers: [
+      usersObject?.[1],
+      usersObject?.[4],
+      usersObject?.[3],
+      usersObject?.[5],
+    ],
+    following: [usersObject?.[1], usersObject?.[2]],
+  },
+  { ...loginUser },
+];
 
 const initialState: AppState = {
   loginUser: loginUser,
   userLists: dummyUsers,
+  removeFollowerTabLoading: false,
 };
 
 const appSlice = createSlice({
   name: "search",
   initialState,
-  reducers: {},
+  reducers: {
+    removeFollower: (state, action) => {
+      const freshUsers = fresh(state.loginUser);
+      const id = action.payload.id;
+      const foundIndex = freshUsers?.followers?.findIndex(
+        (user) => user?.id === id,
+      );
+      if (foundIndex > -1) {
+        freshUsers.followers.splice(foundIndex, 1);
+        state.loginUser = freshUsers;
+      }
+    },
+    setRemoveFollowerTabLoading: (state, action) => {
+      state.removeFollowerTabLoading = action.payload;
+    },
+  },
 });
 
 export const selectLoggedInUser = (state: AppRootState): UserState => {
@@ -163,5 +218,9 @@ export const selectUsersList = (state: AppRootState): UserState[] => {
   return state?.app?.userLists || [];
 };
 
-// export const { setRecentSearches, setClearRecentSearch } = appSlice.actions;
+export const selectLoading = (state: AppRootState): boolean => {
+  return state?.app?.removeFollowerTabLoading || false;
+};
+
+export const { removeFollower, setRemoveFollowerTabLoading } = appSlice.actions;
 export default appSlice.reducer;
