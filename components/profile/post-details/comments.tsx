@@ -44,7 +44,7 @@ const PostComments: React.FC<PostCommentsProps> = ({
   return (
     <View style={style.container}>
       <ScrollView contentContainerStyle={style.scrollViewContent}>
-        {[...activeComments, ...activeComments]?.map((comm, index) => {
+        {activeComments?.map((comm, index) => {
           return (
             <View key={index}>
               <View
