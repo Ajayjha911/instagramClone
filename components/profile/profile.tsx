@@ -87,7 +87,10 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
 
   const onPressNavigate = (value: string) => {
     //@ts-ignore
-    navigation.navigate("followerfollowing", { value: value }); // Pass the value using params
+    navigation.navigate("followerfollowing", {
+      value: value,
+      userId: activeUser.id,
+    }); // Pass the value using params
   };
 
   return (

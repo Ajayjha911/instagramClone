@@ -23,6 +23,7 @@ import {
   removeFollower,
   selectLoading,
   selectLoggedInUser,
+  selectUsersList,
   setRemoveFollowerTabLoading,
 } from "@redux/slices/appSlice";
 import {
@@ -36,6 +37,7 @@ import Divider from "@components/divider/divider";
 declare type RoutePropsType = {
   details: {
     value: "followers" | "following";
+    userId: string;
   };
 };
 
@@ -43,8 +45,12 @@ type BlogDetailRouteProp = RouteProp<RoutePropsType, "details">;
 
 const FollowerFollowingScreen: React.FC = () => {
   const route = useRoute<BlogDetailRouteProp>();
-  const { value } = route.params;
-  const loggedInUser = useAppSelector(selectLoggedInUser);
+  const { value, userId } = route.params;
+  const users = useAppSelector(selectUsersList);
+
+  const activeUser = useMemo(() => {
+    return users?.find((user) => user.id === userId);
+  }, [userId, users]);
 
   const Tab = createMaterialTopTabNavigator();
   const navigation = useNavigation();
@@ -57,7 +63,7 @@ const FollowerFollowingScreen: React.FC = () => {
 
   return (
     <>
-      <ProfileHeader handleBack={handleBack} />
+      <ProfileHeader handleBack={handleBack} title={activeUser.user_name} />
       <Tab.Navigator
         initialRouteName={value}
         screenOptions={{
@@ -81,25 +87,27 @@ const FollowerFollowingScreen: React.FC = () => {
           name={`Followers`}
           component={FollowerFollowing}
           options={{
-            tabBarLabel: `${loggedInUser?.followers?.length} Followers`,
+            tabBarLabel: `${activeUser?.followers?.length} Followers`,
           }}
           listeners={{
             tabPress: () => {
               dispatch(setRemoveFollowerTabLoading(true));
             },
           }}
+          initialParams={{ activeUser: activeUser }}
         />
         <Tab.Screen
           name={`Following`}
           component={FollowerFollowing}
           options={{
-            tabBarLabel: `${loggedInUser?.following?.length} Following`,
+            tabBarLabel: `${activeUser?.following?.length} Following`,
           }}
           listeners={{
             tabPress: () => {
               dispatch(setRemoveFollowerTabLoading(true));
             },
           }}
+          initialParams={{ activeUser: activeUser }}
         />
       </Tab.Navigator>
     </>
@@ -107,8 +115,10 @@ const FollowerFollowingScreen: React.FC = () => {
 };
 
 const FollowerFollowing = () => {
+  const route = useRoute<any>();
+  const { activeUser } = route.params;
+
   const style = getStyles();
-  const loggedInUser = useAppSelector(selectLoggedInUser);
   const loading = useAppSelector(selectLoading);
 
   useEffect(() => {
@@ -137,11 +147,11 @@ const FollowerFollowing = () => {
 
   const users = useMemo(() => {
     if (isTabFollower) {
-      return loggedInUser?.followers;
+      return activeUser?.followers;
     } else {
-      return loggedInUser?.following;
+      return activeUser?.following;
     }
-  }, [loggedInUser.followers, loggedInUser.following, isTabFollower]);
+  }, [activeUser.followers, activeUser.following, isTabFollower]);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
   const handlePress = (user: FollowerFollowingType) => {
