@@ -1,22 +1,60 @@
-import React from "react";
-import { Image, View, useWindowDimensions } from "react-native";
+import React, { useState } from "react";
+import { Image, View, useWindowDimensions, Text } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
 type props = {
   DATA: { img: string }[];
 };
 const Carousel = ({ DATA }: props) => {
-  console.log(DATA);
+  const [activeIndex, setActiveIndex] = useState(1);
+
   const { height, width } = useWindowDimensions();
-  const renderItem = ({ item, index }) => {
+  const RenderItem = ({ item, index }) => {
     return (
       <View style={{ width: width, height: 300 }}>
         <Image source={item.img} style={{ height: 300, width: width }} />
       </View>
     );
   };
+
+  const renderDots = (item) => {
+    return (
+      <View
+        style={{
+          height: 7,
+          width: 7,
+          backgroundColor: item.index === activeIndex ? "red" : "white",
+          marginLeft: 4,
+          borderRadius: 50,
+        }}
+      >
+        <Text></Text>
+      </View>
+    );
+  };
+
   return (
-    <FlatList data={DATA} renderItem={renderItem} horizontal pagingEnabled />
+    <View>
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        onMomentumScrollEnd={(event) => {
+          const index = Math.floor(
+            Math.floor(event.nativeEvent.contentOffset.x) /
+              Math.floor(event.nativeEvent.layoutMeasurement.width)
+          );
+          // work with: index
+          setActiveIndex(index);
+        }}
+        data={DATA}
+        renderItem={RenderItem}
+        horizontal
+        pagingEnabled
+      />
+      <View style={{ position: "absolute", bottom: 5, left: width / 2 }}>
+        <FlatList data={DATA} renderItem={renderDots} horizontal />
+      </View>
+    </View>
   );
 };
 

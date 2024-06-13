@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { Posts } from "data";
 import { AppRootState } from "..";
-import { PostType } from "./postSlices";
+
 import images from "@constants/images";
-import { usersObject } from "./appSlice";
+
 const dummyPosts = [
   {
     id: 1,
