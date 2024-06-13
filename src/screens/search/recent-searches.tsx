@@ -56,7 +56,6 @@ const RecentSearches: React.FC<RecentSearches> = ({
       dispatch(setRecentSearches(user));
     }
     setViewProfile(user);
-    console.log("in else");
   };
 
   const findId = (id: string) => {
