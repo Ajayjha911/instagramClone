@@ -77,6 +77,30 @@ export declare type FollowerFollowingType = {
   profile_image: any;
 };
 
+const loginUser = {
+  id: usersObject?.[100].id,
+  display_name: usersObject?.[100].display_name,
+  user_name: usersObject?.[100].user_name,
+  profile_image: usersObject?.[100].profile_image,
+  bio: "Welcome to Instagram Clone App",
+  followers: [
+    usersObject?.[1],
+    usersObject?.[4],
+    usersObject?.[3],
+    usersObject?.[5],
+    usersObject?.[2],
+  ],
+  following: [
+    usersObject?.[1],
+    usersObject?.[4],
+    usersObject?.[3],
+    usersObject?.[5],
+    usersObject?.[2],
+    usersObject?.[6],
+    usersObject?.[7],
+  ],
+};
+
 export const dummyUsers: UserState[] = [
   {
     id: usersObject?.[1].id,
@@ -156,31 +180,8 @@ export const dummyUsers: UserState[] = [
     ],
     following: [usersObject?.[1], usersObject?.[2]],
   },
+  { ...loginUser },
 ];
-
-const loginUser = {
-  id: usersObject?.[100].id,
-  display_name: usersObject?.[100].display_name,
-  user_name: usersObject?.[100].user_name,
-  profile_image: usersObject?.[100].profile_image,
-  bio: "Welcome to Instagram Clone App",
-  followers: [
-    usersObject?.[1],
-    usersObject?.[4],
-    usersObject?.[3],
-    usersObject?.[5],
-    usersObject?.[2],
-  ],
-  following: [
-    usersObject?.[1],
-    usersObject?.[4],
-    usersObject?.[3],
-    usersObject?.[5],
-    usersObject?.[2],
-    usersObject?.[6],
-    usersObject?.[7],
-  ],
-};
 
 const initialState: AppState = {
   loginUser: loginUser,
