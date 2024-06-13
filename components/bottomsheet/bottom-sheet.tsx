@@ -33,11 +33,7 @@ const BottomSheet: React.FC<BottomSheet1Props> = ({
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
-  // const snapPoints = useMemo(() => ["30%", "90%"], []);
-
   const handlePresentModalPress = useCallback(() => {
-    console.log("here");
-
     bottomSheetModalRef.current?.present();
   }, []);
 

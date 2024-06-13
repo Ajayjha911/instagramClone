@@ -58,7 +58,6 @@ const PostDetails: React.FC<PostDetailsProps> = (props) => {
   const { activeUser, activePosts } = props;
   const [bookmarked, setBookmarked] = useState(false);
   const [openComments, setOpenComments] = useState(false);
-  console.log("openComments:", openComments);
   const [selectedPost, setSelectedPost] = useState(-1);
 
   const handleLike = (post: PostType) => {
