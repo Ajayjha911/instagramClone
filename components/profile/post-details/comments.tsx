@@ -1,8 +1,5 @@
-import { fresh } from "@helpers/func";
-import { useAppDispatch, useAppSelector } from "@hooks/redux";
-import { selectLoggedInUser } from "@redux/slices/appSlice";
-import { PostType, setPostCommentsLikes } from "@redux/slices/postSlices";
-import React, { useMemo, useState } from "react";
+import { PostType } from "@redux/slices/postSlices";
+import React, { useEffect, useMemo, useRef } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 
 declare type PostCommentsProps = {
@@ -14,36 +11,31 @@ const PostComments: React.FC<PostCommentsProps> = ({
   posts,
   selectedPostId,
 }) => {
-  const dispatch = useAppDispatch();
   const style = getStyles();
-  const activeUser = useAppSelector(selectLoggedInUser);
-  const [comment, setComment] = useState("");
 
   const activePost = useMemo(() => {
     return posts?.find((post) => post.id === selectedPostId);
   }, [posts, selectedPostId]);
-
-  const handleComment = () => {
-    const freshPosts = fresh(activePost);
-    freshPosts.comments.push({
-      id: activePost?.comments?.length + 1,
-      user_id: activeUser?.id,
-      user_name: activeUser?.user_name,
-      comment: comment,
-      profile_image: activeUser?.profile_image,
-    });
-    dispatch(setPostCommentsLikes(freshPosts));
-    setComment("");
-  };
 
   const activeComments = useMemo(() => {
     const reversedArray = [...activePost?.comments]?.reverse();
     return reversedArray;
   }, [activePost]);
 
+  const scrollViewRef = useRef(null);
+
+  useEffect(() => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({ y: 0, animated: true });
+    }
+  }, [activeComments?.length]);
+
   return (
     <View style={style.container}>
-      <ScrollView contentContainerStyle={style.scrollViewContent}>
+      <ScrollView
+        contentContainerStyle={style.scrollViewContent}
+        ref={scrollViewRef}
+      >
         {activeComments?.map((comm, index) => {
           return (
             <View key={index}>
