@@ -11,6 +11,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -156,6 +157,9 @@ const FollowerFollowing = () => {
     bottomSheetModalRef.current?.dismiss();
   };
 
+  //TODO on user click
+  const handleUserClick = () => {};
+
   return (
     <View style={style.container}>
       {loading ? (
@@ -169,7 +173,11 @@ const FollowerFollowing = () => {
             {users?.map((user, index) => {
               return (
                 <View style={style.listContainer} key={index}>
-                  <View style={style.listInnerContainer}>
+                  <TouchableOpacity
+                    style={style.listInnerContainer}
+                    activeOpacity={0.8}
+                    onPress={handleUserClick}
+                  >
                     <Image
                       source={user?.profile_image}
                       style={style.profileImage}
@@ -182,7 +190,7 @@ const FollowerFollowing = () => {
                         {user?.display_name}
                       </Text>
                     </View>
-                  </View>
+                  </TouchableOpacity>
 
                   <CustomButton
                     title={isTabFollower ? "Remove" : "Following"}
