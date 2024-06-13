@@ -1,5 +1,3 @@
-import { useAppSelector } from "@hooks/redux";
-import { selectLoggedInUser } from "@redux/slices/appSlice";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -7,18 +5,18 @@ import Icon from "react-native-vector-icons/Ionicons";
 
 declare type ProfileHeaderProps = {
   handleBack: () => void;
+  title: string;
 };
 
-const ProfileHeader: React.FC<ProfileHeaderProps> = ({ handleBack }) => {
+const ProfileHeader: React.FC<ProfileHeaderProps> = ({ handleBack, title }) => {
   const style = getStyles();
-  const loggedInUser = useAppSelector(selectLoggedInUser);
 
   return (
     <View style={style.headerContainer}>
       <TouchableOpacity onPress={handleBack} activeOpacity={1}>
         <Icon name="chevron-back" size={24} color="white" />
       </TouchableOpacity>
-      <Text style={style.headerText}>{loggedInUser?.user_name}</Text>
+      <Text style={style.headerText}>{title}</Text>
     </View>
   );
 };
