@@ -8,6 +8,7 @@ import NotificationScreen from "../screens/NotificationScreen";
 import StoryUploadScreen from "../screens/StoryUploadScreen";
 import ViewStoryScreen from "../screens/ViewStoryScreen";
 import ViewPost from "@components/common/ViewPost";
+import ProfilePostView from "@screens/profilePostView";
 
 const Stack = createStackNavigator();
 
@@ -35,6 +36,7 @@ const MainNavigator = () => {
         component={ViewPost}
         options={{ headerShown: true }}
       />
+      <Stack.Screen name="ProfilePostView" component={ProfilePostView} />
     </Stack.Navigator>
   );
 };

@@ -48,7 +48,7 @@ const HomeScreen = () => {
         }
       >
         <InstaStories />
-        <InstaPost data={Posts} itemIndex={0} />
+        <InstaPost data={Posts} itemIndex={1} />
       </ScrollView>
     </View>
   );

@@ -16,7 +16,7 @@ import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Carousel from "./common/Carousel";
 
-const InstaPost = ({ data, itemIndex }) => {
+const InstaPost = ({ data, itemIndex = 1 }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const toggleModal = () => {
