@@ -18,9 +18,7 @@ const App = () => {
         >
           <StatusBar barStyle="light-content" />
           <GestureHandlerRootView style={{ flex: 1 }}>
-            <NavigationContainer>
-              <MainNavigator />
-            </NavigationContainer>
+            <MainNavigator />
           </GestureHandlerRootView>
         </SafeAreaView>
       </SafeAreaProvider>
