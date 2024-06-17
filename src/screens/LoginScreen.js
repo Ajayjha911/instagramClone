@@ -14,7 +14,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = () => {
     if (username === "user" && password === "password") {
-      navigation.navigate("Home");
+      navigation.navigate("HomeNavigation");
     } else {
       alert("Invalid username or password");
     }

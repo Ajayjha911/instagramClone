@@ -86,7 +86,6 @@ const InstaPost = ({ data, itemIndex = 1 }) => {
 
   const WIDTH = Dimensions.get("window").width;
 
-  console.log("width", WIDTH);
   const flatListref = useRef(null);
   useEffect(() => {
     if (flatListref.current && itemIndex) {
