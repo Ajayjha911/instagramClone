@@ -21,6 +21,7 @@
     "@types/react": "~18.2.79",
     "expo": "~51.0.8",
     "expo-app-loading": "^2.1.1",
+    "expo-av": "~14.0.5",
     "expo-font": "^12.0.5",
     "expo-image-picker": "^15.0.5",
     "expo-linear-gradient": "^13.0.2",
