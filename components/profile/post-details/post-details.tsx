@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Dimensions,
   Image,
+  ImageBackground,
   ScrollView,
   StyleSheet,
   Text,
@@ -15,7 +16,10 @@ import ElipseIcon from "react-native-vector-icons/AntDesign";
 import CommentIcon from "react-native-vector-icons/EvilIcons";
 import ShareIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import BookmarkIcon from "react-native-vector-icons/FontAwesome";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import {
+  TapGestureHandler,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
 import { emptyFunc, fresh, getFullDate } from "@helpers/func";
 import PostComments from "./comments";
 import {
@@ -31,6 +35,15 @@ import {
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
 import Icon from "react-native-vector-icons/AntDesign";
+import { useNavigation } from "@react-navigation/native";
+
+import heartImage from "@assets/heart.png";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withSpring,
+} from "react-native-reanimated";
 
 const { width: viewportWidth } = Dimensions.get("window");
 
@@ -38,9 +51,10 @@ const PostDetailsHeader: React.FC<PostDetailsProps> = ({
   activeUser,
   handleBack,
 }) => {
+  const navigatior = useNavigation();
   return (
     <View style={styles.headerContainer}>
-      <TouchableOpacity activeOpacity={1} onPress={handleBack}>
+      <TouchableOpacity activeOpacity={1} onPress={() => navigatior.goBack()}>
         <Ionicons name="arrow-back" size={24} color="white" />
       </TouchableOpacity>
       <View style={styles.headerTextContainer}>
@@ -60,13 +74,30 @@ const PostDetails: React.FC<PostDetailsProps> = (props) => {
   const [openComments, setOpenComments] = useState(false);
   const [selectedPost, setSelectedPost] = useState(-1);
 
+  const AnimatedImage = Animated.createAnimatedComponent(Image);
+  const scale = useSharedValue(0);
+
+  const LikeAnimation = useCallback(() => {
+    scale.value = withSpring(1, undefined, (isFinised) => {
+      if (isFinised) {
+        scale.value = withDelay(100, withSpring(0));
+      }
+    });
+  }, []);
+  const AnimetedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: Math.max(scale.value, 0) }],
+    };
+  });
+
   const handleLike = (post: PostType) => {
     const found = post.likes?.findIndex(
-      (post) => post.user_id === activeUser.id,
+      (post) => post.user_id === activeUser.id
     );
     if (found > -1) {
       const freshPosts = fresh(post);
       freshPosts.likes.splice(found, 1);
+      // LikeAnimation();
       dispatch(setPostCommentsLikes(freshPosts));
     } else {
       const freshPosts = fresh(post);
@@ -76,6 +107,7 @@ const PostDetails: React.FC<PostDetailsProps> = (props) => {
         user_name: activeUser.user_name,
         profile_image: activeUser?.profile_image,
       });
+      LikeAnimation();
       dispatch(setPostCommentsLikes(freshPosts));
     }
   };
@@ -148,9 +180,26 @@ const PostDetails: React.FC<PostDetailsProps> = (props) => {
                       <ElipseIcon name="ellipsis1" size={24} color={"white"} />
                     </View>
                   </View>
-                  <View style={styles.activePostContainer}>
-                    <Image source={posts.image} style={styles.activePost} />
-                  </View>
+                  <TapGestureHandler
+                    numberOfTaps={2}
+                    onActivated={() => handleLike(posts)}
+                  >
+                    <View style={styles.activePostContainer}>
+                      <ImageBackground
+                        source={posts.image}
+                        style={[
+                          styles.activePost,
+                          { alignItems: "center", justifyContent: "center" },
+                        ]}
+                      >
+                        <AnimatedImage
+                          source={heartImage}
+                          style={[{ height: 100, width: 100 }, AnimetedStyle]}
+                        />
+                      </ImageBackground>
+                    </View>
+                  </TapGestureHandler>
+
                   <View style={styles.actionIconContainer}>
                     <View style={styles.actionItemsLeft}>
                       <TouchableOpacity

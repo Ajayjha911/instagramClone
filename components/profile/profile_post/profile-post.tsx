@@ -23,16 +23,31 @@ const ProfilePost: React.FC<ProfilePostProps> = ({
   const screenWidth = useWindowDimensions().width - 20;
 
   return (
-    <View style={styles.imageContainer(screenWidth)}>
+    <View
+      style={[
+        {
+          flex: 1,
+          margin: 1,
+          height: 200,
+          minWidth: 150,
+          maxWidth: Number(screenWidth / 2),
+        },
+      ]}
+    >
       <TouchableOpacity onPress={onPress}>
-        {!isSelected && (
+        {
           <Image
             source={image}
-            style={styles.contentImage}
+            height={200}
+            width={200}
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
             resizeMode="cover"
           />
-        )}
-        {isSelected && (
+        }
+        {/* {isSelected && (
           <ImageBackground
             source={image}
             resizeMode="cover"
@@ -42,7 +57,7 @@ const ProfilePost: React.FC<ProfilePostProps> = ({
               <Icon name="check" size={24} color={"#0a0a0a"} />
             </View>
           </ImageBackground>
-        )}
+        )} */}
       </TouchableOpacity>
     </View>
   );

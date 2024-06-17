@@ -7,6 +7,8 @@ import ChatScreen from "../screens/ChatScreen";
 import NotificationScreen from "../screens/NotificationScreen";
 import StoryUploadScreen from "../screens/StoryUploadScreen";
 import ViewStoryScreen from "../screens/ViewStoryScreen";
+import ViewPost from "@components/common/ViewPost";
+import ProfilePostView from "@screens/profilePostView";
 
 const Stack = createStackNavigator();
 
@@ -29,6 +31,12 @@ const MainNavigator = () => {
         component={ViewStoryScreen}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="ViewPost"
+        component={ViewPost}
+        options={{ headerShown: true }}
+      />
+      <Stack.Screen name="ProfilePostView" component={ProfilePostView} />
     </Stack.Navigator>
   );
 };

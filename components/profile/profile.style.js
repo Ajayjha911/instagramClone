@@ -124,6 +124,7 @@ export default StyleSheet.create({
   postContainer: {
     display: "flex",
     flexDirection: "row",
+    flexWrap: "wrap",
     gap: 1,
   },
   profileHeader: {

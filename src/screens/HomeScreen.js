@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import InstaStories from "../../components/Stories";
 import InstaPost from "../../components/Post";
+import { Posts } from "data";
 
 const HomeScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
@@ -47,7 +48,7 @@ const HomeScreen = () => {
         }
       >
         <InstaStories />
-        <InstaPost />
+        <InstaPost data={Posts} itemIndex={1} />
       </ScrollView>
     </View>
   );

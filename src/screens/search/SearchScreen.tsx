@@ -7,6 +7,7 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { DATA } from "../../../data";
@@ -15,6 +16,7 @@ import RecentSearches from "./recent-searches";
 import CustomButton from "@components/custom-button/custom-button";
 import ProfileComponent from "@components/profile/profile";
 import { UserState } from "@redux/slices/appSlice";
+import { useNavigation } from "@react-navigation/native";
 
 const SearchScreen = () => {
   const [searchText, setSearchText] = useState("");
@@ -39,11 +41,17 @@ const SearchScreen = () => {
       inputRef.current.blur();
     }
   };
-
+  const navigation = useNavigation();
   const renderItem = ({ item }) => (
-    <View style={styles.itemContainer}>
-      <Image style={styles.image} source={item.image} />
-    </View>
+    <Pressable
+      onPress={() =>
+        //@ts-ignore
+        navigation.navigate("ViewPost", { itemIndex: item.key, data: DATA })
+      }
+      style={styles.itemContainer}
+    >
+      <Image style={styles.image} source={item.img} />
+    </Pressable>
   );
 
   const handleBack = () => {
@@ -125,7 +133,7 @@ const SearchScreen = () => {
           ) : (
             <FlatList
               data={DATA}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item.key}
               numColumns={3}
               renderItem={renderItem}
               contentContainerStyle={styles.flatListContainer}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -6,15 +6,17 @@ import {
   View,
   FlatList,
   TouchableOpacity,
+  useWindowDimensions,
+  Dimensions,
 } from "react-native";
 import Modal from "react-native-modal";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { Posts } from "../data";
+import Carousel from "./common/Carousel";
 
-const InstaPost = () => {
+const InstaPost = ({ data, itemIndex = 1 }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const toggleModal = () => {
@@ -39,7 +41,11 @@ const InstaPost = () => {
           />
         </TouchableOpacity>
       </View>
-      <Image source={item.img} style={styles.postImage} />
+      {Array.isArray(item.img) ? (
+        <Carousel DATA={item.img} />
+      ) : (
+        <Image source={item.img} style={styles.postImage} />
+      )}
       <View style={styles.postFooter}>
         <View style={styles.postFooterIcons}>
           <View style={styles.postFooterActions}>
@@ -76,13 +82,37 @@ const InstaPost = () => {
     </View>
   );
 
+  ////////////scroll logic
+
+  const WIDTH = Dimensions.get("window").width;
+
+  console.log("width", WIDTH);
+  const flatListref = useRef(null);
+  useEffect(() => {
+    if (flatListref.current && itemIndex) {
+      flatListref.current.scrollToIndex({ index: itemIndex - 1 });
+    }
+  }, []);
+
+  const getItemLayout = (_, index) => {
+    return {
+      length: 500,
+      offset: 500 * index,
+      index,
+    };
+  };
+
   return (
     <>
       <FlatList
-        data={Posts}
+        ref={flatListref}
+        initialScrollIndex={Number(itemIndex - 1)}
+        data={data}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id}
+        getItemLayout={getItemLayout}
       />
+
       <Modal
         isVisible={isModalVisible}
         onBackdropPress={toggleModal}
