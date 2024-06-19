@@ -15,8 +15,12 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Carousel from "./common/Carousel";
+import { useTranslation } from "react-i18next";
+import i18n from "src/utils/I18n";
 
 const InstaPost = ({ data, itemIndex = 1 }) => {
+  const { t } = useTranslation();
+  console.log(t("welcome ---"));
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const toggleModal = () => {
@@ -69,9 +73,9 @@ const InstaPost = ({ data, itemIndex = 1 }) => {
         <Text style={styles.captionSection}>
           <Text style={styles.captionUserStyle}>{item.username}</Text>
           <Text style={styles.caption}>
-            {" "}
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt...
+            {t("data")}
+            {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt... */}
           </Text>
         </Text>
         <Text style={styles.viewComments}>
