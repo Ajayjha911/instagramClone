@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,19 +7,32 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
+import { deleteValue, getValue, setValue } from "src/utils/Storage";
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState("user");
   const [password, setPassword] = useState("password");
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (username === "user" && password === "password") {
+      await setValue({ key: username, value: password });
       navigation.navigate("HomeNavigation");
     } else {
       alert("Invalid username or password");
     }
   };
 
+  const isLogIn = async () => {
+    const info = await getValue({ key: username });
+
+    if (info) {
+      // deleteValue({ key: username });
+      navigation.navigate("HomeNavigation");
+    }
+  };
+  useEffect(() => {
+    isLogIn();
+  }, []);
   return (
     <View style={styles.container}>
       <Image source={require("../../assets/logo.png")} style={styles.logo} />
