@@ -20,7 +20,7 @@ import i18n from "src/utils/I18n";
 
 const InstaPost = ({ data, itemIndex = 1 }) => {
   const { t } = useTranslation();
-  console.log(t("welcome ---"));
+
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const toggleModal = () => {
