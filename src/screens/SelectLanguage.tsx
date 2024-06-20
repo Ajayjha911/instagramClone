@@ -15,7 +15,7 @@ export default function SelectLanguage({ navigation }) {
     <View style={style.container}>
       {data.map((lan) => {
         return (
-          <View>
+          <View key={lan.id}>
             <Pressable
               style={style.textContainer}
               onPress={() => handleChange({ code: lan.code })}
