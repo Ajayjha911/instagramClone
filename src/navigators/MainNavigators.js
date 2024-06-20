@@ -12,6 +12,7 @@ import ProfilePostView from "@screens/profilePostView";
 import { NavigationContainer } from "@react-navigation/native";
 import * as Linking from "expo-linking";
 import { Text } from "react-native";
+import SelectLanguage from "@screens/SelectLanguage";
 const prefix = Linking.createURL("/");
 const Stack = createStackNavigator();
 
@@ -40,6 +41,11 @@ function StackNavigation() {
         options={{ headerShown: true }}
       />
       <Stack.Screen name="ProfilePostView" component={ProfilePostView} />
+      <Stack.Screen
+        name="selectLanguage"
+        component={SelectLanguage}
+        options={{ presentation: "modal", headerShown: true }}
+      />
     </Stack.Navigator>
   );
 }

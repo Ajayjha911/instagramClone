@@ -23,7 +23,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.dayachettri.InstagramClone"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -34,7 +35,14 @@
         {
           "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
         }
-      ]
-    ]
+      ],
+      "expo-localization"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "3c27d912-ea2b-4a25-9551-00ce75ceae72"
+      }
+    },
+    "owner": "pankaj.kumar"
   }
 }

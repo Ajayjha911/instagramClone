@@ -8,7 +8,11 @@ import { Provider } from "react-redux";
 import store from "./src/redux";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
+import i18n from "src/utils/I18n";
+import { getLocales } from "expo-localization";
 const App = () => {
+  const deviceLanguage = getLocales()[0].languageCode;
+  console.log("deviceLanguage--->", deviceLanguage);
   return (
     <Provider store={store}>
       <SafeAreaProvider>

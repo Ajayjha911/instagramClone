@@ -16,11 +16,10 @@ import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Carousel from "./common/Carousel";
 import { useTranslation } from "react-i18next";
-import i18n from "src/utils/I18n";
 
 const InstaPost = ({ data, itemIndex = 1 }) => {
   const { t } = useTranslation();
-
+  console.log(t("welcome ---"));
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const toggleModal = () => {

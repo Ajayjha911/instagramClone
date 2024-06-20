@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   ActionSheetIOS,
+  Pressable,
 } from "react-native";
 import styles from "./profile.style";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -102,7 +103,14 @@ const ProfileScreen: React.FC<ProfilePageProps> = ({
             <View style={styles.profileIcons}>
               <ThreadsIcon name="threads" size={24} color={"white"} />
               <PlusIcon name="plus-square" solid size={24} color={"white"} />
-              <Icon name="bars" size={22} color={"white"} />
+              <Pressable
+                onPress={() => {
+                  //@ts-ignore
+                  return navigation.navigate("selectLanguage");
+                }}
+              >
+                <Icon name="bars" size={22} color={"white"} />
+              </Pressable>
             </View>
           </View>
         ) : (

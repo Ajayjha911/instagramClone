@@ -19,7 +19,8 @@ const resources = {
 i18n.use(initReactI18next).init({
   compatibilityJSON: "v3",
   resources,
-  lng: "fr", // Default language
+  lng: "en", // Default language
+
   interpolation: {
     escapeValue: false, // React already escapes values
   },
